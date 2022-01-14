@@ -1,6 +1,6 @@
 <h1 align="center">puutools</h1>
 <p align="center">
-    <img src="pic.jpg" width=300>
+    <img src="pic.jpg" width=400>
     <br/>
     <em>Lineage and phylogenetic tree toolbox for individual-based simulations</em>
     <br/><br/>
