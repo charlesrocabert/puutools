@@ -1,4 +1,4 @@
-<h1 align="center">puuTools</h1>
+<h1 align="center">puutools</h1>
 <p align="center">
     <img src="pic.jpg" width=300>
     <br/>
