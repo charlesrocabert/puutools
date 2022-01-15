@@ -1,28 +1,27 @@
 
 /**
- * \file      Tree.h
- * \authors   Charles Rocabert, Carole Knibbe, Guillaume Beslon
- * \date      10-09-2015
- * \copyright Copyright (C) 2014-2021 Charles Rocabert, Carole Knibbe, Guillaume Beslon. All rights reserved
- * \license   This project is released under the GNU General Public License
- * \brief     Tree class declaration
+ * \file      puutools.h
+ * \authors   Charles Rocabert
+ * \date      14-01-2022
+ * \copyright Copyright © 2022 Charles Rocabert. All rights reserved
+ * \license   puutools is released under the GNU General Public License
+ * \brief     puutools classes declaration
  */
 
 /****************************************************************************
- * Evo2Sim (Evolution of Evolution Simulator)
- * -------------------------------------------
- * Digital evolution model dedicated to
- * bacterial in silico experimental evolution.
+ * puutools
+ * ---------
+ * Lineage and phylogenetic tree toolbox for individual-based simulations.
  *
- * Copyright (C) 2014-2021 Charles Rocabert, Carole Knibbe, Guillaume Beslon
- * Web: https://github.com/charlesrocabert/Evo2Sim
+ * Copyright © 2022 Charles Rocabert
+ * Web: https://github.com/charlesrocabert/puutools
  *
- * This program is free software: you can redistribute it and/or modify
+ * puutools is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * puutools is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -31,27 +30,442 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
 
-#ifndef __Evo2Sim__Tree__
-#define __Evo2Sim__Tree__
+#ifndef __puutools__
+#define __puutools__
 
 #include <iostream>
 #include <vector>
 #include <unordered_map>
-#include <zlib.h>
 #include <cstring>
 #include <cmath>
+#include <zlib.h>
 
-#include "Macros.h"
-#include "Structs.h"
-#include "Enums.h"
-#include "Parameters.h"
-#include "ReplicationReport.h"
-#include "Population.h"
-#include "Node.h"
-#include "TrophicGroup.h"
+/******************************************************************************/
+
+/**
+ * \brief   Node class
+ * \details Defines the class of a node in the tree (master root, root or normal).
+ */
+enum puu_node_class
+{
+  MASTER_ROOT = 0, /*!< The node is the master root */
+  ROOT        = 1, /*!< The node is a root          */
+  NORMAL      = 2  /*!< The node is normal          */
+};
+
+/******************************************************************************/
+
+/**
+ * \brief   Node state
+ * \details Defines the state of a node in the tree (active or inactive).
+ */
+enum puu_node_state
+{
+  ACTIVE   = 0, /*!< The node is active   */
+  INACTIVE = 1  /*!< The node is inactive */
+};
+
+/******************************************************************************/
+
+/**
+ * \brief   Node class definition
+ * \details TODO.
+ */
+template <class individual>
+class puu_node
+{
+  
+public:
+  
+  /*----------------------------
+   * CONSTRUCTORS
+   *----------------------------*/
+  puu_node( void ) = delete;
+  puu_node( unsigned long long int identifier );
+  puu_node( unsigned long long int identifier, individual* ind );
+  puu_node( gzFile backup_file );
+  puu_node( const puu_node& node ) = delete;
+  
+  /*----------------------------
+   * DESTRUCTORS
+   *----------------------------*/
+  ~puu_node( void );
+  
+  /*----------------------------
+   * GETTERS
+   *----------------------------*/
+  inline unsigned long long int get_id( void ) const;
+  inline individual*            get_individual( void );
+  inline puu_node*              get_parent( void );
+  inline puu_node*              get_child( size_t pos );
+  inline size_t                 get_nb_children( void ) const;
+  inline puu_node_class         get_node_class( void ) const;
+  inline puu_node_state         get_node_state( void ) const;
+  inline bool                   isTagged( void ) const;
+  inline bool                   isMasterRoot( void ) const;
+  inline bool                   isRoot( void ) const;
+  inline bool                   isNormal( void ) const;
+  inline bool                   isActive( void ) const;
+  inline bool                   isInactive( void ) const;
+  inline bool                   isAncestor( unsigned long long int ancestor_id );
+  
+  /*----------------------------
+   * SETTERS
+   *----------------------------*/
+  puu_node& operator=(const puu_node&) = delete;
+  
+  inline void set_individual( individual* ind );
+  inline void set_parent( puu_node* node );
+  inline void tag( void );
+  inline void untag( void );
+  inline void set_master_root( void ); /* as */
+  inline void set_root( void ); /* as */
+  inline void set_normal( void ); /* as */
+  inline void set_dead( void ); /* as */
+  inline void set_alive( void ); /* as */
+  
+  /*----------------------------
+   * PUBLIC METHODS
+   *----------------------------*/
+  void save( gzFile backup_file );
+  void add_child( puu_node* node );
+  void remove_child( puu_node* node );
+  void replace_children( puu_node* child_to_remove );
+  void tag_lineage( void );
+  void untag_lineage( void );
+  
+  /*----------------------------
+   * PUBLIC ATTRIBUTES
+   *----------------------------*/
+  
+protected:
+  
+  /*----------------------------
+   * PROTECTED METHODS
+   *----------------------------*/
+  
+  /*----------------------------
+   * PROTECTED ATTRIBUTES
+   *----------------------------*/
+  unsigned long long int _identifier; /*!< Node identifier                          */
+  individual*            _individual; /*!< Attached individual                      */
+  puu_node*              _parent;     /*!< Parent of the node                       */
+  std::vector<puu_node*> _children;   /*!< Children of the node                     */
+  puu_node_class         _node_class; /*!< Node class (master root, root or normal) */
+  puu_node_state         _node_state; /*!< Node state (active or inactive)          */
+  bool                   _tagged;     /*!< Indicates if the node is tagged          */
+};
 
 
-class Tree
+/*----------------------------
+ * GETTERS
+ *----------------------------*/
+
+/**
+ * \brief    Get node identifier
+ * \details  --
+ * \param    void
+ * \return   \e unsigned long long int
+ */
+inline unsigned long long int puu_node::get_id( void ) const
+{
+  return _identifier;
+}
+
+/**
+ * \brief    Get the individual
+ * \details  --
+ * \param    void
+ * \return   \e Cell*
+ */
+inline individual* puu_node::get_individual( void )
+{
+  return _individual;
+}
+
+/**
+ * \brief    Get the replication report linked to the node
+ * \details  --
+ * \param    void
+ * \return   \e ReplicationReport*
+ */
+inline ReplicationReport* Node::get_replication_report( void )
+{
+  return _replication_report;
+}
+
+/**
+ * \brief    Get the parent node
+ * \details  --
+ * \param    void
+ * \return   \e Node*
+ */
+inline Node* Node::get_parent( void )
+{
+  return _parent;
+}
+
+/**
+ * \brief    Get the child at position 'pos'
+ * \details  --
+ * \param    void
+ * \return   \e Node*
+ */
+inline Node* Node::get_child( size_t pos )
+{
+  assert(pos < _children.size());
+  return _children[pos];
+}
+
+/**
+ * \brief    Get the number of children
+ * \details  --
+ * \param    void
+ * \return   \e Node*
+ */
+inline size_t Node::get_number_of_children( void ) const
+{
+  return _children.size();
+}
+
+/**
+ * \brief    Get the node class
+ * \details  --
+ * \param    void
+ * \return   \e node_class
+ */
+inline node_class Node::get_node_class( void ) const
+{
+  return _node_class;
+}
+
+/**
+ * \brief    Get the node state
+ * \details  --
+ * \param    void
+ * \return   \e node_state
+ */
+inline node_state Node::get_node_state( void ) const
+{
+  return _node_state;
+}
+
+/**
+ * \brief    Check if the node is tagged or not
+ * \details  --
+ * \param    void
+ * \return   \e bool
+ */
+inline bool Node::isTagged( void ) const
+{
+  return _tagged;
+}
+
+/**
+ * \brief    Check if the node is the master root
+ * \details  --
+ * \param    void
+ * \return   \e bool
+ */
+inline bool Node::isMasterRoot( void ) const
+{
+  return (_node_class == MASTER_ROOT);
+}
+
+/**
+ * \brief    Check if the node is a root or not
+ * \details  --
+ * \param    void
+ * \return   \e bool
+ */
+inline bool Node::isRoot( void ) const
+{
+  return (_node_class == ROOT);
+}
+
+/**
+ * \brief    Check if the node is normal or not
+ * \details  --
+ * \param    void
+ * \return   \e bool
+ */
+inline bool Node::isNormal( void ) const
+{
+  return (_node_class == NORMAL);
+}
+
+/**
+ * \brief    Check if the node is dead
+ * \details  --
+ * \param    void
+ * \return   \e bool
+ */
+inline bool Node::isDead( void ) const
+{
+  return (_node_state == DEAD);
+}
+
+/**
+ * \brief    Check if the node is alive
+ * \details  --
+ * \param    void
+ * \return   \e bool
+ */
+inline bool Node::isAlive( void ) const
+{
+  return (_node_state == ALIVE);
+}
+
+/**
+ * \brief    Check if the given identifier is an ancestor
+ * \details  --
+ * \param    unsigned long long int ancestor_id
+ * \return   \e bool
+ */
+inline bool Node::isAncestor( unsigned long long int ancestor_id )
+{
+  Node* node = get_parent();
+  while (node != NULL)
+  {
+    if (node->get_id() == ancestor_id)
+    {
+      return true;
+    }
+    node = node->get_parent();
+  }
+  return false;
+}
+
+/*----------------------------
+ * SETTERS
+ *----------------------------*/
+
+/**
+ * \brief    Set the alive cell's pointer (and its replication report pointer)
+ * \details  --
+ * \param    Cell* cell
+ * \return   \e void
+ */
+inline void Node::set_alive_cell( Cell* cell )
+{
+  assert(_node_state == ALIVE);
+  _alive_cell         = cell;
+  _replication_report = cell->get_replication_report();
+}
+
+/**
+ * \brief    Set the replication report pointer
+ * \details  Only alive node should be modified
+ * \param    ReplicationReport* replication_report
+ * \return   \e void
+ */
+inline void Node::set_replication_report( ReplicationReport* replication_report )
+{
+  assert(_node_state == ALIVE);
+  _replication_report = replication_report;
+}
+
+/**
+ * \brief    Add a parent
+ * \details  --
+ * \param    Node* node
+ * \return   \e void
+ */
+inline void Node::set_parent( Node* node )
+{
+  _parent = node;
+}
+
+/**
+ * \brief    Tag the node
+ * \details  --
+ * \param    void
+ * \return   \e void
+ */
+inline void Node::tag( void )
+{
+  _tagged = true;
+}
+
+/**
+ * \brief    Untag the node
+ * \details  --
+ * \param    void
+ * \return   \e void
+ */
+inline void Node::untag( void )
+{
+  _tagged = false;
+}
+
+/**
+ * \brief    Set the node class as master root
+ * \details  --
+ * \param    void
+ * \return   \e void
+ */
+inline void Node::set_master_root( void )
+{
+  _identifier         = 0;
+  _alive_cell         = NULL;
+  _replication_report = NULL;
+  _parent             = NULL;
+  _children.clear();
+  _node_class = MASTER_ROOT;
+  _node_state = DEAD;
+  _tagged     = false;
+}
+
+/**
+ * \brief    Set the node class as root
+ * \details  --
+ * \param    void
+ * \return   \e void
+ */
+inline void Node::set_root( void )
+{
+  _node_class = ROOT;
+}
+
+/**
+ * \brief    Set the node class as normal
+ * \details  --
+ * \param    void
+ * \return   \e void
+ */
+inline void Node::set_normal( void )
+{
+  _node_class = NORMAL;
+}
+
+/**
+ * \brief    Set the node state dead
+ * \details  --
+ * \param    size_t death_time
+ * \return   \e void
+ */
+inline void Node::set_dead( size_t death_time )
+{
+  /*----------------------------------------*/
+  /* 1) Copy and set the replication report */
+  /*----------------------------------------*/
+  _replication_report = new ReplicationReport(*_replication_report);
+  _replication_report->set_death_time(death_time);
+  
+  /*----------------------------------------*/
+  /* 2) Set the alive cell pointer to NULL  */
+  /*----------------------------------------*/
+  _alive_cell = NULL;
+  
+  /*----------------------------------------*/
+  /* 3) set the new node state              */
+  /*----------------------------------------*/
+  _node_state = DEAD;
+}
+
+/******************************************************************************/
+
+class puu_tree
 {
   
 public:
@@ -343,4 +757,5 @@ inline unsigned long long int Tree::get_node_id_by_alive_cell_id( unsigned long 
  *----------------------------*/
 
 
-#endif /* defined(__Evo2Sim__Tree__) */
+#endif /* defined(__puutools__) */
+

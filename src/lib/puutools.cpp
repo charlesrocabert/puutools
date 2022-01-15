@@ -1,21 +1,20 @@
 
 /**
- * \file      Tree.cpp
- * \authors   Charles Rocabert, Carole Knibbe, Guillaume Beslon
- * \date      10-09-2015
- * \copyright Copyright (C) 2014-2021 Charles Rocabert, Carole Knibbe, Guillaume Beslon. All rights reserved
+ * \file      puutools.cpp
+ * \authors   Charles Rocabert
+ * \date      14-01-2022
+ * \copyright Copyright (C) 2022 Charles Rocabert. All rights reserved
  * \license   This project is released under the GNU General Public License
- * \brief     Tree class definition
+ * \brief     puutools classes definition
  */
 
 /****************************************************************************
- * Evo2Sim (Evolution of Evolution Simulator)
- * -------------------------------------------
- * Digital evolution model dedicated to
- * bacterial in silico experimental evolution.
+ * puutools
+ * ---------
+ * Lineage and phylogenetic tree toolbox for individual-based simulations.
  *
- * Copyright (C) 2014-2021 Charles Rocabert, Carole Knibbe, Guillaume Beslon
- * Web: https://github.com/charlesrocabert/Evo2Sim
+ * Copyright (C) 2022 Charles Rocabert
+ * Web: https://github.com/charlesrocabert/puutools
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +30,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
 
-#include "Tree.h"
+#include "puutools.h"
 
 
 /*----------------------------
