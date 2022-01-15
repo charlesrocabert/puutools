@@ -56,18 +56,6 @@ enum puu_node_class
 /******************************************************************************/
 
 /**
- * \brief   Node state
- * \details Defines the state of a node in the tree (active or inactive).
- */
-enum puu_node_state
-{
-  ACTIVE   = 0, /*!< The node is active   */
-  INACTIVE = 1  /*!< The node is inactive */
-};
-
-/******************************************************************************/
-
-/**
  * \brief   Node class definition
  * \details TODO.
  */
@@ -100,14 +88,12 @@ public:
   inline puu_node*              get_child( size_t pos );
   inline size_t                 get_nb_children( void ) const;
   inline puu_node_class         get_node_class( void ) const;
-  inline puu_node_state         get_node_state( void ) const;
-  inline bool                   isTagged( void ) const;
-  inline bool                   isMasterRoot( void ) const;
-  inline bool                   isRoot( void ) const;
-  inline bool                   isNormal( void ) const;
-  inline bool                   isActive( void ) const;
-  inline bool                   isInactive( void ) const;
-  inline bool                   isAncestor( unsigned long long int ancestor_id );
+  inline bool                   is_master_root( void ) const;
+  inline bool                   is_root( void ) const;
+  inline bool                   is_normal( void ) const;
+  inline bool                   is_ancestor( unsigned long long int ancestor_id ) const;
+  inline bool                   is_active( void ) const;
+  inline bool                   is_tagged( void ) const;
   
   /*----------------------------
    * SETTERS
@@ -116,13 +102,12 @@ public:
   
   inline void set_individual( individual* ind );
   inline void set_parent( puu_node* node );
+  inline void as_master_root( void );
+  inline void as_root( void );
+  inline void as_normal( void );
+  inline void as_inactive( void );
   inline void tag( void );
   inline void untag( void );
-  inline void set_master_root( void ); /* as */
-  inline void set_root( void ); /* as */
-  inline void set_normal( void ); /* as */
-  inline void set_dead( void ); /* as */
-  inline void set_alive( void ); /* as */
   
   /*----------------------------
    * PUBLIC METHODS
@@ -152,7 +137,7 @@ protected:
   puu_node*              _parent;     /*!< Parent of the node                       */
   std::vector<puu_node*> _children;   /*!< Children of the node                     */
   puu_node_class         _node_class; /*!< Node class (master root, root or normal) */
-  puu_node_state         _node_state; /*!< Node state (active or inactive)          */
+  bool                   _active;     /*!< Indicates if the node is active          */
   bool                   _tagged;     /*!< Indicates if the node is tagged          */
 };
 
@@ -176,7 +161,7 @@ inline unsigned long long int puu_node::get_id( void ) const
  * \brief    Get the individual
  * \details  --
  * \param    void
- * \return   \e Cell*
+ * \return   \e individual*
  */
 inline individual* puu_node::get_individual( void )
 {
@@ -184,23 +169,12 @@ inline individual* puu_node::get_individual( void )
 }
 
 /**
- * \brief    Get the replication report linked to the node
+ * \brief    Get the parental node
  * \details  --
  * \param    void
- * \return   \e ReplicationReport*
+ * \return   \e puu_node*
  */
-inline ReplicationReport* Node::get_replication_report( void )
-{
-  return _replication_report;
-}
-
-/**
- * \brief    Get the parent node
- * \details  --
- * \param    void
- * \return   \e Node*
- */
-inline Node* Node::get_parent( void )
+inline puu_node* puu_node::get_parent( void )
 {
   return _parent;
 }
@@ -209,9 +183,9 @@ inline Node* Node::get_parent( void )
  * \brief    Get the child at position 'pos'
  * \details  --
  * \param    void
- * \return   \e Node*
+ * \return   \e puu_node*
  */
-inline Node* Node::get_child( size_t pos )
+inline puu_node* puu_node::get_child( size_t pos )
 {
   assert(pos < _children.size());
   return _children[pos];
@@ -221,9 +195,9 @@ inline Node* Node::get_child( size_t pos )
  * \brief    Get the number of children
  * \details  --
  * \param    void
- * \return   \e Node*
+ * \return   \e puu_node*
  */
-inline size_t Node::get_number_of_children( void ) const
+inline size_t puu_node::get_nb_children( void ) const
 {
   return _children.size();
 }
@@ -232,33 +206,11 @@ inline size_t Node::get_number_of_children( void ) const
  * \brief    Get the node class
  * \details  --
  * \param    void
- * \return   \e node_class
+ * \return   \e puu_node_class
  */
-inline node_class Node::get_node_class( void ) const
+inline puu_node_class puu_node::get_node_class( void ) const
 {
   return _node_class;
-}
-
-/**
- * \brief    Get the node state
- * \details  --
- * \param    void
- * \return   \e node_state
- */
-inline node_state Node::get_node_state( void ) const
-{
-  return _node_state;
-}
-
-/**
- * \brief    Check if the node is tagged or not
- * \details  --
- * \param    void
- * \return   \e bool
- */
-inline bool Node::isTagged( void ) const
-{
-  return _tagged;
 }
 
 /**
@@ -267,53 +219,31 @@ inline bool Node::isTagged( void ) const
  * \param    void
  * \return   \e bool
  */
-inline bool Node::isMasterRoot( void ) const
+inline bool puu_node::is_master_root( void ) const
 {
   return (_node_class == MASTER_ROOT);
 }
 
 /**
- * \brief    Check if the node is a root or not
+ * \brief    Check if the node is a root
  * \details  --
  * \param    void
  * \return   \e bool
  */
-inline bool Node::isRoot( void ) const
+inline bool puu_node::is_root( void ) const
 {
   return (_node_class == ROOT);
 }
 
 /**
- * \brief    Check if the node is normal or not
+ * \brief    Check if the node is normal
  * \details  --
  * \param    void
  * \return   \e bool
  */
-inline bool Node::isNormal( void ) const
+inline bool puu_node::is_normal( void ) const
 {
   return (_node_class == NORMAL);
-}
-
-/**
- * \brief    Check if the node is dead
- * \details  --
- * \param    void
- * \return   \e bool
- */
-inline bool Node::isDead( void ) const
-{
-  return (_node_state == DEAD);
-}
-
-/**
- * \brief    Check if the node is alive
- * \details  --
- * \param    void
- * \return   \e bool
- */
-inline bool Node::isAlive( void ) const
-{
-  return (_node_state == ALIVE);
 }
 
 /**
@@ -322,9 +252,9 @@ inline bool Node::isAlive( void ) const
  * \param    unsigned long long int ancestor_id
  * \return   \e bool
  */
-inline bool Node::isAncestor( unsigned long long int ancestor_id )
+inline bool puu_node::is_ancestor( unsigned long long int ancestor_id )
 {
-  Node* node = get_parent();
+  puu_node* node = get_parent();
   while (node != NULL)
   {
     if (node->get_id() == ancestor_id)
@@ -336,66 +266,54 @@ inline bool Node::isAncestor( unsigned long long int ancestor_id )
   return false;
 }
 
+/**
+ * \brief    Check if the node is active or inactive
+ * \details  --
+ * \param    void
+ * \return   \e bool
+ */
+inline bool puu_node::is_active( void ) const
+{
+  return _active;
+}
+
+/**
+ * \brief    Check if the node is tagged or not
+ * \details  --
+ * \param    void
+ * \return   \e bool
+ */
+inline bool puu_node::is_tagged( void ) const
+{
+  return _tagged;
+}
+
 /*----------------------------
  * SETTERS
  *----------------------------*/
 
 /**
- * \brief    Set the alive cell's pointer (and its replication report pointer)
+ * \brief    Set the individual
  * \details  --
- * \param    Cell* cell
+ * \param    individual* ind
  * \return   \e void
  */
-inline void Node::set_alive_cell( Cell* cell )
+inline void puu_node::set_individual( individual* ind )
 {
-  assert(_node_state == ALIVE);
-  _alive_cell         = cell;
-  _replication_report = cell->get_replication_report();
-}
-
-/**
- * \brief    Set the replication report pointer
- * \details  Only alive node should be modified
- * \param    ReplicationReport* replication_report
- * \return   \e void
- */
-inline void Node::set_replication_report( ReplicationReport* replication_report )
-{
-  assert(_node_state == ALIVE);
-  _replication_report = replication_report;
+  assert(ind != NULL);
+  assert(_node_state == ACTIVE); /* TO CONFIRM */
+  _individual = ind;
 }
 
 /**
  * \brief    Add a parent
  * \details  --
- * \param    Node* node
+ * \param    puu_node* node
  * \return   \e void
  */
-inline void Node::set_parent( Node* node )
+inline void puu_node::set_parent( puu_node* node )
 {
   _parent = node;
-}
-
-/**
- * \brief    Tag the node
- * \details  --
- * \param    void
- * \return   \e void
- */
-inline void Node::tag( void )
-{
-  _tagged = true;
-}
-
-/**
- * \brief    Untag the node
- * \details  --
- * \param    void
- * \return   \e void
- */
-inline void Node::untag( void )
-{
-  _tagged = false;
 }
 
 /**
@@ -404,16 +322,15 @@ inline void Node::untag( void )
  * \param    void
  * \return   \e void
  */
-inline void Node::set_master_root( void )
+inline void puu_node::as_master_root( void )
 {
-  _identifier         = 0;
-  _alive_cell         = NULL;
-  _replication_report = NULL;
-  _parent             = NULL;
-  _children.clear();
+  _identifier = 0;
+  _individual = NULL;
+  _parent     = NULL;
   _node_class = MASTER_ROOT;
-  _node_state = DEAD;
+  _active     = false;
   _tagged     = false;
+  _children.clear();
 }
 
 /**
@@ -422,7 +339,7 @@ inline void Node::set_master_root( void )
  * \param    void
  * \return   \e void
  */
-inline void Node::set_root( void )
+inline void puu_node::as_root( void )
 {
   _node_class = ROOT;
 }
@@ -433,34 +350,42 @@ inline void Node::set_root( void )
  * \param    void
  * \return   \e void
  */
-inline void Node::set_normal( void )
+inline void puu_node::as_normal( void )
 {
   _node_class = NORMAL;
 }
 
 /**
- * \brief    Set the node state dead
+ * \brief    Set the node state as inactive
  * \details  --
- * \param    size_t death_time
+ * \param    void
  * \return   \e void
  */
-inline void Node::set_dead( size_t death_time )
+inline void Node::as_inactive( void )
 {
-  /*----------------------------------------*/
-  /* 1) Copy and set the replication report */
-  /*----------------------------------------*/
-  _replication_report = new ReplicationReport(*_replication_report);
-  _replication_report->set_death_time(death_time);
-  
-  /*----------------------------------------*/
-  /* 2) Set the alive cell pointer to NULL  */
-  /*----------------------------------------*/
-  _alive_cell = NULL;
-  
-  /*----------------------------------------*/
-  /* 3) set the new node state              */
-  /*----------------------------------------*/
-  _node_state = DEAD;
+  _active = false;
+}
+
+/**
+ * \brief    Tag the node
+ * \details  --
+ * \param    void
+ * \return   \e void
+ */
+inline void puu_node::tag( void )
+{
+  _tagged = true;
+}
+
+/**
+ * \brief    Untag the node
+ * \details  --
+ * \param    void
+ * \return   \e void
+ */
+inline void puu_node::untag( void )
+{
+  _tagged = false;
 }
 
 /******************************************************************************/
