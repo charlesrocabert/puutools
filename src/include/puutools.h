@@ -14,7 +14,7 @@
  * Lineage and phylogenetic tree toolbox for individual-based simulations.
  *
  * Copyright © 2022 Charles Rocabert
- * Web: https://github.com/charlesrocabert/puutools
+ * Web: https://github.com/charlesrocabert/puutools/
  *
  * puutools is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
+#include <string>
 #include <cstring>
 #include <cmath>
 #include <zlib.h>
@@ -59,30 +60,31 @@ enum puu_node_class
  * \brief   Node class definition
  * \details TODO.
  */
-template <class individual>
+template <typename individual>
 class puu_node
 {
   
 public:
   
-  /*----------------------------
-   * CONSTRUCTORS
-   *----------------------------*/
+  /*---------------------------------------------
+   * CONSTRUCTORS DECLARATION (puu_node)
+   *---------------------------------------------*/
   puu_node( void ) = delete;
-  puu_node( unsigned long long int identifier );
-  puu_node( unsigned long long int identifier, individual* ind );
+  puu_node( unsigned long long int identifier, double score );
+  puu_node( unsigned long long int identifier, double score, individual* ind );
   puu_node( gzFile backup_file );
   puu_node( const puu_node& node ) = delete;
   
-  /*----------------------------
-   * DESTRUCTORS
-   *----------------------------*/
+  /*---------------------------------------------
+   * DESTRUCTORS DECLARATION (puu_node)
+   *---------------------------------------------*/
   ~puu_node( void );
   
-  /*----------------------------
-   * GETTERS
-   *----------------------------*/
+  /*---------------------------------------------
+   * GETTERS DECLARATION (puu_node)
+   *---------------------------------------------*/
   inline unsigned long long int get_id( void ) const;
+  inline double                 get_score( void );
   inline individual*            get_individual( void );
   inline puu_node*              get_parent( void );
   inline puu_node*              get_child( size_t pos );
@@ -95,12 +97,12 @@ public:
   inline bool                   is_active( void ) const;
   inline bool                   is_tagged( void ) const;
   
-  /*----------------------------
-   * SETTERS
-   *----------------------------*/
+  /*---------------------------------------------
+   * SETTERS DECLARATION (puu_node)
+   *---------------------------------------------*/
   puu_node& operator=(const puu_node&) = delete;
   
-  inline void set_individual( individual* ind );
+  inline void set_score( double score );
   inline void set_parent( puu_node* node );
   inline void as_master_root( void );
   inline void as_root( void );
@@ -109,30 +111,31 @@ public:
   inline void tag( void );
   inline void untag( void );
   
-  /*----------------------------
-   * PUBLIC METHODS
-   *----------------------------*/
+  /*---------------------------------------------
+   * PUBLIC METHODS DECLARATION (puu_node)
+   *---------------------------------------------*/
   void save( gzFile backup_file );
   void add_child( puu_node* node );
   void remove_child( puu_node* node );
-  void replace_children( puu_node* child_to_remove );
+  void replace_by_grandchildren( puu_node* child_to_remove );
   void tag_lineage( void );
   void untag_lineage( void );
   
-  /*----------------------------
-   * PUBLIC ATTRIBUTES
-   *----------------------------*/
+  /*---------------------------------------------
+   * PUBLIC ATTRIBUTES DECLARATION (puu_node)
+   *---------------------------------------------*/
   
 protected:
   
-  /*----------------------------
-   * PROTECTED METHODS
-   *----------------------------*/
+  /*---------------------------------------------
+   * PROTECTED METHODS DECLARATION (puu_node)
+   *---------------------------------------------*/
   
-  /*----------------------------
-   * PROTECTED ATTRIBUTES
-   *----------------------------*/
+  /*---------------------------------------------
+   * PROTECTED ATTRIBUTES DECLARATION (puu_node)
+   *---------------------------------------------*/
   unsigned long long int _identifier; /*!< Node identifier                          */
+  double                 _score;      /*!< Node score                               */
   individual*            _individual; /*!< Attached individual                      */
   puu_node*              _parent;     /*!< Parent of the node                       */
   std::vector<puu_node*> _children;   /*!< Children of the node                     */
@@ -141,10 +144,9 @@ protected:
   bool                   _tagged;     /*!< Indicates if the node is tagged          */
 };
 
-
-/*----------------------------
- * GETTERS
- *----------------------------*/
+/*---------------------------------------------
+ * GETTERS DEFINITION (puu_node)
+ *---------------------------------------------*/
 
 /**
  * \brief    Get node identifier
@@ -155,6 +157,17 @@ protected:
 inline unsigned long long int puu_node::get_id( void ) const
 {
   return _identifier;
+}
+
+/**
+ * \brief    Get node score
+ * \details  --
+ * \param    void
+ * \return   \e double
+ */
+inline double puu_node::get_score( void ) const
+{
+  return _score;
 }
 
 /**
@@ -288,22 +301,9 @@ inline bool puu_node::is_tagged( void ) const
   return _tagged;
 }
 
-/*----------------------------
- * SETTERS
- *----------------------------*/
-
-/**
- * \brief    Set the individual
- * \details  --
- * \param    individual* ind
- * \return   \e void
- */
-inline void puu_node::set_individual( individual* ind )
-{
-  assert(ind != NULL);
-  assert(_node_state == ACTIVE); /* TO CONFIRM */
-  _individual = ind;
-}
+/*---------------------------------------------
+ * SETTERS DEFINITION (puu_node)
+ *---------------------------------------------*/
 
 /**
  * \brief    Add a parent
@@ -390,52 +390,54 @@ inline void puu_node::untag( void )
 
 /******************************************************************************/
 
+/**
+ * \brief   Tree class definition
+ * \details TODO.
+ */
+template <typename individual>
 class puu_tree
 {
   
 public:
   
-  /*----------------------------
-   * CONSTRUCTORS
-   *----------------------------*/
-  Tree( void ) = delete;
-  Tree( Parameters* parameters );
-  Tree( Parameters* parameters, Population* population, gzFile backup_file );
-  Tree( const Tree& tree ) = delete;
+  /*---------------------------------------------
+   * CONSTRUCTORS DECLARATION (puu_tree)
+   *---------------------------------------------*/
+  puu_tree( void );
+  puu_tree( gzFile backup_file );
+  puu_tree( const puu_tree& tree ) = delete;
   
-  /*----------------------------
-   * DESTRUCTORS
-   *----------------------------*/
-  ~Tree( void );
+  /*---------------------------------------------
+   * DESTRUCTORS DECLARATION (puu_tree)
+   *---------------------------------------------*/
+  ~puu_tree( void );
   
-  /*----------------------------
-   * GETTERS
-   *----------------------------*/
+  /*---------------------------------------------
+   * GETTERS DECLARATION (puu_tree)
+   *---------------------------------------------*/
   inline unsigned long long int get_current_id( void ) const;
-  inline size_t get_number_of_nodes( void ) const;
-  inline Node*  get_node( unsigned long long int identifier );
-  inline Node*  get_first_node( void );
-  inline Node*  get_next_node( void );
-  inline void   get_alive_nodes( std::vector<unsigned long long int>* alive_nodes );
-  inline Node*  get_best_alive_node( void );
-  inline Node*  get_common_ancestor( void );
-  inline double get_common_ancestor_age( void );
-  inline unsigned long long int get_node_id_by_alive_cell_id( unsigned long long int alive_cell_identifier );
+  inline size_t                 get_nb_nodes( void ) const;
+  inline puu_node*              get_node( unsigned long long int identifier );
+  inline puu_node*              get_first( void );
+  inline puu_node*              get_next( void );
+  inline void                   get_active_node_identifiers( std::vector<unsigned long long int>* active_node_identifiers );
+  inline puu_node*              get_best_active_node( void );
+  inline puu_node*              get_common_ancestor( void );
+  inline double                 get_common_ancestor_age( void );
+  inline unsigned long long int get_node_id_by_active_individual_identifiers( unsigned long long int active_individual_identifiers );
   
-  /*----------------------------
-   * SETTERS
-   *----------------------------*/
-  Tree& operator=(const Tree&) = delete;
+  /*---------------------------------------------
+   * SETTERS DECLARATION (puu_tree)
+   *---------------------------------------------*/
+  puu_tree& operator=(const puu_tree&) = delete;
   
-  /*----------------------------
-   * PUBLIC METHODS
-   *----------------------------*/
+  /*---------------------------------------------
+   * PUBLIC METHODS DECLARATION (puu_tree)
+   *---------------------------------------------*/
   void save( gzFile backup_file );
-  void add_root( Cell* cell );
-  void add_division( Cell* parent, Cell* child1, Cell* child2 );
-  void freeze_node( unsigned long long int cell_identifier, size_t death_time );
+  void add_root( individual* ind );
+  void add_reproduction_event( individual* parent, individual* child );
   void delete_node( unsigned long long int node_identifier );
-  void clean_cell_map( void );
   void prune();
   void shorten();
   
@@ -444,35 +446,28 @@ public:
   
   void write_lineage_statistics( std::string filename, unsigned long long int identifier );
   void write_phylogeny_statistics( std::string filename );
-  void write_trophic_data( std::string filename );
   
-  void compute_AI_score_on_SL( size_t backup_time );
-  void compute_common_ancestor_SL_repartition( double& Sp_A, double& Sp_B );
-  
-  /*----------------------------
-   * PUBLIC ATTRIBUTES
-   *----------------------------*/
+  /*---------------------------------------------
+   * PUBLIC ATTRIBUTES DECLARATION (puu_tree)
+   *---------------------------------------------*/
   
 protected:
   
-  /*----------------------------
-   * PROTECTED METHODS
-   *----------------------------*/
-  void inOrderNewick( Node* node, size_t parent_time, std::stringstream& output );
+  /*---------------------------------------------
+   * PROTECTED METHODS DECLARATION (puu_tree)
+   *---------------------------------------------*/
+  void inOrderNewick( puu_node* node, size_t parent_time, std::stringstream& output );
   void tag_tree();
   void untag_tree();
-  void tag_offspring( Node* node, std::vector<Node*>* tagged_nodes );
+  void tag_offspring( puu_node* node, std::vector<puu_node*>* tagged_nodes );
   
-  /*----------------------------
-   * PROTECTED ATTRIBUTES
-   *----------------------------*/
-  Parameters*                                                 _parameters; /*!< Simulation parameters */
+  /*---------------------------------------------
+   * PROTECTED ATTRIBUTES DECLARATION (puu_tree)
+   *---------------------------------------------*/
   unsigned long long int                                      _current_id; /*!< Current node id       */
-  std::unordered_map<unsigned long long int, Node*>           _node_map;   /*!< Tree nodes map        */
-  std::unordered_map<unsigned long long int, Node*>           _cell_map;   /*!< Cells map             */
-  std::unordered_map<unsigned long long int, Node*>::iterator _iterator;   /*!< Tree map iterator     */
+  std::unordered_map<unsigned long long int, puu_node*>       _node_map;   /*!< Tree nodes map        */
+  std::unordered_map<unsigned long long int, puu_node*>::iterator _iterator;   /*!< Tree map iterator     */
 };
-
 
 /*----------------------------
  * GETTERS
@@ -683,4 +678,3 @@ inline unsigned long long int Tree::get_node_id_by_alive_cell_id( unsigned long 
 
 
 #endif /* defined(__puutools__) */
-
