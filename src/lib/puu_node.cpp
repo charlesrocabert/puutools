@@ -43,44 +43,39 @@
  * \param    unsigned long long int identifier
  * \return   \e void
  */
-template <typename individual>
-puu_node<individual>::puu_node( unsigned long long int identifier )
+template <typename selection_unit>
+puu_node<selection_unit>::puu_node( unsigned long long int identifier )
 {
-  _identifier        = identifier;
-  _activation_time   = 0.0;
-  _inactivation_time = 0.0;
-  _score             = 0.0;
-  _individual        = NULL;
-  _parent            = NULL;
-  _node_class        = MASTER_ROOT;
-  _active            = false;
-  _tagged            = false;
+  _identifier     = identifier;
+  _insertion_time = 0.0;
+  _selection_unit = NULL;
+  _parent         = NULL;
+  _node_class     = MASTER_ROOT;
+  _active         = false;
+  _tagged         = false;
   _children.clear();
 }
 
 /**
  * \brief    Active node constructor
- * \details  Create a new active node with its attached individual.
+ * \details  Create a new active node with its attached selection unit.
  * \param    unsigned long long int identifier
  * \param    double time
- * \param    double score
- * \param    individual* ind
+ * \param    selection_unit* unit
  * \return   \e void
  */
-template <typename individual>
-puu_node<individual>::puu_node( unsigned long long int identifier, double time, double score, individual* ind )
+template <typename selection_unit>
+puu_node<selection_unit>::puu_node( unsigned long long int identifier, double time, selection_unit* unit )
 {
   assert(time >= 0.0);
-  assert(ind != NULL);
-  _identifier         = identifier;
-  _activation_time    = time;
-  _inactivation_time  = 0.0;
-  _score              = score;
-  _individual         = ind;
-  _parent             = NULL;
-  _node_class         = NORMAL;
-  _active             = true;
-  _tagged             = false;
+  assert(unit != NULL);
+  _identifier     = identifier;
+  _insertion_time = time;
+  _selection_unit = unit;
+  _parent         = NULL;
+  _node_class     = NORMAL;
+  _active         = true;
+  _tagged         = false;
   _children.clear();
 }
 
@@ -91,8 +86,8 @@ puu_node<individual>::puu_node( unsigned long long int identifier, double time, 
  * \return   \e void
  */
 /*
-template <typename individual>
-puu_node<individual>::puu_node( gzFile backup_file )
+template <typename selection_unit>
+puu_node<selection_unit>::puu_node( gzFile backup_file )
 {
  TODO
 }
@@ -108,15 +103,14 @@ puu_node<individual>::puu_node( gzFile backup_file )
  * \param    void
  * \return   \e void
  */
-template <typename individual>
-puu_node<individual>::~puu_node( void )
+template <typename selection_unit>
+puu_node<selection_unit>::~puu_node( void )
 {
-  _individual = NULL;
   if (!_active)
   {
-    delete _individual;
+    delete _selection_unit;
   }
-  _individual = NULL;
+  _selection_unit = NULL;
   _children.clear();
 }
 
@@ -131,8 +125,8 @@ puu_node<individual>::~puu_node( void )
  * \return   \e void
  */
 /*
-template <typename individual>
-void puu_node<individual>::save( gzFile backup_file )
+template <typename selection_unit>
+void puu_node<selection_unit>::save( gzFile backup_file )
 {
   TODO
 }
@@ -144,8 +138,8 @@ void puu_node<individual>::save( gzFile backup_file )
  * \param    puu_node* node
  * \return   \e void
  */
-template <typename individual>
-void puu_node<individual>::add_child( puu_node* node )
+template <typename selection_unit>
+void puu_node<selection_unit>::add_child( puu_node* node )
 {
   for (size_t i = 0; i < _children.size(); i++)
   {
@@ -160,8 +154,8 @@ void puu_node<individual>::add_child( puu_node* node )
  * \param    puu_node* node
  * \return   \e void
  */
-template <typename individual>
-void puu_node<individual>::remove_child( puu_node* node )
+template <typename selection_unit>
+void puu_node<selection_unit>::remove_child( puu_node* node )
 {
   int pos = -1;
   for (size_t i = 0; i < _children.size(); i++)
@@ -193,8 +187,8 @@ void puu_node<individual>::remove_child( puu_node* node )
  * \param    puu_node* child_to_remove
  * \return   \e void
  */
-template <typename individual>
-void puu_node<individual>::replace_by_grandchildren( puu_node* child_to_remove )
+template <typename selection_unit>
+void puu_node<selection_unit>::replace_by_grandchildren( puu_node* child_to_remove )
 {
   remove_child(child_to_remove);
   for (size_t i = 0; i < child_to_remove->get_number_of_children(); i++)
@@ -209,8 +203,8 @@ void puu_node<individual>::replace_by_grandchildren( puu_node* child_to_remove )
  * \param    void
  * \return   \e void
  */
-template <typename individual>
-void puu_node<individual>::tag_lineage( void )
+template <typename selection_unit>
+void puu_node<selection_unit>::tag_lineage( void )
 {
   _tagged = true;
   puu_node* node = _parent;
@@ -234,8 +228,8 @@ void puu_node<individual>::tag_lineage( void )
  * \param    void
  * \return   \e void
  */
-template <typename individual>
-void puu_node<individual>::untag_lineage( void )
+template <typename selection_unit>
+void puu_node<selection_unit>::untag_lineage( void )
 {
   _tagged = false;
   puu_node* node = _parent;

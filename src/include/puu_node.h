@@ -41,14 +41,10 @@
 #include <cmath>
 #include <zlib.h>
 
-#include "puu_enums.h"
+#include "./puu_enums.h"
 
 
-/**
- * \brief   Node class definition
- * \details TODO.
- */
-template <typename individual>
+template <typename selection_unit>
 class puu_node
 {
   
@@ -59,7 +55,7 @@ public:
    *----------------------------*/
   puu_node( void ) = delete;
   puu_node( unsigned long long int identifier );
-  puu_node( unsigned long long int identifier, double time, double score, individual* ind );
+  puu_node( unsigned long long int identifier, double time, selection_unit* unit );
   //puu_node( gzFile backup_file );
   puu_node( const puu_node& node ) = delete;
   
@@ -72,8 +68,8 @@ public:
    * GETTERS
    *----------------------------*/
   inline unsigned long long int get_id( void ) const;
-  inline double                 get_score( void ) const;
-  inline individual*            get_individual( void );
+  inline double                 get_insertion_time( void ) const;
+  inline selection_unit*        get_selection_unit( void );
   inline puu_node*              get_parent( void );
   inline puu_node*              get_child( size_t pos );
   inline size_t                 get_nb_children( void ) const;
@@ -90,12 +86,10 @@ public:
    *----------------------------*/
   puu_node& operator=(const puu_node&) = delete;
   
-  inline void set_score( double score );
   inline void set_parent( puu_node* node );
-  inline void as_master_root( void );
   inline void as_root( void );
   inline void as_normal( void );
-  inline void as_inactive( void );
+  inline void inactivate( double time, bool copy );
   inline void tag( void );
   inline void untag( void );
   
@@ -122,56 +116,54 @@ protected:
   /*----------------------------
    * PROTECTED ATTRIBUTES
    *----------------------------*/
-  unsigned long long int _identifier;        /*!< Node identifier                          */
-  double                 _activation_time;   /*!< Node's activation time                   */
-  double                 _inactivation_time; /*!< Node's inactivation time                 */
-  double                 _score;             /*!< Node's score                             */
-  individual*            _individual;        /*!< Attached individual                      */
-  puu_node*              _parent;            /*!< Parental node                            */
-  std::vector<puu_node*> _children;          /*!< Node's children                          */
-  puu_node_class         _node_class;        /*!< Node class (master root, root or normal) */
-  bool                   _active;            /*!< Indicates if the node is active          */
-  bool                   _tagged;            /*!< Indicates if the node is tagged          */
+  unsigned long long int _identifier;     /*!< Node identifier                          */
+  double                 _insertion_time; /*!< Node's insertion time                    */
+  selection_unit*        _selection_unit; /*!< Attached selection unit                  */
+  puu_node*              _parent;         /*!< Parental node                            */
+  std::vector<puu_node*> _children;       /*!< Node's children                          */
+  puu_node_class         _node_class;     /*!< Node class (master root, root or normal) */
+  bool                   _active;         /*!< Indicates if the node is active          */
+  bool                   _tagged;         /*!< Indicates if the node is tagged          */
 };
 
-/*---------------------------------------------
- * GETTERS DEFINITION (puu_node)
- *---------------------------------------------*/
+/*----------------------------
+ * GETTERS
+ *----------------------------*/
 
 /**
- * \brief    Get node identifier
+ * \brief    Get node's identifier
  * \details  --
  * \param    void
  * \return   \e unsigned long long int
  */
-template <typename individual>
-inline unsigned long long int puu_node<individual>::get_id( void ) const
+template <typename selection_unit>
+inline unsigned long long int puu_node<selection_unit>::get_id( void ) const
 {
   return _identifier;
 }
 
 /**
- * \brief    Get node score
+ * \brief    Get node's insertion time
  * \details  --
  * \param    void
  * \return   \e double
  */
-template <typename individual>
-inline double puu_node<individual>::get_score( void ) const
+template <typename selection_unit>
+inline double puu_node<selection_unit>::get_insertion_time( void ) const
 {
-  return _score;
+  return _insertion_time;
 }
 
 /**
- * \brief    Get the individual
+ * \brief    Get the selection unit
  * \details  --
  * \param    void
- * \return   \e individual*
+ * \return   \e selection_unit*
  */
-template <typename individual>
-inline individual* puu_node<individual>::get_individual( void )
+template <typename selection_unit>
+inline selection_unit* puu_node<selection_unit>::get_selection_unit( void )
 {
-  return _individual;
+  return _selection_unit;
 }
 
 /**
@@ -180,8 +172,8 @@ inline individual* puu_node<individual>::get_individual( void )
  * \param    void
  * \return   \e puu_node*
  */
-template <typename individual>
-inline puu_node<individual>* puu_node<individual>::get_parent( void )
+template <typename selection_unit>
+inline puu_node<selection_unit>* puu_node<selection_unit>::get_parent( void )
 {
   return _parent;
 }
@@ -192,8 +184,8 @@ inline puu_node<individual>* puu_node<individual>::get_parent( void )
  * \param    void
  * \return   \e puu_node*
  */
-template <typename individual>
-inline puu_node<individual>* puu_node<individual>::get_child( size_t pos )
+template <typename selection_unit>
+inline puu_node<selection_unit>* puu_node<selection_unit>::get_child( size_t pos )
 {
   assert(pos < _children.size());
   return _children[pos];
@@ -205,8 +197,8 @@ inline puu_node<individual>* puu_node<individual>::get_child( size_t pos )
  * \param    void
  * \return   \e puu_node*
  */
-template <typename individual>
-inline size_t puu_node<individual>::get_nb_children( void ) const
+template <typename selection_unit>
+inline size_t puu_node<selection_unit>::get_nb_children( void ) const
 {
   return _children.size();
 }
@@ -217,8 +209,8 @@ inline size_t puu_node<individual>::get_nb_children( void ) const
  * \param    void
  * \return   \e puu_node_class
  */
-template <typename individual>
-inline puu_node_class puu_node<individual>::get_node_class( void ) const
+template <typename selection_unit>
+inline puu_node_class puu_node<selection_unit>::get_node_class( void ) const
 {
   return _node_class;
 }
@@ -229,8 +221,8 @@ inline puu_node_class puu_node<individual>::get_node_class( void ) const
  * \param    void
  * \return   \e bool
  */
-template <typename individual>
-inline bool puu_node<individual>::is_master_root( void ) const
+template <typename selection_unit>
+inline bool puu_node<selection_unit>::is_master_root( void ) const
 {
   return (_node_class == MASTER_ROOT);
 }
@@ -241,8 +233,8 @@ inline bool puu_node<individual>::is_master_root( void ) const
  * \param    void
  * \return   \e bool
  */
-template <typename individual>
-inline bool puu_node<individual>::is_root( void ) const
+template <typename selection_unit>
+inline bool puu_node<selection_unit>::is_root( void ) const
 {
   return (_node_class == ROOT);
 }
@@ -253,8 +245,8 @@ inline bool puu_node<individual>::is_root( void ) const
  * \param    void
  * \return   \e bool
  */
-template <typename individual>
-inline bool puu_node<individual>::is_normal( void ) const
+template <typename selection_unit>
+inline bool puu_node<selection_unit>::is_normal( void ) const
 {
   return (_node_class == NORMAL);
 }
@@ -265,8 +257,8 @@ inline bool puu_node<individual>::is_normal( void ) const
  * \param    unsigned long long int ancestor_id
  * \return   \e bool
  */
-template <typename individual>
-inline bool puu_node<individual>::is_ancestor( unsigned long long int ancestor_id ) const
+template <typename selection_unit>
+inline bool puu_node<selection_unit>::is_ancestor( unsigned long long int ancestor_id ) const
 {
   puu_node* node = get_parent();
   while (node != NULL)
@@ -286,8 +278,8 @@ inline bool puu_node<individual>::is_ancestor( unsigned long long int ancestor_i
  * \param    void
  * \return   \e bool
  */
-template <typename individual>
-inline bool puu_node<individual>::is_active( void ) const
+template <typename selection_unit>
+inline bool puu_node<selection_unit>::is_active( void ) const
 {
   return _active;
 }
@@ -298,15 +290,15 @@ inline bool puu_node<individual>::is_active( void ) const
  * \param    void
  * \return   \e bool
  */
-template <typename individual>
-inline bool puu_node<individual>::is_tagged( void ) const
+template <typename selection_unit>
+inline bool puu_node<selection_unit>::is_tagged( void ) const
 {
   return _tagged;
 }
 
-/*---------------------------------------------
- * SETTERS DEFINITION (puu_node)
- *---------------------------------------------*/
+/*----------------------------
+ * SETTERS
+ *----------------------------*/
 
 /**
  * \brief    Add a parent
@@ -314,28 +306,10 @@ inline bool puu_node<individual>::is_tagged( void ) const
  * \param    puu_node* node
  * \return   \e void
  */
-template <typename individual>
-inline void puu_node<individual>::set_parent( puu_node* node )
+template <typename selection_unit>
+inline void puu_node<selection_unit>::set_parent( puu_node* node )
 {
   _parent = node;
-}
-
-/**
- * \brief    Set the node class as master root
- * \details  --
- * \param    void
- * \return   \e void
- */
-template <typename individual>
-inline void puu_node<individual>::as_master_root( void )
-{
-  _identifier = 0;
-  _individual = NULL;
-  _parent     = NULL;
-  _node_class = MASTER_ROOT;
-  _active     = false;
-  _tagged     = false;
-  _children.clear();
 }
 
 /**
@@ -344,8 +318,8 @@ inline void puu_node<individual>::as_master_root( void )
  * \param    void
  * \return   \e void
  */
-template <typename individual>
-inline void puu_node<individual>::as_root( void )
+template <typename selection_unit>
+inline void puu_node<selection_unit>::as_root( void )
 {
   _node_class = ROOT;
 }
@@ -356,21 +330,27 @@ inline void puu_node<individual>::as_root( void )
  * \param    void
  * \return   \e void
  */
-template <typename individual>
-inline void puu_node<individual>::as_normal( void )
+template <typename selection_unit>
+inline void puu_node<selection_unit>::as_normal( void )
 {
   _node_class = NORMAL;
 }
 
 /**
- * \brief    Set the node state as inactive
+ * \brief    Inactivate the node
  * \details  --
- * \param    void
+ * \param    double time
+ * \param    bool copy
  * \return   \e void
  */
-template <typename individual>
-inline void puu_node<individual>::as_inactive( void )
+template <typename selection_unit>
+inline void puu_node<selection_unit>::inactivate( double time, bool copy )
 {
+  _insertion_time = time;
+  if (copy)
+  {
+    _selection_unit = new selection_unit(*_selection_unit);
+  }
   _active = false;
 }
 
@@ -380,8 +360,8 @@ inline void puu_node<individual>::as_inactive( void )
  * \param    void
  * \return   \e void
  */
-template <typename individual>
-inline void puu_node<individual>::tag( void )
+template <typename selection_unit>
+inline void puu_node<selection_unit>::tag( void )
 {
   _tagged = true;
 }
@@ -392,8 +372,8 @@ inline void puu_node<individual>::tag( void )
  * \param    void
  * \return   \e void
  */
-template <typename individual>
-inline void puu_node<individual>::untag( void )
+template <typename selection_unit>
+inline void puu_node<selection_unit>::untag( void )
 {
   _tagged = false;
 }

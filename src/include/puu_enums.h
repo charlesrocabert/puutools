@@ -33,6 +33,7 @@
 #ifndef __puutools__puu_enums__
 #define __puutools__puu_enums__
 
+
 /**
  * \brief   Node class
  * \details Defines the class of a node in the tree (master root, root or normal).
@@ -43,6 +44,7 @@ enum puu_node_class
   ROOT        = 1, /*!< The node is a root          */
   NORMAL      = 2  /*!< The node is normal          */
 };
+
 
 #endif /* __puutools__puu_enums__ */
 
