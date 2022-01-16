@@ -35,7 +35,8 @@
 
 #include "./Prng.h"
 #include "./Individual.h"
-#include "../include/puutools.h"
+//#include "../include/puutools.h"
+#include "../include/puu_node.h"
 
 
 /**
