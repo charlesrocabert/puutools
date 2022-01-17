@@ -1,10 +1,10 @@
-<h1 align="center">puutools</h1>
+<h1 align="center">puuTools</h1>
 <p align="center">
     <kbd>
     <img src="pic.jpg" width=350>
     </kbd>
     <br/>
-    <sup>(Helmi Biese) - View from Pyynikki Ridge, 1900</sup>
+    <sup>(Helmi Biese) - View from Pyynikki Ridge, 1900.</sup>
     <br/>
     <em>Live management of lineage and phylogenetic tree toolbox for individual-based simulations</em>
     <br/><br/>
