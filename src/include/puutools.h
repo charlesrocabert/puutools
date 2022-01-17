@@ -365,6 +365,10 @@ inline void puu_node<selection_unit>::inactivate( bool copy )
   {
     _selection_unit = new selection_unit(*_selection_unit);
   }
+  else
+  {
+    _selection_unit = NULL;
+  }
   _active = false;
 }
 
@@ -603,7 +607,7 @@ inline double puu_tree<selection_unit>::get_common_ancestor_age( void )
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 1) If the population extincted            */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  if(master_root->get_number_of_children() == 0)
+  if(master_root->get_nb_children() == 0)
   {
     return 0.0;
   }
@@ -611,7 +615,7 @@ inline double puu_tree<selection_unit>::get_common_ancestor_age( void )
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) If there is a unique common ancestor   */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  else if (master_root->get_number_of_children() == 1)
+  else if (master_root->get_nb_children() == 1)
   {
     if (master_root->get_child(0)->is_active())
     {
@@ -629,7 +633,7 @@ inline double puu_tree<selection_unit>::get_common_ancestor_age( void )
   else
   {
     double mean = 0.0;
-    for (size_t i = 0; i < master_root->get_number_of_children(); i++)
+    for (size_t i = 0; i < master_root->get_nb_children(); i++)
     {
       if (master_root->get_child(0)->is_active())
       {
@@ -640,7 +644,7 @@ inline double puu_tree<selection_unit>::get_common_ancestor_age( void )
         mean += (double)master_root->get_child(0)->get_insertion_time();
       }
     }
-    return mean/master_root->get_number_of_children();
+    return mean/master_root->get_nb_children();
   }
 }
 

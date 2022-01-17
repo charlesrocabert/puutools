@@ -193,7 +193,7 @@ template <typename selection_unit>
 void puu_node<selection_unit>::replace_by_grandchildren( puu_node* child_to_remove )
 {
   remove_child(child_to_remove);
-  for (size_t i = 0; i < child_to_remove->get_number_of_children(); i++)
+  for (size_t i = 0; i < child_to_remove->get_nb_children(); i++)
   {
     add_child(child_to_remove->get_child(i));
   }
@@ -388,8 +388,6 @@ void puu_tree<selection_unit>::add_reproduction_event( selection_unit* parent, s
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   assert(_unit_map.find(parent) != _unit_map.end());
   puu_node<selection_unit>* parent_node = _unit_map[parent];
-  //_unit_map.erase(parent);
-  //parent_node->inactivate(copy_parent);
 
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) Create child node              */
@@ -406,13 +404,13 @@ void puu_tree<selection_unit>::add_reproduction_event( selection_unit* parent, s
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 4) Add child node to the node map */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  assert(_node_map.find(_current_id) != _node_map.end());
-  _node_map[child_node->get_identifier()] = child_node;
+  assert(_node_map.find(_current_id) == _node_map.end());
+  _node_map[child_node->get_id()] = child_node;
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 5) Add child node to the unit map */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  assert(_unit_map.find(child) != _unit_map.end());
+  assert(_unit_map.find(child) == _unit_map.end());
   _unit_map[child] = child_node;
 }
 
@@ -449,12 +447,12 @@ void puu_tree<selection_unit>::delete_node( unsigned long long int node_identifi
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 1) Update parental children list  */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  node->get_parent()->replace_children(node);
+  node->get_parent()->replace_by_grandchildren(node);
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) Set the new parent of children */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  for (size_t i = 0; i < node->get_parent()->get_number_of_children(); i++)
+  for (size_t i = 0; i < node->get_parent()->get_nb_children(); i++)
   {
     node->get_parent()->get_child(i)->set_parent(node->get_parent());
   }
@@ -515,7 +513,7 @@ void puu_tree<selection_unit>::prune()
   /* 4) Set master root children as root */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   puu_node<selection_unit>* master_root = _node_map[0];
-  for (size_t i = 0; i < master_root->get_number_of_children(); i++)
+  for (size_t i = 0; i < master_root->get_nb_children(); i++)
   {
     master_root->get_child(i)->as_root();
   }
@@ -541,7 +539,7 @@ void puu_tree<selection_unit>::shorten()
   for (_iterator = _node_map.begin(); _iterator != _node_map.end(); ++_iterator)
   {
     assert(_iterator->first == _iterator->second->get_id());
-    if (!_iterator->second->is_master_root() && !_iterator->second->is_active() && _iterator->second->get_number_of_children() == 1)
+    if (!_iterator->second->is_master_root() && !_iterator->second->is_active() && _iterator->second->get_nb_children() == 1)
     {
       remove_list.push_back(_iterator->first);
     }
@@ -556,23 +554,25 @@ void puu_tree<selection_unit>::shorten()
   }
   remove_list.clear();
 
+  /*
 #if DEBUG
   for (_iterator = _node_map.begin(); _iterator != _node_map.end(); ++_iterator)
   {
-    if (!_iterator->second->isMasterRoot() && !_iterator->second->isAlive())
+    if (!_iterator->second->is_master_root() && !_iterator->second->is_active())
     {
-      assert(_iterator->second->get_number_of_children() == 2);
+      assert(_iterator->second->get_nb_children() == 2);
     }
   }
 #endif
+  */
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 3) Set master root children as root */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   puu_node<selection_unit>* master_root = _node_map[0];
-  for (size_t i = 0; i < master_root->get_number_of_children(); i++)
+  for (size_t i = 0; i < master_root->get_nb_children(); i++)
   {
-    master_root->get_child(i)->set_root();
+    master_root->get_child(i)->as_root();
   }
 }
 
@@ -693,7 +693,7 @@ void puu_tree<selection_unit>::untag_tree()
  * \brief    Tag all the offspring of this node
  * \details  --
  * \param    puu_node* node
- * \param    std::vector<Node*>* tagged_nodes
+ * \param    std::vector<puu_node*>* tagged_nodes
  * \return   \e void
  */
 template <typename selection_unit>
