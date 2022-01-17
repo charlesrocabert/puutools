@@ -31,13 +31,12 @@
  ****************************************************************************/
 
 #include <iostream>
+#include <typeinfo>
 #include <assert.h>
 
-#include "../include/puu_enums.h"
-#include "../include/puu_node.h"
-#include "../include/puu_tree.h"
-#include "../lib/puu_node.cpp"
-#include "../lib/puu_tree.cpp"
+#include "../include/puutools.h"
+#include "../lib/puutools.cpp"
+
 
 /**
  * \brief   Basic Individual class

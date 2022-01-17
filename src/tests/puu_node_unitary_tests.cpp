@@ -34,9 +34,9 @@
 #include <typeinfo>
 #include <assert.h>
 
-#include "../include/puu_enums.h"
-#include "../include/puu_node.h"
-#include "../lib/puu_node.cpp"
+#include "../include/puutools.h"
+#include "../lib/puutools.cpp"
+
 
 /**
  * \brief   Basic Individual class
@@ -116,9 +116,8 @@ int main( int argc, char const** argv )
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) Testing the creation of a normal node                  */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /*
   std::cout << "\n>> Testing NORMAL node" << std::endl;
-  my_node = new puu_node<Individual>(1, my_ind->get_birth_time(), my_ind->get_fitness(), my_ind);
+  my_node = new puu_node<Individual>(1, my_ind->get_birth_time(), my_ind);
   std::cout << "   > Is master root?     " << my_node->is_master_root() << std::endl;
   std::cout << "   > Is root?            " << my_node->is_root() << std::endl;
   std::cout << "   > Is normal?          " << my_node->is_normal() << std::endl;
@@ -128,8 +127,8 @@ int main( int argc, char const** argv )
   my_node->tag();
   std::cout << "  >> Tag the node:" << std::endl;
   std::cout << "   > Is tagged?          " << my_node->is_tagged() << std::endl;
-  puu_node<Individual>* child1 = new puu_node<Individual>(2, my_ind->get_birth_time(), my_ind->get_fitness(), my_ind);
-  puu_node<Individual>* child2 = new puu_node<Individual>(3, my_ind->get_birth_time(), my_ind->get_fitness(), my_ind);
+  puu_node<Individual>* child1 = new puu_node<Individual>(2, my_ind->get_birth_time(), my_ind);
+  puu_node<Individual>* child2 = new puu_node<Individual>(3, my_ind->get_birth_time(), my_ind);
   my_node->add_child(child1);
   my_node->add_child(child2);
   std::cout << "  >> Add two children:" << std::endl;
@@ -147,6 +146,5 @@ int main( int argc, char const** argv )
   my_node = NULL;
   delete my_ind;
   my_ind = NULL;
-   */
   return EXIT_SUCCESS;
 }
