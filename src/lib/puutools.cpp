@@ -108,7 +108,7 @@ puu_node<selection_unit>::puu_node( gzFile backup_file )
 template <typename selection_unit>
 puu_node<selection_unit>::~puu_node( void )
 {
-  if (!_active)
+  if (!_active && _selection_unit != NULL)
   {
     delete _selection_unit;
   }
@@ -216,7 +216,7 @@ void puu_node<selection_unit>::tag_lineage( void )
     node = node->get_parent();
     if (node != NULL)
     {
-      if (node->isTagged())
+      if (node->is_tagged())
       {
         node = NULL;
       }
@@ -241,7 +241,7 @@ void puu_node<selection_unit>::untag_lineage( void )
     node = node->get_parent();
     if (node != NULL)
     {
-      if (!node->isTagged())
+      if (!node->is_tagged())
       {
         node = NULL;
       }
@@ -260,7 +260,7 @@ void puu_node<selection_unit>::untag_lineage( void )
  *----------------------------*/
 
 /**
- * \brief    Default onstructor
+ * \brief    Default constructor
  * \details  The tree is initialized with one node called the master root
  * \param    void
  * \return   \e void
@@ -345,54 +345,57 @@ void puu_tree<selection_unit>::add_root( selection_unit* unit )
   puu_node<selection_unit>* master_root = _node_map[0];
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 2) Create the node              */
+  /* 2) Create the root              */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   _current_id++;
-  puu_node<selection_unit>* node = new puu_node<selection_unit>(_current_id, unit);
+  puu_node<selection_unit>* root = new puu_node<selection_unit>(_current_id, 0.0, unit);
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 3) Connect nodes                */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  node->as_root();
-  node->set_parent(master_root);
-  master_root->add_child(node);
+  root->as_root();
+  root->set_parent(master_root);
+  master_root->add_child(root);
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 4) Add the node to the node map */
+  /* 4) Add the root to the node map */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  assert(_node_map.find(node->get_id()) == _node_map.end());
-  _node_map[node->get_id()] = node;
+  assert(_node_map.find(root->get_id()) == _node_map.end());
+  _node_map[root->get_id()] = root;
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 5) Add the node to the unit map */
+  /* 5) Add the root to the unit map */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   assert(_unit_map.find(unit) == _unit_map.end());
-  _unit_map[unit] = node;
+  _unit_map[unit] = root;
 }
 
 /**
- * \brief    Add a division to the tree
+ * \brief    Add a reproduction event to the tree
  * \details  --
  * \param    selection_unit* parent
  * \param    selection_unit* child
+ * \param    double time
  * \return   \e void
  */
 template <typename selection_unit>
-void puu_tree<selection_unit>::add_reproduction_event( selection_unit* parent, selection_unit* child )
+void puu_tree<selection_unit>::add_reproduction_event( selection_unit* parent, selection_unit* child, double time )
 {
+  assert(time >= 0.0);
+  
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 1) Get parental node              */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   assert(_unit_map.find(parent) != _unit_map.end());
   puu_node<selection_unit>* parent_node = _unit_map[parent];
-  _unit_map.erase(parent);
-  parent_node->inactivate();
+  //_unit_map.erase(parent);
+  //parent_node->inactivate(copy_parent);
 
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) Create child node              */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   _current_id++;
-  puu_node<selection_unit>* child_node = new puu_node<selection_unit>(_current_id, child);
+  puu_node<selection_unit>* child_node = new puu_node<selection_unit>(_current_id, time, child);
 
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 3) Update child node attributes   */
@@ -411,6 +414,22 @@ void puu_tree<selection_unit>::add_reproduction_event( selection_unit* parent, s
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   assert(_unit_map.find(child) != _unit_map.end());
   _unit_map[child] = child_node;
+}
+
+/**
+ * \brief    Inactivate the node related to this selection unit
+ * \details  If copy_unit is true, a local copy of the selection unit is made
+ * \param    selection_unit* unit
+ * \param    bool copy_unit
+ * \return   \e void
+ */
+template <typename selection_unit>
+void puu_tree<selection_unit>::inactivate( selection_unit* unit, bool copy_unit )
+{
+  assert(_unit_map.find(unit) != _unit_map.end());
+  puu_node<selection_unit>* node = _unit_map[unit];
+  _unit_map.erase(unit);
+  node->inactivate(copy_unit);
 }
 
 /**

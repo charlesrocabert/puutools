@@ -354,6 +354,7 @@ inline void puu_node<selection_unit>::as_normal( void )
 /** @
  * \brief    Inactivate the node
  * \details  --
+ * \param    selection_unit* unit
  * \param    bool copy
  * \return   \e void
  */
@@ -437,8 +438,8 @@ public:
    *----------------------------*/
   //void save( gzFile backup_file );
   void add_root( selection_unit* unit );
-  void add_reproduction_event( selection_unit* parent, selection_unit* child );
-  void delete_node( unsigned long long int node_identifier );
+  void add_reproduction_event( selection_unit* parent, selection_unit* child, double time );
+  void inactivate( selection_unit* unit, bool copy_unit );
   void prune();
   void shorten();
   void write_tree( std::string filename );
@@ -453,6 +454,7 @@ protected:
   /*----------------------------
    * PROTECTED METHODS
    *----------------------------*/
+  void delete_node( unsigned long long int node_identifier );
   void inOrderNewick( puu_node<selection_unit>* node, double parent_time, std::stringstream& output );
   void tag_tree();
   void untag_tree();
@@ -501,7 +503,7 @@ inline puu_node<selection_unit>* puu_tree<selection_unit>::get_node_by_identifie
 
 /**
  * \brief    Get the node by selection unit
- * \details  Return NULL if the node do not exist
+ * \details  Return NULL if the node do not exist. The node must be active.
  * \param    selection_unit* unit
  * \return   \e puu_node*
  */
@@ -518,7 +520,7 @@ inline puu_node<selection_unit>* puu_tree<selection_unit>::get_node_by_selection
 
 /**
  * \brief    Get the first node of the map
- * \details  Return NULL if the tree is empty
+ * \details  Return NULL if the node map is empty
  * \param    void
  * \return   \e puu_node*
  */
@@ -535,7 +537,7 @@ inline puu_node<selection_unit>* puu_tree<selection_unit>::get_first( void )
 
 /**
  * \brief    Get the next node
- * \details  Return NULL if the end of the tree is reached
+ * \details  Return NULL if the end of the node map is reached
  * \param    void
  * \return   \e puu_node*
  */
@@ -589,7 +591,7 @@ inline puu_node<selection_unit>* puu_tree<selection_unit>::get_common_ancestor( 
 
 /**
  * \brief    Get the common ancestor age
- * \details  --
+ * \details  If the root is multirooted, returns the mean of root ages
  * \param    void
  * \return   \e double
  */
@@ -613,11 +615,11 @@ inline double puu_tree<selection_unit>::get_common_ancestor_age( void )
   {
     if (master_root->get_child(0)->is_active())
     {
-      return (double)master_root->get_child(0)->get_activation_time();
+      return (double)master_root->get_child(0)->get_insertion_time();
     }
     else
     {
-      return (double)master_root->get_child(0)->get_activation_time();
+      return (double)master_root->get_child(0)->get_insertion_time();
     }
   }
   
@@ -631,11 +633,11 @@ inline double puu_tree<selection_unit>::get_common_ancestor_age( void )
     {
       if (master_root->get_child(0)->is_active())
       {
-        mean += (double)master_root->get_child(0)->get_activation_time();
+        mean += (double)master_root->get_child(0)->get_insertion_time();
       }
       else
       {
-        mean += (double)master_root->get_child(0)->get_activation_time();
+        mean += (double)master_root->get_child(0)->get_insertion_time();
       }
     }
     return mean/master_root->get_number_of_children();
