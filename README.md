@@ -1,6 +1,8 @@
 <h1 align="center">puutools</h1>
 <p align="center">
-    <img src="pic.jpg" width=400>
+    <kbd>
+    <img src="pic.jpg" width=350>
+    </kbd>
     <br/>
     <sup>(Helmi Biese) - View from Pyynikki Ridge, 1900</sup>
     <br/>
