@@ -89,7 +89,7 @@ public:
   inline void set_parent( puu_node* node );
   inline void as_root( void );
   inline void as_normal( void );
-  inline void inactivate( double time, bool copy );
+  inline void inactivate( bool copy );
   inline void tag( void );
   inline void untag( void );
   
@@ -339,14 +339,12 @@ inline void puu_node<selection_unit>::as_normal( void )
 /**
  * \brief    Inactivate the node
  * \details  --
- * \param    double time
  * \param    bool copy
  * \return   \e void
  */
 template <typename selection_unit>
-inline void puu_node<selection_unit>::inactivate( double time, bool copy )
+inline void puu_node<selection_unit>::inactivate( bool copy )
 {
-  _insertion_time = time;
   if (copy)
   {
     _selection_unit = new selection_unit(*_selection_unit);

@@ -163,7 +163,8 @@ void puu_tree<selection_unit>::add_reproduction_event( selection_unit* parent, s
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   assert(_unit_map.find(parent) != _unit_map.end());
   puu_node<selection_unit>* parent_node = _unit_map[parent];
-  parent_node->set_dead();
+  _unit_map.erase(parent);
+  parent_node->inactivate();
 
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) Create child node              */
@@ -390,17 +391,17 @@ void puu_tree<selection_unit>::write_newick_tree( std::string filename )
 template <typename selection_unit>
 void puu_tree<selection_unit>::inOrderNewick( puu_node<selection_unit>* node, double parent_time, std::stringstream& output )
 {
-  /*--------------------------------------*/
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 1) If node is a leaf                 */
-  /*--------------------------------------*/
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   if (node->is_active() || node->get_number_of_children() < 2)
   {
     output << node->get_id() << ":" << node->get_insertion_time()-parent_time;
   }
   
-  /*--------------------------------------*/
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) Else if node has several children */
-  /*--------------------------------------*/
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   else
   {
     output << "(";
