@@ -4,7 +4,7 @@
     <img src="pic.jpg" width=350>
     </kbd>
     <br/>
-    <sup>(Helmi Biese) - View from Pyynikki Ridge, 1900.</sup>
+    <sup><a href="https://www.kansallisgalleria.fi/en/object/614144" target="_blank">(Helmi Biese) - View from Pyynikki Ridge, 1900.</a></sup>
     <br/>
     <em>Live-management toolbox for lineage and phylogenetic trees in individual-based simulations</em>
     <br/><br/>
