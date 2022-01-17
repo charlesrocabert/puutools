@@ -12,9 +12,11 @@
 </p>
 
 <p align="justify">
-<strong>puuTools</strong> allows to create, track and manage lineage and phylogenic trees inside forward-in-time, individual-based simulations of evolution.
+<strong>puuTools</strong> allows to easily create, track and manage lineage and phylogenic trees inside forward-in-time, individual-based simulations of evolution.
 
-To date, <strong>puuTools</strong> is a static library for C++ developers. We plan to provide a Python-binding in a future version.
+With <strong>puuTools</strong>, it is possible to update the lineage and/or the phylogenic tree of a population at each generation or time-step of a simulation, to track the evolution of any individual or population-level property at the resolution of the lineage or phylogenetic level. <strong>puuTools</strong> is easy to deploy in one's simulation framework and is versatile thanks to class inheritance.
 
-With <strong>puuTools</strong>, e.
+To date, <strong>puuTools</strong> is distributed as a static library for C++ developers. We plan to provide a Python-binding in a future version.
+
+
 </p>
