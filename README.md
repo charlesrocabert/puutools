@@ -11,7 +11,7 @@
 <a href="https://github.com/charlesrocabert/Evo2Sim/releases/latest"><img src="https://img.shields.io/badge/version- 1.1.0-green.svg" /></a>&nbsp;<a href="https://github.com/charlesrocabert/Evo2Sim/releases/latest"><img src="https://img.shields.io/badge/build-passing-green.svg" /></a>&nbsp;<a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/license-GPL v3-blue.svg" /></a>
 </p>
 
-# Rationale
+# Aim
 
 <p align="justify">
 As the complexity of individual-based evolutionary simulations increases, it becomes crucial to develop tools to efficiently track the phylogeny of <em>in silico</em> populations and access exhaustively to all the events that occured (<em>e.g.</em> genetic mutations) during the simulations.
@@ -31,7 +31,7 @@ While this approach comes at slightly higher computational and RAM cost (it is n
 Re-implementing from scratch this kind of tools each time a new simulation software is developed can be a hassle, as it requires specific algorithms to optimize computational and memory costs. This is where <strong>puuTools</strong> may facilitate this facet of the numerical modeling of evolution.
 </p>
 
-# What puuTools does
+# What is puuTools
 
 <p align="justify">
 <strong>puuTools</strong> allows to dynamically create, track and manage lineage and phylogenic trees inside forward-in-time, individual-based simulations of evolution.
@@ -44,7 +44,7 @@ The code of <strong>puuTools</strong> has primarily been implemented during the 
 To date, <strong>puuTools</strong> is distributed as a static library for C++ developers. We plan to provide a Python-binding in a future version.
 </p>
 
-# Examples
+# First usage with examples
 
 ## Wright-Fisher population
 
