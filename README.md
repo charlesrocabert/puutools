@@ -11,6 +11,8 @@
 <a href="https://github.com/charlesrocabert/Evo2Sim/releases/latest"><img src="https://img.shields.io/badge/version- 1.1.0-green.svg" /></a>&nbsp;<a href="https://github.com/charlesrocabert/Evo2Sim/releases/latest"><img src="https://img.shields.io/badge/build-passing-green.svg" /></a>&nbsp;<a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/license-GPL v3-blue.svg" /></a>
 </p>
 
+# Rationale
+
 <p align="justify">
 As the complexity of individual-based evolutionary simulations increases, it becomes crucial to develop tools to efficiently track the phylogeny of <em>in silico</em> populations and access exhaustively to all the events that occured (<em>e.g.</em> genetic mutations) during the simulations.
 More and more models simulate complex phenomena such as the evolution of bacterial genomes, phenotypic plasticity, speciation events or even major evolutionary transitions.
@@ -27,10 +29,29 @@ While this approach comes at slightly higher computational and RAM cost (it is n
 
 <p align="justify">
 Developers usually re-develop from scratch the tools to trace back evolution at the level of the lineages and the phylogeny. As it can be a hassle, we decided to implement and distribute an open-source tool to facilitate this facet of the numerical modeling of evolution.
-  
+</p>
+
+# What puuTools does
+
+<p align="justify">
 <strong>puuTools</strong> allows to easily create, track and manage lineage and phylogenic trees inside forward-in-time, individual-based simulations of evolution.
 
-With <strong>puuTools</strong>, it is possible to update the lineage and/or the phylogenic tree of a population at each generation or time-step of a simulation, to track the evolution of any individual or population-level property at the resolution of the lineage or phylogenetic level. <strong>puuTools</strong> is easy to deploy in one's simulation framework and is versatile thanks to class inheritance.
+With <strong>puuTools</strong>, it is possible to dynamically track and update the lineage and/or the phylogenic tree of a population at each generation or time-step of a simulation, to track the evolution of any individual, population or phylogenetic-level property at time resolution. <strong>puuTools</strong> is easy to deploy and is versatile thanks to class inheritance.
 
 To date, <strong>puuTools</strong> is distributed as a static library for C++ developers. We plan to provide a Python-binding in a future version.
 </p>
+
+# Examples
+
+## Wright-Fisher population
+
+<p align="justify">
+  
+</p>
+
+## Allopatric speciation
+
+<p align="justify">
+  
+</p>
+
