@@ -4,7 +4,7 @@
 <img src="pic.jpg" width=350>
 </kbd>
 <br/>
-<sup>Helmi Biese - View from Pyynikki Ridge, 1900 (Puut means tree in Finnish).</sup>
+<sup>Helmi Biese - View from Pyynikki Ridge, 1900 (Puu is the Finnish word for tree).</sup>
 <br/>
 <em>Dynamic tracking of evolutionary events and phylogenetic trees in individual-based simulations of evolution.</em>
 <br/><br/>
