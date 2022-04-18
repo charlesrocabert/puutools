@@ -19,7 +19,7 @@ More and more models simulate complex phenomena such as the evolution of bacteri
 </p>
 
 <p align="justify">
-As suggested by <a href="https://www.nature.com/articles/nrmicro2750">Hindré et al. (2012)</a>, one solution consists to regularly back up all the information during a simulation, in order to recover the information afterward. However, such an approach usually comes at the cost of the heavy accumulation of data, and limit the opportunities to produce portable simulation software.
+As discussed by <a href="https://www.nature.com/articles/nrmicro2750">Hindré et al. (2012)</a> when it comes to complex evolutionary simulations, one solution consists to regularly back up all the information during a simulation, in order to recover the information afterward. However, such an approach usually requires gigabites of storage space, limiting the opportunities to produce light and portable simulation software.
 </p>
 
 <p align="justify">
