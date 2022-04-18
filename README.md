@@ -55,3 +55,6 @@ To date, <strong>puuTools</strong> is distributed as a static library for C++ de
   
 </p>
 
+# Behind the scene
+
+Algorithms used
