@@ -23,22 +23,22 @@ As discussed by <a href="https://www.nature.com/articles/nrmicro2750">Hindré et
 </p>
 
 <p align="justify">
-Because computational biologists are usually interested in the evolutionary events that led to the final state of a simulation, it is not necessary to back up everything, but only the lineages that did not went extinct. Another solution thus consists in dynamically tracking the lineage and phylogenetic trees during a simulation, to keep at any time the pertinent information. Moreover, such an approach provides instant access to the history of evolutionary events (<em>e.g.</em> the mutational history of a genome), and also to any phylogeny statistics such as the structure of the phylogenetic tree, the most recent common ancestor age, etc.
-While this approach comes at slightly higher computational and RAM cost (it is necessary to regularly update the structure of the tree and to maintain in memory the information of approximately 2n-1 individuals), it is much lighter and efficient than backing up everything and running post-treatments afterward.
+Because computational biologists are usually interested in the evolutionary events that led to the final state of a simulation, it is not necessary to back up everything, but only the lineages that did not went extinct. Another solution thus consists in dynamically tracking the lineage and phylogenetic trees during a simulation, in order to only keep the pertinent information in memory. Moreover, such an approach provides instant access to the history of evolutionary events (<em>e.g.</em> the mutational history of a genome, or the most recent common ancestor age), at any time.
+While this approach comes at slightly higher computational and RAM cost (it is necessary to regularly update the structure of the tree, and to maintain in memory the information of approximately 2n-1 individuals), it is much lighter and efficient than backing up everything and running post-treatments afterward.
 </p>
 
 <p align="justify">
-Developers usually re-develop from scratch the tools to trace back evolution at the level of the lineages and the phylogeny. As it can be a hassle, we decided to implement and distribute an open-source tool to facilitate this facet of the numerical modeling of evolution.
+Re-implementing from scratch this kind of tools each time a new simulation software is developed can be a hassle, as it requires specific algorithms to optimize computational and memory costs. This is where <strong>puuTools</strong> may facilitate this facet of the numerical modeling of evolution.
 </p>
 
 # What puuTools does
 
 <p align="justify">
-<strong>puuTools</strong> allows to easily create, track and manage lineage and phylogenic trees inside forward-in-time, individual-based simulations of evolution.
+<strong>puuTools</strong> allows to dynamically create, track and manage lineage and phylogenic trees inside forward-in-time, individual-based simulations of evolution.
 
-With <strong>puuTools</strong>, it is possible to dynamically track and update the lineage and/or the phylogenic tree of a population at each generation or time-step of a simulation, to track the evolution of any individual, population or phylogenetic-level property at time resolution. <strong>puuTools</strong> is easy to deploy and is versatile thanks to class inheritance.
+With <strong>puuTools</strong>, it is possible to update the lineage and/or the phylogenic tree of a population at each generation during a simulation, and to track the evolution of any individual, population or phylogenetic-level property at time resolution. <strong>puuTools</strong> is easy to deploy and is versatile thanks to class inheritance.
 
-<strong>puuTools</strong> is an all-in-one library. It does not depend on third-party libraries, and its code is kept simple and light. Learn more about what is under the hood [here](#behind_the_scene).
+<strong>puuTools</strong> is an all-in-one library. It does not depend on third-party packages, and its code is kept simple and light. Learn more about what is under the hood [here](#behind_the_scene).
 To date, <strong>puuTools</strong> is distributed as a static library for C++ developers. We plan to provide a Python-binding in a future version.
 </p>
 
@@ -55,6 +55,8 @@ To date, <strong>puuTools</strong> is distributed as a static library for C++ de
 <p align="justify">
   
 </p>
+
+## A complex scenario where puuTools can be useful
 
 # Behind the scene
 
