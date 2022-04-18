@@ -38,6 +38,7 @@ Developers usually re-develop from scratch the tools to trace back evolution at 
 
 With <strong>puuTools</strong>, it is possible to dynamically track and update the lineage and/or the phylogenic tree of a population at each generation or time-step of a simulation, to track the evolution of any individual, population or phylogenetic-level property at time resolution. <strong>puuTools</strong> is easy to deploy and is versatile thanks to class inheritance.
 
+<strong>puuTools</strong> is an all-in-one library. It does not depend on third-party libraries, and its code is kept simple and light. Learn more about what is under the hood [here](#behind_the_scene).
 To date, <strong>puuTools</strong> is distributed as a static library for C++ developers. We plan to provide a Python-binding in a future version.
 </p>
 
