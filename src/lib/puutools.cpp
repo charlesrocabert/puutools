@@ -55,6 +55,7 @@ puu_node<selection_unit>::puu_node( unsigned long long int identifier )
   _node_class     = MASTER_ROOT;
   _active         = false;
   _tagged         = false;
+  //_copy           = false;
   _children.clear();
 }
 
@@ -78,6 +79,7 @@ puu_node<selection_unit>::puu_node( unsigned long long int identifier, double ti
   _node_class     = NORMAL;
   _active         = true;
   _tagged         = false;
+  //_copy           = false;
   _children.clear();
 }
 
@@ -87,11 +89,13 @@ puu_node<selection_unit>::puu_node( unsigned long long int identifier, double ti
  * \param    gzFile backup_file
  * \return   \e void
  */
+/*
 template <typename selection_unit>
 puu_node<selection_unit>::puu_node( gzFile backup_file )
 {
- TODO
+  TODO
 }
+ */
 
 /*----------------------------
  * DESTRUCTORS
@@ -124,11 +128,13 @@ puu_node<selection_unit>::~puu_node( void )
  * \param    gzFile backup_file
  * \return   \e void
  */
+/*
 template <typename selection_unit>
 void puu_node<selection_unit>::save( gzFile backup_file )
 {
   TODO
 }
+*/
 
 /**
  * \brief    Adds a child
@@ -277,11 +283,13 @@ puu_tree<selection_unit>::puu_tree( void )
  * \param    gzFile backup_file
  * \return   \e void
  */
+/*
 template <typename selection_unit>
 puu_tree<selection_unit>::puu_tree( gzFile backup_file )
 {
   TODO
 }
+*/
 
 /*----------------------------
  * DESTRUCTORS
@@ -316,11 +324,13 @@ puu_tree<selection_unit>::~puu_tree( void )
  * \param    gzFile backup_file
  * \return   \e void
  */
+/*
 template <typename selection_unit>
 void puu_tree<selection_unit>::save( gzFile backup_file )
 {
   TODO
 }
+*/
 
 /**
  * \brief    Adds a root to the tree

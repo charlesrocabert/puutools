@@ -39,7 +39,7 @@
 #include <sstream>
 #include <vector>
 #include <unordered_map>
-#include <zlib.h>
+//#include <zlib.h>
 
 /****************************************************************************/
 
@@ -72,7 +72,7 @@ public:
   puu_node( void ) = delete;
   puu_node( unsigned long long int identifier );
   puu_node( unsigned long long int identifier, double time, selection_unit* unit );
-  puu_node( gzFile backup_file );
+  //puu_node( gzFile backup_file );
   puu_node( const puu_node& node ) = delete;
   
   /*----------------------------
@@ -112,7 +112,7 @@ public:
   /*----------------------------
    * PUBLIC METHODS
    *----------------------------*/
-  void save( gzFile backup_file );
+  //void save( gzFile backup_file );
   void add_child( puu_node* node );
   void remove_child( puu_node* node );
   void replace_by_grandchildren( puu_node* child_to_remove );
@@ -132,14 +132,15 @@ protected:
   /*----------------------------
    * PROTECTED ATTRIBUTES
    *----------------------------*/
-  unsigned long long int _identifier;     /*!< Node identifier                          */
-  double                 _insertion_time; /*!< Node's insertion time                    */
-  selection_unit*        _selection_unit; /*!< Attached selection unit                  */
-  puu_node*              _parent;         /*!< Parental node                            */
-  std::vector<puu_node*> _children;       /*!< Node's children                          */
-  puu_node_class         _node_class;     /*!< Node class (master root, root or normal) */
-  bool                   _active;         /*!< Indicates if the node is active          */
-  bool                   _tagged;         /*!< Indicates if the node is tagged          */
+  unsigned long long int _identifier;     /*!< Node identifier                                 */
+  double                 _insertion_time; /*!< Node's insertion time                           */
+  selection_unit*        _selection_unit; /*!< Attached selection unit                         */
+  puu_node*              _parent;         /*!< Parental node                                   */
+  std::vector<puu_node*> _children;       /*!< Node's children                                 */
+  puu_node_class         _node_class;     /*!< Node class (master root, root or normal)        */
+  bool                   _active;         /*!< Indicates if the node is active                 */
+  bool                   _tagged;         /*!< Indicates if the node is tagged                 */
+  //bool                   _copy;           /*!< Indicates if the selection unit has been copied */
 };
 
 /*----------------------------
@@ -371,6 +372,7 @@ inline void puu_node<selection_unit>::inactivate( bool copy )
     _selection_unit = NULL;
   }
   _active = false;
+  //_copy   = copy;
 }
 
 /**
@@ -413,7 +415,7 @@ public:
    * CONSTRUCTORS
    *----------------------------*/
   puu_tree( void );
-  puu_tree( gzFile backup_file );
+  //puu_tree( gzFile backup_file );
   puu_tree( const puu_tree& tree ) = delete;
   
   /*----------------------------
@@ -441,7 +443,7 @@ public:
   /*----------------------------
    * PUBLIC METHODS
    *----------------------------*/
-  void save( gzFile backup_file );
+  //void save( gzFile backup_file );
   void add_root( selection_unit* unit );
   void add_reproduction_event( selection_unit* parent, selection_unit* child, double time );
   void inactivate( selection_unit* unit, bool copy_unit );
