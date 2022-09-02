@@ -1,4 +1,9 @@
-<h1 align="center">puuTools</h1>
+<!--<h1 align="center">puuTools</h1>-->
+
+<p align="center">
+<img src="./logo/puuTools_logo_crop.png" width=200>
+</p>
+
 <p align="center">
 <kbd>
 <img src="./pic/finnish_landscape.jpg" width=500>
