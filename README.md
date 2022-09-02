@@ -5,12 +5,6 @@
 </p>
 
 <p align="center">
-<kbd>
-<img src="./pic/finnish_landscape.jpg" width=400>
-</kbd>
-<br/>
-<sup>Helmi Biese - View from Pyynikki Ridge, 1900 (Puu is the Finnish word for tree).</sup>
-<br/>
 <em>Live tracking of lineage/phylogenetic trees and evolutionary events in individual-based forward-in-time simulations of evolution.</em>
 <br/><br/>
 <a href="https://github.com/charlesrocabert/Evo2Sim/releases/latest"><img src="https://img.shields.io/badge/version- 1.1.0-green.svg" /></a>&nbsp;<a href="https://github.com/charlesrocabert/Evo2Sim/releases/latest"><img src="https://img.shields.io/badge/build-passing-green.svg" /></a>&nbsp;<a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/license-GPL v3-blue.svg" /></a>
@@ -26,6 +20,14 @@
   - [A complex scenario where puuTools can be useful](#complex_scenario)
 
 ## Aim
+
+<p align="center">
+<kbd>
+<img src="./pic/finnish_landscape.jpg" width=300>
+</kbd>
+<br/>
+<sup>Helmi Biese - View from Pyynikki Ridge, 1900 (Puu is the Finnish word for tree).</sup>
+</p>
 
 <p align="justify">
 Individual-based forward-in-time evolutionary simulations are more and more common, and have been proven to be useful in many field of biology (ecology and evolution, conservation biology, systems biology, etc).
