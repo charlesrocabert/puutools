@@ -1,7 +1,7 @@
 <h1 align="center">puuTools</h1>
 <p align="center">
 <kbd>
-<img src="finnish_landscape.jpg" width=500>
+<img src="./pic/finnish_landscape.jpg" width=500>
 </kbd>
 <br/>
 <sup>Helmi Biese - View from Pyynikki Ridge, 1900 (Puu is the Finnish word for tree).</sup>
