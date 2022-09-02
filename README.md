@@ -47,9 +47,9 @@ This functionality is usually re-implemented from scratch in different simulatio
 ## What is puuTools <a name="puutools"></a>
 
 <p align="justify">
-<strong>puuTools</strong> allows to dynamically create, track and manage lineage and phylogenic trees inside forward-in-time, individual-based simulations of evolution.
+<strong>puuTools</strong> allows to dynamically create, track and manage lineage and phylogenic trees during individual-based forward-in-time simulations of evolution.
 
-With <strong>puuTools</strong>, it is possible to update the lineage and/or the phylogenic tree of a population at each generation during a simulation, and to track the evolution of any individual, population or phylogenetic-level property at time resolution. <strong>puuTools</strong> is easy to deploy and is versatile thanks to class inheritance.
+With <strong>puuTools</strong>, it is possible to update the lineage and/or the phylogenic tree of a population at each generation during a simulation, and to track and recover any evolutionary events. <strong>puuTools</strong> is easy to deploy and versatile.
 
 <strong>puuTools</strong> is an all-in-one library. It does not depend on third-party packages, and its code is kept simple and light. Learn more about what is under the hood [here](#behind_the_scene).
 
@@ -71,7 +71,7 @@ To date, <strong>puuTools</strong> is distributed as a static library for C++ de
 
 </p>
 
-### A complex scenario where puuTools can be useful <a name="complex_scenario"></a>
+### A complex scenario where puuTools has been useful <a name="complex_scenario"></a>
 
 ## Behind the scene
 
