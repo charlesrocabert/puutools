@@ -58,7 +58,7 @@ With <strong>puuTools</strong>, it is possible to update the lineage and/or the 
 
 <strong>puuTools</strong> is an all-in-one library. It does not depend on third-party packages, and its code is kept simple and light. Learn more about what is under the hood [here](#behind_the_scene).
 
-The code of <strong>puuTools</strong> has primarily been implemented during the European project <a href="http://www.evoevo.eu/">EvoEvo</a> (FP7-ICT-610427), as part of the <a href="https://github.com/charlesrocabert/Evo2Sim">Evo2Sim</a> software.
+The code of <strong>puuTools</strong> has primarily been implemented during the European project <a href="http://www.evoevo.eu/">EvoEvo</a> (FP7-ICT-610427), as part of the <a href="https://github.com/charlesrocabert/Evo2Sim">Evo<sup>2</sup>Sim</a> software.
 To date, <strong>puuTools</strong> is distributed as a static library for C++ developers. We plan to provide a Python-binding in a future version.
 </p>
 
