@@ -6,7 +6,7 @@
 
 <p align="center">
 <kbd>
-<img src="./pic/finnish_landscape.jpg" width=500>
+<img src="./pic/finnish_landscape.jpg" width=400>
 </kbd>
 <br/>
 <sup>Helmi Biese - View from Pyynikki Ridge, 1900 (Puu is the Finnish word for tree).</sup>
