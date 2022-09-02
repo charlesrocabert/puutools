@@ -14,6 +14,7 @@
 
 - [Aim](#aim)
 - [What is puuTools](#puutools)
+- [Installation instructions](#installation)
 - [First usage with examples](#first_usage)
   - [Wright-Fisher population](#wright_fisher)
   - [Allopatric speciation](#allopatric_speciation)
@@ -33,9 +34,6 @@
 Individual-based forward-in-time evolutionary simulations are more and more common, and have been proven to be useful in many field of biology (ecology and evolution, conservation biology, systems biology, etc).
 
 As the complexity of these tools tends to increase, it becomes crucial to develop tools which efficiently track the phylogeny of <em>in silico</em> populations and unlock our ability to exhaustively access to all the events (<em>e.g.</em> genetic mutations) during a simulation.
-<!--
-More and more models simulate complex phenomena such as the evolution of bacterial genomes, phenotypic plasticity, speciation events or even major evolutionary transitions.
--->
 </p>
 
 <p align="justify">
@@ -63,6 +61,17 @@ With <strong>puuTools</strong>, it is possible to update the lineage and/or the 
 The code of <strong>puuTools</strong> has primarily been implemented during the European project <a href="http://www.evoevo.eu/">EvoEvo</a> (FP7-ICT-610427), as part of the <a href="https://github.com/charlesrocabert/Evo2Sim">Evo2Sim</a> software.
 To date, <strong>puuTools</strong> is distributed as a static library for C++ developers. We plan to provide a Python-binding in a future version.
 </p>
+
+## Installation instructions <a name="installation"></a>
+
+### Supported platforms
+
+<strong>puuTools</strong> library has been successfully tested on Ubuntu and MacOS.
+
+### Required dependencies
+
+- A C++11 compiler (GCC, LLVM, ...);
+- zlib;
 
 ## First usage with examples <a name="first_usage"></a>
 

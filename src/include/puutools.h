@@ -38,6 +38,7 @@
 #include <sstream>
 #include <vector>
 #include <unordered_map>
+#include <zlib.h>
 
 
 /****************************************************************************/
@@ -57,7 +58,7 @@ enum puu_node_class
 
 /**
  * \brief   puu_node class declaration
- * \details The puu_node class manages lineage or phylogenetic tree nodes
+ * \details The puu_node class manages a lineage or phylogenetic node
  */
 template <typename selection_unit>
 class puu_node
@@ -71,7 +72,7 @@ public:
   puu_node( void ) = delete;
   puu_node( unsigned long long int identifier );
   puu_node( unsigned long long int identifier, double time, selection_unit* unit );
-  //puu_node( gzFile backup_file );
+  puu_node( gzFile backup_file );
   puu_node( const puu_node& node ) = delete;
   
   /*----------------------------
@@ -111,7 +112,7 @@ public:
   /*----------------------------
    * PUBLIC METHODS
    *----------------------------*/
-  //void save( gzFile backup_file );
+  void save( gzFile backup_file );
   void add_child( puu_node* node );
   void remove_child( puu_node* node );
   void replace_by_grandchildren( puu_node* child_to_remove );
@@ -400,7 +401,7 @@ inline void puu_node<selection_unit>::untag( void )
 
 /**
  * \brief   puu_tree class declaration
- * \details The puu_tree class manages lineage or phylogenetic tree
+ * \details The puu_tree class manages a lineage or phylogenetic tree
  */
 template <typename selection_unit>
 class puu_tree
@@ -412,7 +413,7 @@ public:
    * CONSTRUCTORS
    *----------------------------*/
   puu_tree( void );
-  //puu_tree( gzFile backup_file );
+  puu_tree( gzFile backup_file );
   puu_tree( const puu_tree& tree ) = delete;
   
   /*----------------------------
@@ -440,7 +441,7 @@ public:
   /*----------------------------
    * PUBLIC METHODS
    *----------------------------*/
-  //void save( gzFile backup_file );
+  void save( gzFile backup_file );
   void add_root( selection_unit* unit );
   void add_reproduction_event( selection_unit* parent, selection_unit* child, double time );
   void inactivate( selection_unit* unit, bool copy_unit );
@@ -478,7 +479,7 @@ protected:
  *----------------------------*/
 
 /**
- * \brief    Get the number of nodes of the tree
+ * \brief    Get the number of nodes in the tree
  * \details  --
  * \param    void
  * \return   \e size_t
@@ -491,7 +492,7 @@ inline size_t puu_tree<selection_unit>::get_nb_nodes( void ) const
 
 /**
  * \brief    Get the node by its identifier
- * \details  Return NULL if the node do not exist
+ * \details  Returns NULL if the node does not exist
  * \param    unsigned long long int identifier
  * \return   \e Node*
  */
@@ -507,7 +508,7 @@ inline puu_node<selection_unit>* puu_tree<selection_unit>::get_node_by_identifie
 
 /**
  * \brief    Get the node by selection unit
- * \details  Return NULL if the node do not exist. The node must be active.
+ * \details  Returns NULL if the node does not exist. The node must be active.
  * \param    selection_unit* unit
  * \return   \e puu_node*
  */
@@ -524,7 +525,7 @@ inline puu_node<selection_unit>* puu_tree<selection_unit>::get_node_by_selection
 
 /**
  * \brief    Get the first node of the map
- * \details  Return NULL if the node map is empty
+ * \details  Returns NULL if the node map is empty
  * \param    void
  * \return   \e puu_node*
  */
@@ -541,7 +542,7 @@ inline puu_node<selection_unit>* puu_tree<selection_unit>::get_first( void )
 
 /**
  * \brief    Get the next node
- * \details  Return NULL if the end of the node map is reached
+ * \details  Returns NULL if the end of the node map is reached
  * \param    void
  * \return   \e puu_node*
  */
@@ -557,7 +558,7 @@ inline puu_node<selection_unit>* puu_tree<selection_unit>::get_next( void )
 }
 
 /**
- * \brief    Get active node identifiers list
+ * \brief    Get the list of active node identifiers
  * \details  --
  * \param    std::vector<unsigned long long int>* active_node_identifiers
  * \return   \e void
@@ -578,7 +579,7 @@ inline void puu_tree<selection_unit>::get_active_node_identifiers( std::vector<u
 
 /**
  * \brief    Get the common ancestor
- * \details  Return NULL if the population is extincted or if the tree is multirooted
+ * \details  Returns NULL if the population is extincted or if the tree is multi-rooted
  * \param    void
  * \return   \e puu_node*
  */
@@ -595,7 +596,7 @@ inline puu_node<selection_unit>* puu_tree<selection_unit>::get_common_ancestor( 
 
 /**
  * \brief    Get the common ancestor age
- * \details  If the root is multirooted, returns the mean of root ages
+ * \details  If the root is multi-rooted, returns the mean of root ages
  * \param    void
  * \return   \e double
  */
@@ -605,7 +606,7 @@ inline double puu_tree<selection_unit>::get_common_ancestor_age( void )
   puu_node<selection_unit>* master_root = _node_map[0];
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 1) If the population extincted            */
+  /* 1) If the population went extincte        */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   if(master_root->get_nb_children() == 0)
   {
