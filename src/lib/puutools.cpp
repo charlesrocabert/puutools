@@ -11,7 +11,8 @@
 /****************************************************************************
  * puutools
  * ---------
- * Lineage and phylogenetic tree toolbox for individual-based simulations.
+ * Live tracking of lineage/phylogenetic trees and evolutionary events in
+ * individual-based forward-in-time simulations of evolution.
  *
  * Copyright © 2022 Charles Rocabert
  * Web: https://github.com/charlesrocabert/puutools/
@@ -32,7 +33,6 @@
 
 #include "../include/puutools.h"
 
-
 /****************************************************************************/
 
 /*----------------------------
@@ -41,7 +41,7 @@
 
 /**
  * \brief    Constructor
- * \details  Create a MASTER_ROOT node
+ * \details  Creates a MASTER_ROOT node
  * \param    unsigned long long int identifier
  * \return   \e void
  */
@@ -60,7 +60,7 @@ puu_node<selection_unit>::puu_node( unsigned long long int identifier )
 
 /**
  * \brief    Active node constructor
- * \details  Create a new active node with its attached selection unit.
+ * \details  Creates a new active node with its attached selection unit.
  * \param    unsigned long long int identifier
  * \param    double time
  * \param    selection_unit* unit
@@ -83,17 +83,15 @@ puu_node<selection_unit>::puu_node( unsigned long long int identifier, double ti
 
 /**
  * \brief    Constructor from backup file
- * \details  Load Node class from backup file. Relationships are not loaded, but are managed in Tree class
+ * \details  Loads a node from a backup file. Nodes' relationships are not loaded.
  * \param    gzFile backup_file
  * \return   \e void
  */
-/*
 template <typename selection_unit>
 puu_node<selection_unit>::puu_node( gzFile backup_file )
 {
  TODO
 }
-*/
 
 /*----------------------------
  * DESTRUCTORS
@@ -121,21 +119,19 @@ puu_node<selection_unit>::~puu_node( void )
  *----------------------------*/
 
 /**
- * \brief    Save in backup file
- * \details  Relationships are not saved, but are managed in Tree class
+ * \brief    Saves the node in a backup file
+ * \details  Nodes' relationships are not saved.
  * \param    gzFile backup_file
  * \return   \e void
  */
-/*
 template <typename selection_unit>
 void puu_node<selection_unit>::save( gzFile backup_file )
 {
   TODO
 }
-*/
 
 /**
- * \brief    Add a child
+ * \brief    Adds a child
  * \details  --
  * \param    puu_node* node
  * \return   \e void
@@ -151,7 +147,7 @@ void puu_node<selection_unit>::add_child( puu_node* node )
 }
 
 /**
- * \brief    Remove a child
+ * \brief    Removes a child
  * \details  --
  * \param    puu_node* node
  * \return   \e void
@@ -168,7 +164,7 @@ void puu_node<selection_unit>::remove_child( puu_node* node )
     }
     else if (node->get_id() == _children[i]->get_id() && pos >= 0)
     {
-      printf("Error in Node::remove_child(): multiple occurences of a node in the children list. Exit.\n");
+      printf("Error in Node::remove_child(): multiple occurences of a node in the list of children. Exit.\n");
       exit(EXIT_FAILURE);
     }
   }
@@ -184,7 +180,7 @@ void puu_node<selection_unit>::remove_child( puu_node* node )
 }
 
 /**
- * \brief    Replace this child by its own children
+ * \brief    Replaces the given child by its own children
  * \details  --
  * \param    puu_node* child_to_remove
  * \return   \e void
@@ -200,7 +196,7 @@ void puu_node<selection_unit>::replace_by_grandchildren( puu_node* child_to_remo
 }
 
 /**
- * \brief    Tag the lineage of this node
+ * \brief    Tags the lineage of the node
  * \details  --
  * \param    void
  * \return   \e void
@@ -225,7 +221,7 @@ void puu_node<selection_unit>::tag_lineage( void )
 }
 
 /**
- * \brief    Untag the lineage of this node
+ * \brief    Untags the lineage of the node
  * \details  --
  * \param    void
  * \return   \e void
@@ -277,17 +273,15 @@ puu_tree<selection_unit>::puu_tree( void )
 
 /**
  * \brief    Constructor from backup file
- * \details  Load Tree class from backup file. First, load nodes. Then, load tree relationships (parent and children information), and load selection units.
+ * \details  Loads the tree from a backup file. First, the function loads nodes. Then, it loads tree's relationships (parent and children information), and load selection units.
  * \param    gzFile backup_file
  * \return   \e void
  */
-/*
 template <typename selection_unit>
 puu_tree<selection_unit>::puu_tree( gzFile backup_file )
 {
   TODO
 }
-*/
 
 /*----------------------------
  * DESTRUCTORS
@@ -317,21 +311,19 @@ puu_tree<selection_unit>::~puu_tree( void )
  *----------------------------*/
 
 /**
- * \brief    Save in backup file
+ * \brief    Saves the tree in a backup file
  * \details  --
  * \param    gzFile backup_file
  * \return   \e void
  */
-/*
 template <typename selection_unit>
 void puu_tree<selection_unit>::save( gzFile backup_file )
 {
   TODO
 }
-*/
 
 /**
- * \brief    Add a root to the tree
+ * \brief    Adds a root to the tree
  * \details  --
  * \param    selection_unit* unit
  * \return   \e void
@@ -371,7 +363,7 @@ void puu_tree<selection_unit>::add_root( selection_unit* unit )
 }
 
 /**
- * \brief    Add a reproduction event to the tree
+ * \brief    Adds a reproduction event to the tree
  * \details  --
  * \param    selection_unit* parent
  * \param    selection_unit* child
@@ -415,8 +407,8 @@ void puu_tree<selection_unit>::add_reproduction_event( selection_unit* parent, s
 }
 
 /**
- * \brief    Inactivate the node related to this selection unit
- * \details  If copy_unit is true, a local copy of the selection unit is made
+ * \brief    Inactivates the node belonging to the provided selection unit
+ * \details  If copy_unit is set to true, a local copy of the selection unit is made
  * \param    selection_unit* unit
  * \param    bool copy_unit
  * \return   \e void
@@ -431,7 +423,7 @@ void puu_tree<selection_unit>::inactivate( selection_unit* unit, bool copy_unit 
 }
 
 /**
- * \brief    Delete a node and remove all links
+ * \brief    Deletes a node and removes all node's relationships
  * \details  --
  * \param    unsigned long long int node_identifier
  * \return   \e void
@@ -466,8 +458,8 @@ void puu_tree<selection_unit>::delete_node( unsigned long long int node_identifi
 }
 
 /**
- * \brief    Prune the tree
- * \details  Remove all dead branches
+ * \brief    Prunes the tree
+ * \details  Removes all dead branches.
  * \param    void
  * \return   \e void
  */
@@ -520,8 +512,8 @@ void puu_tree<selection_unit>::prune()
 }
 
 /**
- * \brief    Shorten the tree
- * \details  Remove all the dead nodes that are not common ancestors
+ * \brief    Shortens the tree
+ * \details  Removes all the dead nodes that are not common ancestors
  * \param    void
  * \return   \e void
  */
@@ -577,8 +569,8 @@ void puu_tree<selection_unit>::shorten()
 }
 
 /**
- * \brief    Write tree
- * \details  Write adjacency list in a file (.txt)
+ * \brief    Writes tree in a text file
+ * \details  Writes adjacency list in a file (.txt).
  * \param    std::string filename
  * \return   \e void
  */
@@ -597,8 +589,8 @@ void puu_tree<selection_unit>::write_tree( std::string filename )
 }
 
 /**
- * \brief    Write Newick tree
- * \details  Write tree in Newick format in a file (.phb)
+ * \brief    Writes Newick tree
+ * \details  Writes tree in Newick format in a file (.phb)
  * \param    std::string filename
  * \return   \e void
  */
@@ -622,7 +614,7 @@ void puu_tree<selection_unit>::write_newick_tree( std::string filename )
  *----------------------------*/
 
 /**
- * \brief    Recursive method used to build Newick format file
+ * \brief    Recursive method used to build the Newick format file
  * \details  --
  * \param    puu_node* node
  * \param    double parent_time
@@ -660,7 +652,7 @@ void puu_tree<selection_unit>::inOrderNewick( puu_node<selection_unit>* node, do
 }
 
 /**
- * \brief    Tag all the nodes
+ * \brief    Tags all the nodes
  * \details  --
  * \param    void
  * \return   \e void
@@ -675,7 +667,7 @@ void puu_tree<selection_unit>::tag_tree()
 }
 
 /**
- * \brief    Untag all the nodes
+ * \brief    Untags all the nodes
  * \details  --
  * \param    void
  * \return   \e void
@@ -690,7 +682,7 @@ void puu_tree<selection_unit>::untag_tree()
 }
 
 /**
- * \brief    Tag all the offspring of this node
+ * \brief    Tags all the offspring of the given node
  * \details  --
  * \param    puu_node* node
  * \param    std::vector<puu_node*>* tagged_nodes

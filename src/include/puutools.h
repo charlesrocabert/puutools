@@ -11,7 +11,8 @@
 /****************************************************************************
  * puutools
  * ---------
- * Lineage and phylogenetic tree toolbox for individual-based simulations.
+ * Live tracking of lineage/phylogenetic trees and evolutionary events in
+ * individual-based forward-in-time simulations of evolution.
  *
  * Copyright © 2022 Charles Rocabert
  * Web: https://github.com/charlesrocabert/puutools/
@@ -39,7 +40,6 @@
 #include <vector>
 #include <unordered_map>
 #include <zlib.h>
-
 
 /****************************************************************************/
 
