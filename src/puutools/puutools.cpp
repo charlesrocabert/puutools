@@ -31,7 +31,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
 
-#include "../include/puutools.h"
+#include "puutools.h"
+
+
+namespace puutools {
 
 /****************************************************************************/
 
@@ -722,4 +725,6 @@ void puu_tree<selection_unit>::tag_offspring( puu_node<selection_unit>* node, st
     }
   }
 }
+
+} // namespace puutools
 
