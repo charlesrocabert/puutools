@@ -53,8 +53,8 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG -O3 -Wall -Wext
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 add_library(
   puutools STATIC
-  ./src/puutools/puutools.h
-  ./src/puutools/puutools.cpp
+  ./src/include/puutools.h
+  ./src/lib/puutools.cpp
 )
 
 set_target_properties(puutools PROPERTIES VERSION ${puutools_VERSION})
@@ -65,7 +65,7 @@ set_target_properties(puutools PROPERTIES VERSION ${puutools_VERSION})
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 install(
   FILES
-    ./src/puutools/puutools.h
+    ./src/include/puutools.h
   DESTINATION
     include
 )
