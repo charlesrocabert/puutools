@@ -23,10 +23,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #***************************************************************************/
 
-make clean
-rm -rf ../build/puutools/*
-rm -rf CMakeFiles
-rm cmake_install.cmake
-rm CMakeCache.txt
-rm Makefile
-rm libpuutools.a
+bash cmake_clean.sh
+cmake -DCMAKE_BUILD_TYPE=Debug ..
+cmake --build .
+sudo cmake --install .
+

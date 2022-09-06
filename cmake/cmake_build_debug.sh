@@ -23,6 +23,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #***************************************************************************/
 
-bash make_clean.sh
-cmake -DCMAKE_BUILD_TYPE=Release ..
-make
+bash cmake_clean.sh
+cmake -DCMAKE_BUILD_TYPE=Debug ..
+cmake --build .
+
