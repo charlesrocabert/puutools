@@ -42,8 +42,6 @@
 //#include <zlib.h>
 
 
-namespace puutools {
-
 /****************************************************************************/
 
 /**
@@ -659,8 +657,6 @@ inline double puu_tree<selection_unit>::get_common_ancestor_age( void )
  *----------------------------*/
 
 /****************************************************************************/
-
-} // namespace puutools
 
 
 #endif /* defined(__puutools__) */

@@ -33,10 +33,11 @@
 #include <iostream>
 #include <assert.h>
 
-#include "./Prng.h"
-#include "./Individual.h"
-#include "../include/puutools.h"
-#include "../lib/puutools.cpp"
+#include "Prng.h"
+#include "Individual.h"
+#include "puu_enums.h"
+#include "puu_node.h"
+#include "puu_tree.h"
 
 
 /**
@@ -48,6 +49,9 @@
  */
 int main( int argc, char const** argv )
 {
+  (void)argc;
+  (void)argv;
+  
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 1) Define simulation parameters */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -97,7 +101,7 @@ int main( int argc, char const** argv )
     
     for (int i = 0; i < population_size; i++)
     {
-      for (int j = 0; j < nb_descendants[i]; j++)
+      for (int j = 0; j < (int)nb_descendants[i]; j++)
       {
         new_population[index] = new Individual(*population[i]);
         new_population[index]->mutate(mutation_rate, mutation_size);
