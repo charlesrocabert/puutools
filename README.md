@@ -48,7 +48,7 @@ While this approach comes at slightly higher computational and live memory cost 
 </p>
 
 <p align="justify">
-This functionality is usually re-implemented from scratch in different simulation software, at the cost of re-investing time and energy to optimize the algorithms. The aim of <strong>puuTools</strong> is to help developers win development time by offering an easy-to-use and light framework to manage lineage and phylogenetic information on the fly during an evolutionary simulation.
+This functionality is usually re-implemented from scratch in different simulation software, at the cost of re-investing time to optimize the algorithms. The aim of <strong>puuTools</strong> is to help developers by offering an easy-to-use and light framework to manage lineage and phylogenetic information on the fly during an evolutionary simulation.
 </p>
 
 <p align="center">
