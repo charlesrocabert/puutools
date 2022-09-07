@@ -51,6 +51,10 @@ While this approach comes at slightly higher computational and live memory cost 
 This functionality is usually re-implemented from scratch in different simulation software, at the cost of re-investing time and energy to optimize the algorithms. The aim of <strong>puuTools</strong> is to help developers win development time by offering an easy-to-use and light framework to manage lineage and phylogenetic information on the fly during an evolutionary simulation.
 </p>
 
+<p align="center">
+<img src="./doc/backup_vs_live_tracking-crop.jpg" width=800>
+</p>
+
 ## What is puuTools <a name="puutools"></a>
 
 <p align="justify">
