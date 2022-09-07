@@ -51,10 +51,14 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG -O3 -Wall -Wext
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 # Create puuTools library                                                      #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#add_library(
+#  puutools STATIC
+#  ./puutools/puutools.h
+#  ./puutools/puutools.cpp
+#)
 add_library(
   puutools STATIC
-  ./src/puutools.h
-  ./src/puutools.cpp
+  ./puutools/puutools2.h
 )
 
 set_target_properties(puutools PROPERTIES VERSION ${puutools_VERSION})
@@ -63,16 +67,24 @@ set_target_properties(puutools PROPERTIES VERSION ${puutools_VERSION})
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 # Provide installation instructions                                            #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#install(
+#  FILES
+#    ./puutools/puutools.h
+#  DESTINATION
+#    include
+#)
+#install(
+#  FILES
+#    ./cmake/libpuutools.a
+#  DESTINATION
+#    lib
+#)
+
 install(
   FILES
-    ./src/puutools.h
+    ./puutools/puutools2.h
   DESTINATION
     include
 )
-install(
-  FILES
-    ./cmake/libpuutools.a
-  DESTINATION
-    lib
-)
+
 

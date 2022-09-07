@@ -32,12 +32,10 @@
 
 #include <iostream>
 #include <assert.h>
+#include <puutools2.h>
 
 #include "Prng.h"
 #include "Individual.h"
-#include "puu_enums.h"
-#include "puu_node.h"
-#include "puu_tree.h"
 
 
 /**
