@@ -52,7 +52,7 @@ This functionality is usually re-implemented from scratch in different simulatio
 </p>
 
 <p align="center">
-<img src="./doc/backup_vs_live_tracking-crop.jpg" width=800>
+<img src="./doc/backup_vs_live_tracking-crop.jpg">
 </p>
 
 ## What is puuTools <a name="puutools"></a>
