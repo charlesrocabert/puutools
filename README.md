@@ -75,12 +75,20 @@ To date, <strong>puutools</strong> is distributed as a static library for C++ de
 
 ### Supported platforms
 
-<strong>puutools</strong> library has been successfully tested on Ubuntu and MacOS.
+<strong>puutools</strong> library has been developed for Unix/Linux and macOS systems.
 
 ### Required dependencies
 
 - A C++11 compiler (GCC, LLVM, ...);
-- zlib;
+- CMake >= 3.19 (command line version);
+
+### Installation
+
+Download the <a href="https://github.com/charlesrocabert/Evo2Sim/releases/latest">latest release</a> of <strong>puutools</strong>, and save it to a directory of your choice. Open a terminal and use the <code>cd</code> command to navigate to this directory. To install <strong>puutools</strong>, simply call <code>install.sh</code> on the command line:
+
+    sh install.sh
+
+The script requires sudo access to install the library in the appropriate folder. <strong>puutools</strong> comes as a single C++ header file, and will then be installed in an <code>include</code> directory (usually <code>/usr/local/include</code>).
 
 ## First usage with examples <a name="first_usage"></a>
 
