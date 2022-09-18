@@ -39,12 +39,12 @@ As models' complexity tends to increase, it becomes crucial to develop tools whi
 </p>
 
 <p align="justify">
-When dealing with complex evolutionary simulations, one solution consists in producing full simulation backups at regular intervals during a simulation, in order to recover lineage information in post-processing. However, such an approach usually requires gigabytes of storage, as it saves more information than strictly necessary to recover lineages, limiting the opportunities to produce light and portable simulation software.
+When dealing with complex evolutionary simulations, one solution consists in producing full simulation backups at regular intervals during a simulation, in order to recover lineage information in post-processing. However, such an approach usually requires gigabytes of storage, as it saves more information than strictly necessary to recover lineages, limiting the opportunities to produce light and portable simulation software (Fig. 1).
 </p>
 
 <p align="justify">
-Because computational biologists are usually interested in the evolutionary events that led to the final state of a simulation, they are interested in the lineages that did not went extinct. Thus, another solution consists in dynamically tracking the lineage trees during a simulation, in order to only keep the pertinent information in memory. Moreover, such an approach provides live access to the lineage and phylogenetic relationships, including tracing back evolutionary events, at any time during a simulation.
-While this approach comes at slightly higher computational and live memory cost (it is necessary to regularly update the structure of the tree, and to maintain in memory the information of approximately 2n-1 individuals), it is much lighter and efficient than backing up everything and running post-treatments.
+Because precisely recovering the evolutionary events that led to the final state of a population is one major interest of evolutionary simulations, keeping trace of the lineages that did not went extinct is relevant. Thus, another solution consists in dynamically tracking the lineage trees during a simulation, in order to only keep the pertinent information in memory. Moreover, such an approach provides live access to the lineage and phylogenetic relationships, including tracing back evolutionary events, at any time during a simulation.
+While this approach comes at slightly higher computational and live memory cost (it is necessary to maintain in memory and regularly update the structure of the tree), it is much lighter and efficient than backing up everything and running post-treatments.
 </p>
 
 <p align="justify">
@@ -58,13 +58,13 @@ This functionality is usually re-implemented from scratch in different simulatio
 ## What is puuTools <a name="puutools"></a>
 
 <p align="justify">
-<strong>puuTools</strong> allows to dynamically create, track and manage lineage and phylogenic trees during individual-based forward-in-time simulations of evolution.
+<strong>puuTools</strong> allows to dynamically create, track and manage lineage and/or phylogenic trees during individual-based forward-in-time simulations of evolution.
 
 With <strong>puuTools</strong>, it is possible to update the lineage and/or the phylogenic tree of a population at each generation during a simulation, and to track and recover any evolutionary events. <strong>puuTools</strong> is easy to deploy and versatile.
 
-<strong>puuTools</strong> is an all-in-one library. It does not depend on third-party packages, and its code is kept simple and light. Learn more about what is under the hood [here](#behind_the_scene).
+<strong>puuTools</strong> is an all-in-one library. It does not depend on third-party packages, and its code is kept simple and light. <!--Learn more about what is under the hood [here](#behind_the_scene).-->
 
-The code of <strong>puuTools</strong> has primarily been implemented during the European project <a href="http://www.evoevo.eu/">EvoEvo</a> (FP7-ICT-610427), as part of the <a href="https://github.com/charlesrocabert/Evo2Sim">Evo<sup>2</sup>Sim</a> software (see https://doi.org/10.1371/journal.pcbi.1005459). The code has also been used in <a href="https://github.com/charlesrocabert/SigmaFGM">&sigma;FGM</a> framework (see https://doi.org/10.1111/evo.14083).
+The code of <strong>puuTools</strong> has primarily been implemented and optimized during the European project <a href="http://www.evoevo.eu/">EvoEvo</a> (FP7-ICT-610427), as part of the <a href="https://github.com/charlesrocabert/Evo2Sim">Evo<sup>2</sup>Sim</a> software (see https://doi.org/10.1371/journal.pcbi.1005459). The code has also been used in <a href="https://github.com/charlesrocabert/SigmaFGM">&sigma;FGM</a> framework (see https://doi.org/10.1111/evo.14083).
 To date, <strong>puuTools</strong> is distributed as a static library for C++ developers. We plan to provide a Python-binding in a future version.
 </p>
 
