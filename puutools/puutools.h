@@ -374,7 +374,7 @@ inline void puu_node<selection_unit>::inactivate( bool copy )
     _selection_unit = NULL;
   }
   _active = false;
-  //_copy   = copy;
+  _copy   = copy;
 }
 
 /**
@@ -421,7 +421,7 @@ puu_node<selection_unit>::puu_node( unsigned long long int identifier )
   _node_class     = MASTER_ROOT;
   _active         = false;
   _tagged         = false;
-  //_copy           = false;
+  _copy           = false;
   _children.clear();
 }
 
@@ -445,7 +445,7 @@ puu_node<selection_unit>::puu_node( unsigned long long int identifier, double ti
   _node_class     = NORMAL;
   _active         = true;
   _tagged         = false;
-  //_copy           = false;
+  _copy           = false;
   _children.clear();
 }
 
@@ -462,7 +462,7 @@ puu_node<selection_unit>::puu_node( unsigned long long int identifier, double ti
 template <typename selection_unit>
 puu_node<selection_unit>::~puu_node( void )
 {
-  if (!_active && _selection_unit != NULL)
+  if (_copy)
   {
     delete _selection_unit;
   }
