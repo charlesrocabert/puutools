@@ -3,8 +3,9 @@
 #***************************************************************************
 # puutools
 # ---------
-# Live tracking of lineage/phylogenetic trees and evolutionary events in
-# individual-based forward-in-time simulations of evolution.
+# Easy-to-use and versatile framework for the live tracking of
+# lineage/phylogenetic trees and evolutionary events in individual-based
+# forward-in-time simulations of evolution.
 #
 # Copyright © 2022 Charles Rocabert
 # Web: https://github.com/charlesrocabert/puutools/
@@ -26,8 +27,9 @@
 echo "\n****************************************************************************"
 echo "* puutools"
 echo "* ---------"
-echo "* Live tracking of lineage/phylogenetic trees and evolutionary events in"
-echo "* individual-based forward-in-time simulations of evolution."
+echo "* Easy-to-use and versatile framework for the live tracking of"
+echo "* lineage/phylogenetic trees and evolutionary events in individual-based"
+echo "* forward-in-time simulations of evolution."
 echo "*"
 echo "* Copyright © 2022 Charles Rocabert"
 echo "* Web: https://github.com/charlesrocabert/puutools/"
@@ -46,12 +48,16 @@ echo "* You should have received a copy of the GNU General Public License"
 echo "* along with this program.  If not, see <http://www.gnu.org/licenses/>."
 echo "****************************************************************************"
 
-echo "\n>>> Call CMake ...\n"
-cmake ..
+echo "\n>>> Pre-process installation files..."
+cmake .
 
-echo "\n>>> Install puutools ...\n"
+echo "\n>>> Install puutools (requires sudo access)..."
 sudo cmake --install .
 
-echo "\n>>> Do some cleaning ...\n"
-bash cmake_clean.sh
+echo "\n>>> Clean..."
+rm -rf CMakeFiles
+rm cmake_install.cmake
+rm CMakeCache.txt
+rm Makefile
+#rm install_manifest.txt
 

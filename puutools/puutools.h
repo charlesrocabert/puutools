@@ -11,8 +11,9 @@
 /****************************************************************************
  * puutools
  * ---------
- * Live tracking of lineage/phylogenetic trees and evolutionary events in
- * individual-based forward-in-time simulations of evolution.
+ * Easy-to-use and versatile framework for the live tracking of
+ * lineage/phylogenetic trees and evolutionary events in individual-based
+ * forward-in-time simulations of evolution.
  *
  * Copyright © 2022 Charles Rocabert
  * Web: https://github.com/charlesrocabert/puutools/
@@ -39,7 +40,6 @@
 #include <sstream>
 #include <vector>
 #include <unordered_map>
-//#include <zlib.h>
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* Node class enumeration                                                     */
@@ -76,7 +76,6 @@ public:
   puu_node( void ) = delete;
   puu_node( unsigned long long int identifier );
   puu_node( unsigned long long int identifier, double time, selection_unit* unit );
-  //puu_node( gzFile backup_file );
   puu_node( const puu_node& node ) = delete;
   
   /*----------------------------
@@ -87,7 +86,7 @@ public:
   /*----------------------------
    * GETTERS
    *----------------------------*/
-  inline unsigned long long int get_id( void ) const;
+  inline unsigned long long int get_identifier( void ) const;
   inline double                 get_insertion_time( void ) const;
   inline selection_unit*        get_selection_unit( void );
   inline puu_node*              get_parent( void );
@@ -116,7 +115,6 @@ public:
   /*----------------------------
    * PUBLIC METHODS
    *----------------------------*/
-  //void save( gzFile backup_file );
   void add_child( puu_node* node );
   void remove_child( puu_node* node );
   void replace_by_grandchildren( puu_node* child_to_remove );
@@ -144,7 +142,7 @@ protected:
   puu_node_class         _node_class;     /*!< Node class (master root, root or normal)        */
   bool                   _active;         /*!< Indicates if the node is active                 */
   bool                   _tagged;         /*!< Indicates if the node is tagged                 */
-  //bool                   _copy;           /*!< Indicates if the selection unit has been copied */
+  bool                   _copy;           /*!< Indicates if the selection unit has been copied */
 };
 
 /*----------------------------
@@ -158,7 +156,7 @@ protected:
  * \return   \e unsigned long long int
  */
 template <typename selection_unit>
-inline unsigned long long int puu_node<selection_unit>::get_id( void ) const
+inline unsigned long long int puu_node<selection_unit>::get_identifier( void ) const
 {
   return _identifier;
 }
@@ -451,20 +449,6 @@ puu_node<selection_unit>::puu_node( unsigned long long int identifier, double ti
   _children.clear();
 }
 
-/**
- * \brief    Constructor from backup file
- * \details  Loads a node from a backup file. Nodes' relationships are not loaded.
- * \param    gzFile backup_file
- * \return   \e void
- */
-/*
-template <typename selection_unit>
-puu_node<selection_unit>::puu_node( gzFile backup_file )
-{
-  TODO
-}
- */
-
 /*----------------------------
  * DESTRUCTORS
  *----------------------------*/
@@ -491,20 +475,6 @@ puu_node<selection_unit>::~puu_node( void )
  *----------------------------*/
 
 /**
- * \brief    Saves the node in a backup file
- * \details  Nodes' relationships are not saved.
- * \param    gzFile backup_file
- * \return   \e void
- */
-/*
-template <typename selection_unit>
-void puu_node<selection_unit>::save( gzFile backup_file )
-{
-  TODO
-}
-*/
-
-/**
  * \brief    Adds a child
  * \details  --
  * \param    puu_node* node
@@ -515,7 +485,7 @@ void puu_node<selection_unit>::add_child( puu_node* node )
 {
   for (size_t i = 0; i < _children.size(); i++)
   {
-    assert(node->get_id() != _children[i]->get_id());
+    assert(node->get_identifier() != _children[i]->get_identifier());
   }
   _children.push_back(node);
 }
@@ -532,11 +502,11 @@ void puu_node<selection_unit>::remove_child( puu_node* node )
   int pos = -1;
   for (size_t i = 0; i < _children.size(); i++)
   {
-    if (node->get_id() == _children[i]->get_id() && pos == -1)
+    if (node->get_identifier() == _children[i]->get_identifier() && pos == -1)
     {
       pos = (int)i;
     }
-    else if (node->get_id() == _children[i]->get_id() && pos >= 0)
+    else if (node->get_identifier() == _children[i]->get_identifier() && pos >= 0)
     {
       printf("Error in Node::remove_child(): multiple occurences of a node in the list of children. Exit.\n");
       exit(EXIT_FAILURE);
@@ -641,7 +611,6 @@ public:
    * CONSTRUCTORS
    *----------------------------*/
   puu_tree( void );
-  //puu_tree( gzFile backup_file );
   puu_tree( const puu_tree& tree ) = delete;
   
   /*----------------------------
@@ -669,7 +638,6 @@ public:
   /*----------------------------
    * PUBLIC METHODS
    *----------------------------*/
-  //void save( gzFile backup_file );
   void add_root( selection_unit* unit );
   void add_reproduction_event( selection_unit* parent, selection_unit* child, double time );
   void inactivate( selection_unit* unit, bool copy_unit );
@@ -901,20 +869,6 @@ puu_tree<selection_unit>::puu_tree( void )
   _node_map[_current_id] = master_root;
 }
 
-/**
- * \brief    Constructor from backup file
- * \details  Loads the tree from a backup file. First, the function loads nodes. Then, it loads tree's relationships (parent and children information), and load selection units.
- * \param    gzFile backup_file
- * \return   \e void
- */
-/*
-template <typename selection_unit>
-puu_tree<selection_unit>::puu_tree( gzFile backup_file )
-{
-  TODO
-}
-*/
-
 /*----------------------------
  * DESTRUCTORS
  *----------------------------*/
@@ -941,20 +895,6 @@ puu_tree<selection_unit>::~puu_tree( void )
 /*----------------------------
  * PUBLIC METHODS
  *----------------------------*/
-
-/**
- * \brief    Saves the tree in a backup file
- * \details  --
- * \param    gzFile backup_file
- * \return   \e void
- */
-/*
-template <typename selection_unit>
-void puu_tree<selection_unit>::save( gzFile backup_file )
-{
-  TODO
-}
-*/
 
 /**
  * \brief    Adds a root to the tree
@@ -986,8 +926,8 @@ void puu_tree<selection_unit>::add_root( selection_unit* unit )
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 4) Add the root to the node map */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  assert(_node_map.find(root->get_id()) == _node_map.end());
-  _node_map[root->get_id()] = root;
+  assert(_node_map.find(root->get_identifier()) == _node_map.end());
+  _node_map[root->get_identifier()] = root;
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 5) Add the root to the unit map */
@@ -1031,7 +971,7 @@ void puu_tree<selection_unit>::add_reproduction_event( selection_unit* parent, s
   /* 4) Add child node to the node map */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   assert(_node_map.find(_current_id) == _node_map.end());
-  _node_map[child_node->get_id()] = child_node;
+  _node_map[child_node->get_identifier()] = child_node;
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 5) Add child node to the unit map */
@@ -1067,7 +1007,7 @@ void puu_tree<selection_unit>::delete_node( unsigned long long int node_identifi
 {
   assert(_node_map.find(node_identifier) != _node_map.end());
   puu_node<selection_unit>* node = _node_map[node_identifier];
-  assert(node->get_id() == node_identifier);
+  assert(node->get_identifier() == node_identifier);
   assert(!node->is_active());
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -1107,7 +1047,7 @@ void puu_tree<selection_unit>::prune()
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   for (_iterator = _node_map.begin(); _iterator != _node_map.end(); ++_iterator)
   {
-    assert(_iterator->first == _iterator->second->get_id());
+    assert(_iterator->first == _iterator->second->get_identifier());
     if (_iterator->second->is_active())
     {
       _iterator->second->tag_lineage();
@@ -1164,7 +1104,7 @@ void puu_tree<selection_unit>::shorten()
   remove_list.clear();
   for (_iterator = _node_map.begin(); _iterator != _node_map.end(); ++_iterator)
   {
-    assert(_iterator->first == _iterator->second->get_id());
+    assert(_iterator->first == _iterator->second->get_identifier());
     if (!_iterator->second->is_master_root() && !_iterator->second->is_active() && _iterator->second->get_nb_children() == 1)
     {
       remove_list.push_back(_iterator->first);

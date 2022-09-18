@@ -32,10 +32,11 @@
 
 #include <iostream>
 #include <assert.h>
-#include <puutools.h>
+//#include <puutools.h>
 
 #include "Prng.h"
 #include "Individual.h"
+#include "../puutools/puutools.h"
 
 
 /**
