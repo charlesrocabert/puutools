@@ -50,7 +50,7 @@ While this approach comes at slightly higher computational and live memory cost 
 </p>
 
 <p align="justify">
-While tree's data-structures are standard in computer science, this functionality is usually re-implemented from scratch in different simulation software, at the cost of re-investing time to optimize the algorithms. The aim of <strong>puutools</strong> is to help developers by offering an **easy-to-use** and **light** framework to manage lineage and phylogenetic information on the fly during an evolutionary simulation.
+This functionality is usually re-implemented from scratch in different simulation software, at the cost of re-investing time to optimize the algorithms. The aim of <strong>puutools</strong> is to help developers by offering an <strong>easy-to-use</strong> and <strong>light</strong> framework to manage lineage and phylogenetic information on the fly during an evolutionary simulation.
 </p>
 
 <p align="center">
@@ -60,6 +60,7 @@ While tree's data-structures are standard in computer science, this functionalit
 ## What is puuTools <a name="puutools"></a>
 
 <p align="justify">
+While tree's data-structures are standard in computer science, a straightforward tool to specifically manipulate ancestral relationships in individual-based simulations is still missing.
 <strong>puutools</strong> allows to dynamically create, track and manage lineage and/or phylogenic trees during individual-based forward-in-time simulations of evolution.
 
 With <strong>puutools</strong>, it is possible to update the lineage and/or the phylogenic tree of a population at each generation during a simulation, and to track and recover any evolutionary events. <strong>puutools</strong> is easy to deploy and versatile.
