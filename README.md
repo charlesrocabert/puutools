@@ -21,6 +21,8 @@
   - [Wright-Fisher population](#wright_fisher)
   - [Allopatric speciation](#allopatric_speciation)
   - [A complex scenario where puuTools can be useful](#complex_scenario)
+- [Copyright](#copyright)
+- [License](#license)
 
 ## Aim
 
@@ -98,3 +100,22 @@ To date, <strong>puutools</strong> is distributed as a static library for C++ de
 ## Behind the scene
 
 Algorithms used
+
+## Copyright <a name="copyright"></a>
+Copyright &copy; 2022 Charles Rocabert.
+All rights reserved.
+
+## License <a name="license"></a>
+<p align="justify">
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+</p>
+
+<p align="justify">
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+</p>
+
+<p align="justify">
+You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses/.
+</p>
+
+
