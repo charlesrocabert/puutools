@@ -327,6 +327,72 @@ It is not mandatory to call these methods at each generation. In this example, t
 
 Remember that the size of a phylogenetic tree is approximately constant over time ($2n-1$ nodes), while a lineage tree will grow slowly over time. Depending on the complexity of your simulation, in can be useful to provide a secondary class saving important information (such that phenotypic trait values, mutational events, etc) instead of the main individual class.
 
+### Extracting the information from the trees
+Now that the simulation reached an end, we want to extract some information from the trees.
+
+We first call a last time update functions to ensure a good final structure:
+
+```c++
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  /* 5) Save lineage and phylogenetic data */
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  
+  lineage_tree.update_as_lineage_tree();
+  phylogenetic_tree.update_as_phylogenetic_tree();
+```
+
+We then retrieve the lineage of the last best individual. To do so, we first get the tree's node from the memory address of the individual using the method <code>get_node_by_selection_unit(*individual)</code>. We then trace back the lineage of the node using the method <code>get_parent()</code> until the master root of the tree is reached (the master root is not a real root of the tree, but is here to anchor every roots). Doing so, we write statistics in a file:
+
+```c++
+  /* Save the lineage of the last best individual
+     --------------------------------------------- */
+  std::ofstream file("./output/lineage_best.txt", std::ios::out | std::ios::trunc);
+  file << "generation mutation_size trait fitness" << std::endl;
+  puu_node<Individual>* best_node = lineage_tree.get_node_by_selection_unit(population[best_individual]);
+  while (!best_node->is_master_root())
+  {
+    file << best_node->get_insertion_time() << " ";
+    file << best_node->get_selection_unit()->get_mutation_size() << " ";
+    file << best_node->get_selection_unit()->get_trait() << " ";
+    file << best_node->get_selection_unit()->get_fitness() << std::endl;
+    best_node = best_node->get_parent();
+    file.flush();
+  }
+  file.close();
+```
+
+We then save the data over the whole lineage tree. To do so, we use standard list exploration methods implemented in <strong>puutools</strong>: <code>get_first()</code> and <code>get_next()</code>. When the last node is reached, the function returns <code>NULL</code>. Note that we carefully check that the node is not the master root:
+
+```c++
+  /* Save the lineage of all alive individuals
+     ------------------------------------------ */
+  file.open("./output/lineage_all.txt", std::ios::out | std::ios::trunc);
+  file << "generation mutation_size trait fitness" << std::endl;
+  puu_node<Individual>* node = lineage_tree.get_first();
+  while (node != NULL)
+  {
+    if (!node->is_master_root())
+    {
+      file << node->get_insertion_time() << " ";
+      file << node->get_selection_unit()->get_mutation_size() << " ";
+      file << node->get_selection_unit()->get_trait() << " ";
+      file << node->get_selection_unit()->get_fitness() << std::endl;
+      file.flush();
+    }
+    node = lineage_tree.get_next();
+  }
+  file.close();
+```
+
+Finally, we save the structure of the phylogenetic tree in Newick format (<code>.phb</code> extension):
+
+```c++
+  /* Save the phylogenetic tree
+     --------------------------- */
+  phylogenetic_tree.write_newick_tree("./output/phylogenetic_tree.phb");
+```
+
+
 ## A complex scenario where puutools has been useful <a name="complex_scenario"></a>
 
 ## Behind the scene
