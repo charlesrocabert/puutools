@@ -102,10 +102,11 @@ The script requires sudo access to install the library in the appropriate folder
 The main object that will be manipulated by the user is the class <code>puu_tree<selection_unit></code> which instanciates a dynamic representation of a lineage or phylogenetic tree. <code>puu_tree</code> class uses a template: <code>selection_unit</code> can be any class created on your own, with the constraint that the copy contructor must be at least public and not disabled, and preferably fully implemented to avoid errors.
 </p>
 
+### A simple model to implement
 <p align="justify">
 In this example, we will implement a basic algorithm to simulate the evolution of a population of constant size $N$. Individuals are asexual and generations are non-overlapping. Each individual owns a phenotypic trait $x \in \mathcal{R}$ which can mutate with a probability $m$ (per individual per generation) and a size $s$ such that the mutated trait $x' = x + \mathcal{N}(0, s)$. Individual's fitness is calculated with the standard Gaussian fitness function $w = e^{-\frac{x^2}{2}}$. The number of descendants at each generation is fitness proportionate.
 
-We will implement six command line arguments to define each simulation:
+We will implement five command line arguments to define each simulation:
 - The initial trait value $x_0$;
 - The simulation time $T$ (in generations);
 - The population size $N$;
@@ -115,10 +116,52 @@ We will implement six command line arguments to define each simulation:
 We will introduce <strong>puutools</strong> code step by step.
 </p>
 
-### Pre-processor include directives
+## Pre-processor include directives
+<p align="justify">
+Let's first include the necessary standard library (<code>std</code>) utilitaries and <strong>puutools</strong> libraries:
 
+```c++
+#include <iostream>
+#include <vector>
+#include <assert.h>
+#include <puutools.h>
+```
 
+We then include to classes that are pre-implemented (see <code>example</code> folder):
+    
+```c++
+#include "Prng.h"
+#include "Individual.h"
+```
 
+The <code>Prng</code> class implements many random functions based on the <a href="https://www.gnu.org/software/gsl/" target="_blank">GNU Scientific Library</a>. The class <code>Individual</code> implements the functions described above (one phenotypic trait and a fitness value, plus a few methods). This class will be provided to <strong>puutools</strong> to instanciate trees.
+
+## Read command line parameters
+Let's implement a basic piece of code to read our parameters from the command line:
+
+```c++
+int main( int argc, char const** argv )
+{
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  /* 1) Read simulation parameters         */
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  
+  assert(argc==6);
+  (void)argc;
+  double  initial_trait_value = atof(argv[1]);
+  int     simulation_time     = atoi(argv[2]);
+  int     population_size     = atoi(argv[3]);
+  double  mutation_rate       = atof(argv[4]);
+  double  mutation_size       = atof(argv[5]);
+  std::cout << "> Running a simulation with the following parameters:" << std::endl;
+  std::cout << "  • Initial trait value: " << initial_trait_value << std::endl;
+  std::cout << "  • Simulation time    : " << simulation_time << std::endl;
+  std::cout << "  • Population size    : " << population_size << std::endl;
+  std::cout << "  • Mutation rate      : " << mutation_rate << std::endl;
+  std::cout << "  • Mutation size      : " << mutation_size << std::endl;
+```
+
+</p>
 
 ## A complex scenario where puutools has been useful <a name="complex_scenario"></a>
 
