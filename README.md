@@ -17,9 +17,8 @@
 - [Aim](#aim)
 - [What is puuTools](#puutools)
 - [Installation instructions](#installation)
-- [First usage with examples](#first_usage)
-  - [Wright-Fisher population](#wright_fisher)
-  - [Allopatric speciation](#allopatric_speciation)
+- [First usage](#first_usage)
+  - [One simple example](#example)
   - [A complex scenario where puuTools can be useful](#complex_scenario)
 - [Copyright](#copyright)
 - [License](#license)
@@ -90,19 +89,14 @@ Download the <a href="https://github.com/charlesrocabert/Evo2Sim/releases/latest
 
 The script requires sudo access to install the library in the appropriate folder. <strong>puutools</strong> comes as a single C++ header file, and will then be installed in an <code>include</code> directory (usually <code>/usr/local/include</code>).
 
-## First usage with examples <a name="first_usage"></a>
+## First usage <a name="first_usage"></a>
 
-### Wright-Fisher population <a name="wright_fisher"></a>
-
-<p align="justify">
-
-</p>
-
-### Allopatric speciation <a name="allopatric_speciation"></a>
+### One simple example <a name="example"></a>
 
 <p align="justify">
 
 </p>
+
 
 ### A complex scenario where puutools has been useful <a name="complex_scenario"></a>
 
