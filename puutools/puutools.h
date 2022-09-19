@@ -621,7 +621,7 @@ public:
   /*----------------------------
    * GETTERS
    *----------------------------*/
-  inline size_t                    get_nb_nodes( void ) const;
+  inline size_t                    get_number_of_nodes( void ) const;
   inline puu_node<selection_unit>* get_node_by_identifier( unsigned long long int identifier );
   inline puu_node<selection_unit>* get_node_by_selection_unit( selection_unit* unit );
   inline puu_node<selection_unit>* get_first( void );
@@ -683,7 +683,7 @@ protected:
  * \return   \e size_t
  */
 template <typename selection_unit>
-inline size_t puu_tree<selection_unit>::get_nb_nodes( void ) const
+inline size_t puu_tree<selection_unit>::get_number_of_nodes( void ) const
 {
   return _node_map.size();
 }
@@ -806,7 +806,7 @@ inline double puu_tree<selection_unit>::get_common_ancestor_age( void )
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 1) If the population went extincte        */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  if(master_root->get_nb_children() == 0)
+  if(master_root->get_number_of_children() == 0)
   {
     return 0.0;
   }
@@ -814,7 +814,7 @@ inline double puu_tree<selection_unit>::get_common_ancestor_age( void )
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) If there is a unique common ancestor   */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  else if (master_root->get_nb_children() == 1)
+  else if (master_root->get_number_of_children() == 1)
   {
     if (master_root->get_child(0)->is_active())
     {
@@ -832,7 +832,7 @@ inline double puu_tree<selection_unit>::get_common_ancestor_age( void )
   else
   {
     double mean = 0.0;
-    for (size_t i = 0; i < master_root->get_nb_children(); i++)
+    for (size_t i = 0; i < master_root->get_number_of_children(); i++)
     {
       if (master_root->get_child(0)->is_active())
       {
@@ -843,7 +843,7 @@ inline double puu_tree<selection_unit>::get_common_ancestor_age( void )
         mean += (double)master_root->get_child(0)->get_insertion_time();
       }
     }
-    return mean/master_root->get_nb_children();
+    return mean/master_root->get_number_of_children();
   }
 }
 
@@ -1163,7 +1163,7 @@ void puu_tree<selection_unit>::shorten()
   {
     if (!_iterator->second->is_master_root() && !_iterator->second->is_active())
     {
-      assert(_iterator->second->get_nb_children() == 2);
+      assert(_iterator->second->get_number_of_children() == 2);
     }
   }
 #endif

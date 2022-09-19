@@ -28,7 +28,8 @@ rm(list=ls())
 library("tidyverse")
 library("ape")
 
-setwd(Path to example/output folder)
+#setwd(Path to example/output folder)
+setwd("/Users/charlesrocabert/git/puutools/example/output")
 
 best = read.table("lineage_best.txt", sep=" ", h=T)
 all  = read.table("lineage_all.txt", sep=" ", h=T)

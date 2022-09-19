@@ -39,6 +39,10 @@
 #include "Individual.h"
 //#include "../puutools/puutools.h"
 
+void readArgs( int argc, char const** argv );
+void printUsage( void );
+void printHeader( void );
+
 /**
  * \brief    Main function
  * \details  --
@@ -48,18 +52,23 @@
  */
 int main( int argc, char const** argv )
 {
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  /* 1) Read simulation parameters         */
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  
+  assert(argc==6);
   (void)argc;
-  (void)argv;
-  
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 1) Define simulation parameters       */
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  
-  double  initial_trait_value = 2.0;
-  int     simulation_time     = 10000;
-  int     population_size     = 1000;
-  double  mutation_rate       = 1.0/200.0;
-  double  mutation_size       = 0.02;
+  double  initial_trait_value = atof(argv[1]);
+  int     simulation_time     = atoi(argv[2]);
+  int     population_size     = atoi(argv[3]);
+  double  mutation_rate       = atof(argv[4]);
+  double  mutation_size       = atof(argv[5]);
+  std::cout << "> Running a simulation with the following parameters:" << std::endl;
+  std::cout << "  • Initial trait value: " << initial_trait_value << std::endl;
+  std::cout << "  • Simulation time    : " << simulation_time << std::endl;
+  std::cout << "  • Population size    : " << population_size << std::endl;
+  std::cout << "  • Mutation rate      : " << mutation_rate << std::endl;
+  std::cout << "  • Mutation size      : " << mutation_size << std::endl;
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) Create the prng                    */
