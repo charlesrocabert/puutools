@@ -497,7 +497,7 @@ We can also vizualize the phylogenetic tree, as well as the distribution of phen
 
 **Trajectory of the lineage of the last best individual, and phylogenetic tree:**
 
-![image](https://user-images.githubusercontent.com/25666459/191051924-b69d834c-f244-41f7-9c03-0ce1e42a3c62.png)
+![image](https://user-images.githubusercontent.com/25666459/191052960-9ec2108c-fb8d-4451-a4ea-46679ed52642.png)
 
 **Repartition of the phenotypic trait in the whole lineage tree:**
 
