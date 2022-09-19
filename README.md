@@ -39,7 +39,7 @@ As models' complexity tends to increase, it becomes crucial to develop tools whi
 </p>
 
 <p align="justify">
-When dealing with complex evolutionary simulations, one solution consists in producing full simulation backups at regular intervals during a simulation, in order to recover lineage information in post-processing. However, such an approach usually requires gigabytes of storage, as it saves more information than strictly necessary to recover lineages, limiting the opportunities to produce light and portable simulation software (Fig. 1).
+When dealing with complex evolutionary simulations, one solution consists in producing full simulation backups at regular intervals during a simulation, in order to recover lineage information in post-processing. However, such an approach usually requires gigabytes of storage, as it saves more information than strictly necessary to recover lineages, limiting the opportunities to produce light and portable simulation software.
 </p>
 
 <p align="justify">
@@ -198,16 +198,18 @@ This step is used to create the initial population and initialize two trees:
 Two pieces of code are important here:
 
 ```c++
-puu_tree<Individual>      lineage_tree;
-puu_tree<Individual>      phylogenetic_tree;
+puu_tree<Individual> lineage_tree;
+puu_tree<Individual> phylogenetic_tree;
 ```
-We instanciate a tree which will handle the <code>Individual</code> class. Note that we are creating two trees (one for tracking lineages, one for tracking phylogenetic relationships).
+
+We instanciate a tree which will handle the <code>Individual</code> class. Note that we are creating two trees (one for tracking lineages, one for tracking phylogenetic relationships). It is <strong>not mandatory</strong> to name your individual class "Individual". You can use any name.
 
 ```c++
 lineage_tree.add_root(population[i]);
 phylogenetic_tree.add_root(population[i]);
 ```
-Each time a new individual is created, we must add a corresponding <strong>root</strong> in each tree. To do so, we provide the memory address (through the pointer <code>population[i]</code> to the i<sup>th</sup> individual). If you are not at ease with pointers and memory adresses, consider following an introduction to C/C++ before going further in this example.
+
+Each time a new individual is created, we must add a corresponding <strong>root</strong> in each tree with the function <code>add_root(*individual)</code> (<code>*</code> symbolizing the memory address). To do so, we provide the memory address (through the pointer <code>population[i]</code> to the i<sup>th</sup> individual). If you are not at ease with pointers and memory adresses, consider following an introduction to C/C++ before going further in this example.
 </p>
 
 ### Evolution algorithm
@@ -295,6 +297,35 @@ At each generation:
     }
   }
 ```
+
+The most import steps for us are <strong>steps 3 and 5</strong>, where trees are manipulated.
+
+```c++
+lineage_tree.add_reproduction_event(population[i], new_population[new_individual_pos], (double)generation);
+phylogenetic_tree.add_reproduction_event(population[i], new_population[new_individual_pos], (double)generation);
+```
+
+Each time a new individual is created from its parent (it is literally a copy of its parent: <code>new Individual(*population[i])</code>), we must create a new relationship in each tree. This is done thought the method <code>add_reproduction_event(*parent, *child, time)</code> (<code>*</code> symbolizing the memory address).
+
+```c++
+lineage_tree.inactivate(population[i], true);
+phylogenetic_tree.inactivate(population[i], false);
+```
+
+Then, we must tell to our trees that the individuals from the previous generation are now dead, with the method <code>inactivate(*individual, copy)</code>. The parameter <code>copy</code> is a boolean (true/false). If true, the tree will copy your individual when inactivated, to save it independently from your population algorithm (this is why it is mandatory to implement a copy constructor with <strong>puutools</strong>). This method must be called by the user. Indeed, depending on the complexity of a simulation, parents and their children can both be alive at the same time (<em>e.g.</em> for a bacterial population). The main reason is tree's structure manipulations can only be done with dead individuals.
+
+Note that here, we copy the dead individuals in the lineage tree, but not in the phylogenetic tree. Indeed, we will recover later the evolution of the phenotypic trait and the fitness from the lineage tree, while we will only extract the structure of the phylogenetic tree.
+
+```c++
+lineage_tree.update_as_lineage_tree();
+phylogenetic_tree.update_as_phylogenetic_tree();
+```
+
+The user will decide with these two methods if a tree is a lineage or a phylogeny. Updating a lineage tree consists in pruning dead branches (branches containing only dead invididuals). Updating a phylogenetic tree consists in pruning the dead branches and shortening the tree, by removing all intermediate nodes to only keep common ancestors.
+
+It is not mandatory to call these methods at each generation. In this example, the methods are called every 1,000 generations. If the trees are updated more often, this will increase the computational load. If the trees are updated less often, this will increase the memory load (trees grow at each generation before being pruned and shortened). The user must decide on the period of trees' updates depending on the performance of its own code.
+
+Remember that the size of a phylogenetic tree is approximately constant over time ($2n-1$ nodes), while a lineage tree will grow slowly over time. Depending on the complexity of your simulation, in can be useful to provide a secondary class saving important information (such that phenotypic trait values, mutational events, etc) instead of the main individual class.
 
 ## A complex scenario where puutools has been useful <a name="complex_scenario"></a>
 
