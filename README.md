@@ -161,7 +161,140 @@ int main( int argc, char const** argv )
   std::cout << "  • Mutation size      : " << mutation_size << std::endl;
 ```
 
+## Instanciate the pseudo-random numbers generator (prng)
+We also instanciate a PRNG object:
+
+```c++
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  /* 2) Create the prng                    */
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  
+  Prng prng(time(0));
+```
+
+## Initialize the population
+This step is used to create the initial population and initialize two trees:
+- A lineage tree, which will contain parent-children relationships at every generations,
+- A phylogenetic tree, which will only contain common ancestors.
+
+```c++
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  /* 3) Initialize the population          */
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  
+  puu_tree<Individual>      lineage_tree;
+  puu_tree<Individual>      phylogenetic_tree;
+  std::vector<Individual*>  population(population_size);
+  std::vector<unsigned int> nb_descendants(population_size);
+  for (int i = 0; i < population_size; i++)
+  {
+    population[i] = new Individual(initial_trait_value);
+    population[i]->mutate(&prng, mutation_rate, mutation_size);
+    lineage_tree.add_root(population[i]);
+    phylogenetic_tree.add_root(population[i]);
+  }
+```
+
+Two pieces of code are important here:
+
+```c++
+puu_tree<Individual>      lineage_tree;
+puu_tree<Individual>      phylogenetic_tree;
+```
+We instanciate a tree which will handle the <code>Individual</code> class. Note that we are creating two trees (one for tracking lineages, one for tracking phylogenetic relationships).
+
+```c++
+lineage_tree.add_root(population[i]);
+phylogenetic_tree.add_root(population[i]);
+```
+Each time a new individual is created, we must add a corresponding <strong>root</strong> in each tree. To do so, we provide the memory address (through the pointer <code>population[i]</code> to the i<sup>th</sup> individual). If you are not at ease with pointers and memory adresses, consider following an introduction to C/C++ before going further in this example.
 </p>
+
+### Evolution algorithm
+This is the core of our "simple" example. For clarity, each task is uncoupled while it is possible to optimize further the code by merging several loops together.
+At each generation:
+- The vector $w$ of the relative fitnesses is calculated (<strong>step 1</strong>, note that we also detect the best individual of the current generation);
+- The number of descendants per individual is drawn from a multinomial distribution (<strong>step 2</strong>);
+- The new population is generated from this drawing (<strong>step 3</strong>);
+- The population is replaced by the new one (<strong>step 4</strong>);
+- Trees structures are updated (<strong>step 5</strong>);
+
+```c++
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  /* 4) Evolve the population              */
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  
+  std::vector<double> fitness_vector(population_size);
+  double              fitness_sum     = 0.0;
+  int                 best_individual = 0;
+  double              best_fitness    = 0.0;
+  for (int generation = 1; generation <= simulation_time; generation++)
+  {
+    if (generation%1000==0)
+    {
+      std::cout << ">> Generation " << generation << "\n";
+    }
+    
+    /* STEP 1 : Update and normalize the fitness vector
+       ------------------------------------------------- */
+    fitness_sum = 0.0;
+    for (int i = 0; i < population_size; i++)
+    {
+      population[i]->compute_fitness();
+      fitness_vector[i]  = population[i]->get_fitness();
+      fitness_sum       += population[i]->get_fitness();
+    }
+    best_individual = 0;
+    best_fitness    = 0.0;
+    for (int i = 0; i < population_size; i++)
+    {
+      fitness_vector[i] /= fitness_sum;
+      if (best_fitness < fitness_vector[i])
+      {
+        best_individual = i;
+      }
+    }
+    
+    /* STEP 2 : Draw the number of descendants
+       ---------------------------------------- */
+    prng.multinomial(nb_descendants.data(), fitness_vector.data(), population_size, population_size);
+    
+    /* STEP 3 : Generate the new population
+       ------------------------------------- */
+    std::vector<Individual*> new_population(population_size);
+    size_t new_individual_pos = 0;
+    for (int i = 0; i < population_size; i++)
+    {
+      for (unsigned int j = 0; j < nb_descendants[i]; j++)
+      {
+        new_population[new_individual_pos] = new Individual(*population[i]);
+        new_population[new_individual_pos]->mutate(&prng, mutation_rate, mutation_size);
+        lineage_tree.add_reproduction_event(population[i], new_population[new_individual_pos], (double)generation);
+        phylogenetic_tree.add_reproduction_event(population[i], new_population[new_individual_pos], (double)generation);
+        new_individual_pos++;
+      }
+      lineage_tree.inactivate(population[i], true);
+      phylogenetic_tree.inactivate(population[i], false);
+      delete population[i];
+    }
+    
+    /* STEP 4 : Replace the current population with the new one
+       --------------------------------------------------------- */
+    for (int i = 0; i < population_size; i++)
+    {
+      population[i] = new_population[i];
+    }
+    new_population.clear();
+    
+    /* STEP 5: Update the lineage and phylogenetic trees
+       -------------------------------------------------- */
+    if (generation%1000==0)
+    {
+      lineage_tree.update_as_lineage_tree();
+      phylogenetic_tree.update_as_phylogenetic_tree();
+    }
+  }
+```
 
 ## A complex scenario where puutools has been useful <a name="complex_scenario"></a>
 
