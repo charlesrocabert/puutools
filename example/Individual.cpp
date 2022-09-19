@@ -108,6 +108,6 @@ void Individual::mutate( Prng* prng, double mutation_rate, double mutation_size 
  */
 void Individual::compute_fitness( void )
 {
-  _fitness = exp(-_trait*_trait);
+  _fitness = exp(-0.5*_trait*_trait);
 }
 

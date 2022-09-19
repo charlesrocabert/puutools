@@ -68,8 +68,8 @@ set(EXECUTABLE_OUTPUT_PATH ../build/bin)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 # Define the executables                                                       #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-set(WRIGHT_FISHER puutools_wright_fisher_example)
-add_executable(${WRIGHT_FISHER} puutools_wright_fisher_example.cpp)
+set(RUN_EXECUTABLE puutools_example)
+add_executable(${RUN_EXECUTABLE} puutools_example.cpp)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -78,7 +78,7 @@ add_executable(${WRIGHT_FISHER} puutools_wright_fisher_example.cpp)
 find_package(GSL REQUIRED)
 if(GSL_FOUND)
   include_directories(${GSL_INCLUDE_DIR})
-  target_link_libraries(${WRIGHT_FISHER} ${GSL_LIBRARIES})
+  target_link_libraries(${RUN_EXECUTABLE} ${GSL_LIBRARIES})
 endif(GSL_FOUND)
 
 find_package(PUUTOOLS REQUIRED)
@@ -98,14 +98,5 @@ add_library(
 
 target_link_libraries(puutools_examples gsl gslcblas)
 
-target_link_libraries(${WRIGHT_FISHER} puutools_examples)
+target_link_libraries(${RUN_EXECUTABLE} puutools_examples)
 
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-# Build the Config.h file                                                      #
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-#configure_file(
-#  "${PROJECT_SOURCE_DIR}/cmake/modules/Config.h.in"
-#  "${PROJECT_BINARY_DIR}/Config.h"
-#)
-#include_directories("${PROJECT_BINARY_DIR}")

@@ -1,11 +1,11 @@
 
 /**
- * \file      puutools_wright_fisher_example.cpp
+ * \file      puutools_example.cpp
  * \authors   Charles Rocabert
  * \date      15-01-2022
  * \copyright Copyright © 2022 Charles Rocabert. All rights reserved
  * \license   puutools is released under the GNU General Public License
- * \brief     Wright-Fisher simulation example using puutools
+ * \brief     Simulation example using puutools
  */
 
 /****************************************************************************
@@ -37,11 +37,7 @@
 
 #include "Prng.h"
 #include "Individual.h"
-//#include "../puutools/puutools.h"
 
-void readArgs( int argc, char const** argv );
-void printUsage( void );
-void printHeader( void );
 
 /**
  * \brief    Main function
@@ -166,12 +162,13 @@ int main( int argc, char const** argv )
       phylogenetic_tree.update_as_phylogenetic_tree();
     }
   }
-  lineage_tree.update_as_lineage_tree();
-  phylogenetic_tree.update_as_phylogenetic_tree();
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 5) Save lineage and phylogenetic data */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  
+  lineage_tree.update_as_lineage_tree();
+  phylogenetic_tree.update_as_phylogenetic_tree();
   
   /* Save the lineage of the last best individual
      --------------------------------------------- */
