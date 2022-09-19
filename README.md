@@ -129,11 +129,13 @@ In this example, we will implement a basic algorithm to simulate the evolution o
 
 <p align="justify">
 We will implement five command line arguments to define each simulation:
+
 - The initial trait value $x_0$;
 - The simulation time $T$ (in generations);
 - The population size $N$;
 - The mutation rate $m$;
 - The mutation size $s$;
+
 </p>
 
 <p align="justify">
@@ -154,7 +156,7 @@ Let's first include the necessary standard library (<code>std</code>) utilitarie
 ```
 
 <p align="justify">
-We then include to classes that are pre-implemented (see <code>example</code> folder):
+We then include to classes that have been pre-implemented on purpose for this tutorial (see the <code>example</code> folder):
 </p>
 
 ```c++
@@ -163,7 +165,7 @@ We then include to classes that are pre-implemented (see <code>example</code> fo
 ```
 
 <p align="justify">
-The <code>Prng</code> class implements many random functions based on the <a href="https://www.gnu.org/software/gsl/" target="_blank">GNU Scientific Library</a>. The class <code>Individual</code> implements the functions described above (one phenotypic trait and a fitness value, plus a few methods). This class will be provided to <strong>puutools</strong> to instanciate trees.
+The <code>Prng</code> class contains several random functions based on the <a href="https://www.gnu.org/software/gsl/" target="_blank">GNU Scientific Library</a>. The class <code>Individual</code> contains the basic structure of an individual (one phenotypic trait and one fitness value, plus a few methods). This class will be provided to <strong>puutools</strong> to instanciate trees.
 </p>
 
 ## Read command line parameters
