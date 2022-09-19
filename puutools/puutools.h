@@ -91,7 +91,7 @@ public:
   inline selection_unit*        get_selection_unit( void );
   inline puu_node*              get_parent( void );
   inline puu_node*              get_child( size_t pos );
-  inline size_t                 get_nb_children( void ) const;
+  inline size_t                 get_number_of_children( void ) const;
   inline puu_node_class         get_node_class( void ) const;
   inline bool                   is_master_root( void ) const;
   inline bool                   is_root( void ) const;
@@ -217,7 +217,7 @@ inline puu_node<selection_unit>* puu_node<selection_unit>::get_child( size_t pos
  * \return   \e puu_node*
  */
 template <typename selection_unit>
-inline size_t puu_node<selection_unit>::get_nb_children( void ) const
+inline size_t puu_node<selection_unit>::get_number_of_children( void ) const
 {
   return _children.size();
 }
@@ -533,7 +533,7 @@ template <typename selection_unit>
 void puu_node<selection_unit>::replace_by_grandchildren( puu_node* child_to_remove )
 {
   remove_child(child_to_remove);
-  for (size_t i = 0; i < child_to_remove->get_nb_children(); i++)
+  for (size_t i = 0; i < child_to_remove->get_number_of_children(); i++)
   {
     add_child(child_to_remove->get_child(i));
   }
@@ -641,8 +641,8 @@ public:
   void add_root( selection_unit* unit );
   void add_reproduction_event( selection_unit* parent, selection_unit* child, double time );
   void inactivate( selection_unit* unit, bool copy_unit );
-  void prune();
-  void shorten();
+  void update_as_lineage_tree( void );
+  void update_as_phylogenetic_tree( void );
   void write_tree( std::string filename );
   void write_newick_tree( std::string filename );
   
@@ -655,6 +655,8 @@ protected:
   /*----------------------------
    * PROTECTED METHODS
    *----------------------------*/
+  void prune( void );
+  void shorten( void );
   void delete_node( unsigned long long int node_identifier );
   void inOrderNewick( puu_node<selection_unit>* node, double parent_time, std::stringstream& output );
   void tag_tree();
@@ -997,39 +999,74 @@ void puu_tree<selection_unit>::inactivate( selection_unit* unit, bool copy_unit 
 }
 
 /**
- * \brief    Deletes a node and removes all node's relationships
- * \details  --
- * \param    unsigned long long int node_identifier
+ * \brief    Update the tree as a lineage tree
+ * \details  Prune dead branches.
+ * \param    void
  * \return   \e void
  */
 template <typename selection_unit>
-void puu_tree<selection_unit>::delete_node( unsigned long long int node_identifier )
+void puu_tree<selection_unit>::update_as_lineage_tree( void )
 {
-  assert(_node_map.find(node_identifier) != _node_map.end());
-  puu_node<selection_unit>* node = _node_map[node_identifier];
-  assert(node->get_identifier() == node_identifier);
-  assert(!node->is_active());
-  
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 1) Update parental children list  */
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  node->get_parent()->replace_by_grandchildren(node);
-  
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 2) Set the new parent of children */
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  for (size_t i = 0; i < node->get_parent()->get_nb_children(); i++)
-  {
-    node->get_parent()->get_child(i)->set_parent(node->get_parent());
-  }
-  
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 3) Delete node in the node map    */
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  delete _node_map[node_identifier];
-  _node_map[node_identifier] = NULL;
-  _node_map.erase(node_identifier);
+  prune();
 }
+
+/**
+ * \brief    Update the tree as a phylogenetic tree
+ * \details  Prune dead branches and shorten the tree.
+ * \param    void
+ * \return   \e void
+ */
+template <typename selection_unit>
+void puu_tree<selection_unit>::update_as_phylogenetic_tree( void )
+{
+  prune();
+  shorten();
+}
+
+/**
+ * \brief    Writes tree in a text file
+ * \details  Writes adjacency list in a file (.txt).
+ * \param    std::string filename
+ * \return   \e void
+ */
+template <typename selection_unit>
+void puu_tree<selection_unit>::write_tree( std::string filename )
+{
+  std::ofstream file(filename.c_str(), std::ios::out | std::ios::trunc);
+  for (_iterator = _node_map.begin(); _iterator != _node_map.end(); ++_iterator)
+  {
+    for (size_t i = 0; i < _iterator->second->get_number_of_children(); i++)
+    {
+      file << _iterator->second->get_id() << " " << _iterator->second->get_child(i)->get_id() << "\n";
+    }
+  }
+  file.close();
+}
+
+/**
+ * \brief    Writes Newick tree
+ * \details  Writes tree in Newick format in a file (.phb)
+ * \param    std::string filename
+ * \return   \e void
+ */
+template <typename selection_unit>
+void puu_tree<selection_unit>::write_newick_tree( std::string filename )
+{
+  std::ofstream file(filename.c_str(), std::ios::out | std::ios::trunc);
+  
+  for (size_t i = 0; i < _node_map[0]->get_number_of_children(); i++)
+  {
+    std::stringstream newick_tree;
+    inOrderNewick(_node_map[0]->get_child(i), 0, newick_tree);
+    newick_tree << ";\n";
+    file << newick_tree.str();
+  }
+  file.close();
+}
+
+/*----------------------------
+ * PROTECTED METHODS
+ *----------------------------*/
 
 /**
  * \brief    Prunes the tree
@@ -1079,7 +1116,7 @@ void puu_tree<selection_unit>::prune()
   /* 4) Set master root children as root */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   puu_node<selection_unit>* master_root = _node_map[0];
-  for (size_t i = 0; i < master_root->get_nb_children(); i++)
+  for (size_t i = 0; i < master_root->get_number_of_children(); i++)
   {
     master_root->get_child(i)->as_root();
   }
@@ -1105,7 +1142,7 @@ void puu_tree<selection_unit>::shorten()
   for (_iterator = _node_map.begin(); _iterator != _node_map.end(); ++_iterator)
   {
     assert(_iterator->first == _iterator->second->get_identifier());
-    if (!_iterator->second->is_master_root() && !_iterator->second->is_active() && _iterator->second->get_nb_children() == 1)
+    if (!_iterator->second->is_master_root() && !_iterator->second->is_active() && _iterator->second->get_number_of_children() == 1)
     {
       remove_list.push_back(_iterator->first);
     }
@@ -1136,56 +1173,46 @@ void puu_tree<selection_unit>::shorten()
   /* 3) Set master root children as root */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   puu_node<selection_unit>* master_root = _node_map[0];
-  for (size_t i = 0; i < master_root->get_nb_children(); i++)
+  for (size_t i = 0; i < master_root->get_number_of_children(); i++)
   {
     master_root->get_child(i)->as_root();
   }
 }
 
 /**
- * \brief    Writes tree in a text file
- * \details  Writes adjacency list in a file (.txt).
- * \param    std::string filename
+ * \brief    Deletes a node and removes all node's relationships
+ * \details  --
+ * \param    unsigned long long int node_identifier
  * \return   \e void
  */
 template <typename selection_unit>
-void puu_tree<selection_unit>::write_tree( std::string filename )
+void puu_tree<selection_unit>::delete_node( unsigned long long int node_identifier )
 {
-  std::ofstream file(filename.c_str(), std::ios::out | std::ios::trunc);
-  for (_iterator = _node_map.begin(); _iterator != _node_map.end(); ++_iterator)
-  {
-    for (size_t i = 0; i < _iterator->second->get_number_of_children(); i++)
-    {
-      file << _iterator->second->get_id() << " " << _iterator->second->get_child(i)->get_id() << "\n";
-    }
-  }
-  file.close();
-}
-
-/**
- * \brief    Writes Newick tree
- * \details  Writes tree in Newick format in a file (.phb)
- * \param    std::string filename
- * \return   \e void
- */
-template <typename selection_unit>
-void puu_tree<selection_unit>::write_newick_tree( std::string filename )
-{
-  std::ofstream file(filename.c_str(), std::ios::out | std::ios::trunc);
+  assert(_node_map.find(node_identifier) != _node_map.end());
+  puu_node<selection_unit>* node = _node_map[node_identifier];
+  assert(node->get_identifier() == node_identifier);
+  assert(!node->is_active());
   
-  for (size_t i = 0; i < _node_map[0]->get_number_of_children(); i++)
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  /* 1) Update parental children list  */
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  node->get_parent()->replace_by_grandchildren(node);
+  
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  /* 2) Set the new parent of children */
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  for (size_t i = 0; i < node->get_parent()->get_number_of_children(); i++)
   {
-    std::stringstream newick_tree;
-    inOrderNewick(_node_map[0]->get_child(i), 0, newick_tree);
-    newick_tree << ";\n";
-    file << newick_tree.str();
+    node->get_parent()->get_child(i)->set_parent(node->get_parent());
   }
-  file.close();
+  
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  /* 3) Delete node in the node map    */
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  delete _node_map[node_identifier];
+  _node_map[node_identifier] = NULL;
+  _node_map.erase(node_identifier);
 }
-
-/*----------------------------
- * PROTECTED METHODS
- *----------------------------*/
 
 /**
  * \brief    Recursive method used to build the Newick format file
@@ -1203,7 +1230,7 @@ void puu_tree<selection_unit>::inOrderNewick( puu_node<selection_unit>* node, do
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   if (node->is_active() || node->get_number_of_children() < 2)
   {
-    output << node->get_id() << ":" << node->get_insertion_time()-parent_time;
+    output << node->get_identifier() << ":" << node->get_insertion_time()-parent_time;
   }
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -1221,7 +1248,7 @@ void puu_tree<selection_unit>::inOrderNewick( puu_node<selection_unit>* node, do
       }
     }
     output << ")";
-    output << node->get_id() << ":" << node->get_insertion_time()-parent_time;
+    output << node->get_identifier() << ":" << node->get_insertion_time()-parent_time;
   }
 }
 

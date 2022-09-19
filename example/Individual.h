@@ -33,7 +33,6 @@
 #ifndef __puutools__Individual__
 #define __puutools__Individual__
 
-
 #include "Prng.h"
 
 
@@ -46,7 +45,7 @@ public:
    * CONSTRUCTORS
    *----------------------------*/
   Individual( void ) = delete;
-  Individual( Prng* prng, double initial_trait_value );
+  Individual( double initial_trait_value );
   Individual( const Individual& individual );
   
   /*----------------------------
@@ -57,6 +56,7 @@ public:
   /*----------------------------
    * GETTERS
    *----------------------------*/
+  inline double get_mutation_size( void ) const;
   inline double get_trait( void ) const;
   inline double get_fitness( void ) const;
   
@@ -68,7 +68,7 @@ public:
   /*----------------------------
    * PUBLIC METHODS
    *----------------------------*/
-  void mutate( double mutation_rate, double mutation_size );
+  void mutate( Prng* prng, double mutation_rate, double mutation_size );
   void compute_fitness( void );
   
   /*----------------------------
@@ -84,14 +84,25 @@ protected:
   /*----------------------------
    * PROTECTED ATTRIBUTES
    *----------------------------*/
-  Prng*  _prng;    /*!< Prng        */
-  double _trait;   /*!< Trait value */
-  double _fitness; /*!< Fitness     */
+  double _mutation_size; /*!< Mutation size */
+  double _trait;         /*!< Trait value   */
+  double _fitness;       /*!< Fitness       */
 };
 
 /*----------------------------
  * GETTERS
  *----------------------------*/
+
+/**
+ * \brief    Get the mutation size
+ * \details  --
+ * \param    void
+ * \return   \e double
+ */
+inline double Individual::get_mutation_size( void ) const
+{
+  return _mutation_size;
+}
 
 /**
  * \brief    Get the trait value

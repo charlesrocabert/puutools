@@ -40,15 +40,14 @@
 /**
  * \brief    Constructor
  * \details  --
- * \param    Prng* prng
  * \param    double initial_trait_value
  * \return   \e void
  */
-Individual::Individual( Prng* prng, double initial_trait_value )
+Individual::Individual( double initial_trait_value )
 {
-  _prng    = prng;
-  _trait   = initial_trait_value;
-  _fitness = 0.0;
+  _mutation_size = 0.0;
+  _trait         = initial_trait_value;
+  _fitness       = 0.0;
 }
 
 /**
@@ -59,9 +58,9 @@ Individual::Individual( Prng* prng, double initial_trait_value )
  */
 Individual::Individual( const Individual& individual )
 {
-  _prng    = individual._prng;
-  _trait   = individual._trait;
-  _fitness = individual._fitness;
+  _mutation_size = individual._mutation_size;
+  _trait         = individual._trait;
+  _fitness       = individual._fitness;
 }
 
 /*----------------------------
@@ -86,15 +85,17 @@ Individual::~Individual( void )
 /**
  * \brief    Mutate the individual
  * \details  --
+ * \param    Prng* prng
  * \param    double mutation_rate
  * \param    double mutation_size
  * \return   \e void
  */
-void Individual::mutate( double mutation_rate, double mutation_size )
+void Individual::mutate( Prng* prng, double mutation_rate, double mutation_size )
 {
-  if (_prng->uniform() < mutation_rate)
+  if (prng->uniform() < mutation_rate)
   {
-    _trait += _prng->gaussian(0.0, mutation_size);
+    _mutation_size  = prng->gaussian(0.0, mutation_size);
+    _trait         += _mutation_size;
   }
 }
 

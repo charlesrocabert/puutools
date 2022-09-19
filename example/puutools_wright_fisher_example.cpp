@@ -31,13 +31,13 @@
  ****************************************************************************/
 
 #include <iostream>
+#include <vector>
 #include <assert.h>
 //#include <puutools.h>
 
 #include "Prng.h"
 #include "Individual.h"
 #include "../puutools/puutools.h"
-
 
 /**
  * \brief    Main function
@@ -51,102 +51,135 @@ int main( int argc, char const** argv )
   (void)argc;
   (void)argv;
   
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 1) Define simulation parameters */
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  double  initial_trait_value = 0.0;
-  int     simulation_time     = 100000;
-  int     population_size     = 200;
-  double  mutation_rate       = 0.0;
-  double  mutation_size       = 0.0;
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  /* 1) Define simulation parameters       */
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 2) Initialize the population    */
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  Prng*                 prng              = new Prng();
-  Individual**          population        = new Individual*[population_size];
-  puu_tree<Individual>* phylogenetic_tree = new puu_tree<Individual>();
-  double*               fitness_vector    = new double[population_size];
-  double                fitness_sum       = 0.0;
+  double  initial_trait_value = 2.0;
+  int     simulation_time     = 10000;
+  int     population_size     = 1000;
+  double  mutation_rate       = 1e-4;
+  double  mutation_size       = 0.1;
+  
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  /* 2) Create the prng                    */
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  
+  Prng prng(time(0));
+  
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  /* 3) Initialize the population          */
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  
+  puu_tree<Individual>      lineage_tree;
+  puu_tree<Individual>      phylogenetic_tree;
+  std::vector<Individual*>  population(population_size);
+  std::vector<unsigned int> nb_descendants(population_size);
   for (int i = 0; i < population_size; i++)
   {
-    population[i] = new Individual(prng, initial_trait_value);
-    population[i]->mutate(mutation_rate, mutation_size);
-    population[i]->compute_fitness();
-    fitness_vector[i]  = population[i]->get_fitness();
-    fitness_sum       += population[i]->get_fitness();
-    phylogenetic_tree->add_root(population[i]);
-  }
-  for (int i = 0; i < population_size; i++)
-  {
-    fitness_vector[i] /= fitness_sum;
+    population[i] = new Individual(initial_trait_value);
+    population[i]->mutate(&prng, mutation_rate, mutation_size);
+    lineage_tree.add_root(population[i]);
+    phylogenetic_tree.add_root(population[i]);
   }
   
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 3) Evolve the population        */
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  std::ofstream file("/Users/charlesrocabert/git/puutools/src/example/output/MRCA_age_N200.txt", std::ios::out | std::ios::trunc);
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  /* 4) Evolve the population              */
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  
+  std::vector<double> fitness_vector(population_size);
+  double              fitness_sum     = 0.0;
+  int                 best_individual = 0;
+  double              best_fitness    = 0.0;
   for (int generation = 1; generation <= simulation_time; generation++)
   {
     if (generation%1000==0)
     {
       std::cout << ">> Generation " << generation << "\n";
     }
-    unsigned int* nb_descendants = new unsigned int[population_size];
-    Individual**  new_population = new Individual*[population_size];
-    size_t        index          = 0;
-    fitness_sum                  = 0.0;
-    prng->multinomial(nb_descendants, fitness_vector, population_size, population_size);
     
+    /* STEP 1 : Update and normalize the fitness vector
+       ------------------------------------------------- */
+    fitness_sum = 0.0;
     for (int i = 0; i < population_size; i++)
     {
-      for (int j = 0; j < (int)nb_descendants[i]; j++)
-      {
-        new_population[index] = new Individual(*population[i]);
-        new_population[index]->mutate(mutation_rate, mutation_size);
-        new_population[index]->compute_fitness();
-        fitness_vector[i]  = new_population[index]->get_fitness();
-        fitness_sum       += new_population[index]->get_fitness();
-        phylogenetic_tree->add_reproduction_event(population[i], new_population[index], (double)generation);
-        index++;
-      }
-      phylogenetic_tree->inactivate(population[i], false);
+      population[i]->compute_fitness();
+      fitness_vector[i]  = population[i]->get_fitness();
+      fitness_sum       += population[i]->get_fitness();
     }
-    for (int i = 0; i < population_size; i++)
-    {
-      delete population[i];
-      population[i] = new_population[i];
-    }
-    delete[] new_population;
-    new_population = NULL;
-    delete[] nb_descendants;
-    nb_descendants = NULL;
+    best_individual = 0;
+    best_fitness    = 0.0;
     for (int i = 0; i < population_size; i++)
     {
       fitness_vector[i] /= fitness_sum;
+      if (best_fitness < fitness_vector[i])
+      {
+        best_individual = i;
+      }
     }
-    phylogenetic_tree->prune();
-    phylogenetic_tree->shorten();
-    file << generation-phylogenetic_tree->get_common_ancestor_age() << "\n";
-    file.flush();
+    
+    /* STEP 2 : Draw the number of descendants
+       ---------------------------------------- */
+    prng.multinomial(nb_descendants.data(), fitness_vector.data(), population_size, population_size);
+    
+    /* STEP 3 : Generate the new population
+       ------------------------------------- */
+    std::vector<Individual*> new_population(population_size);
+    size_t new_individual_pos = 0;
+    for (int i = 0; i < population_size; i++)
+    {
+      for (int j = 0; j < nb_descendants[i]; j++)
+      {
+        new_population[new_individual_pos] = new Individual(*population[i]);
+        new_population[new_individual_pos]->mutate(&prng, mutation_rate, mutation_size);
+        lineage_tree.add_reproduction_event(population[i], new_population[new_individual_pos], (double)generation);
+        phylogenetic_tree.add_reproduction_event(population[i], new_population[new_individual_pos], (double)generation);
+        new_individual_pos++;
+      }
+      lineage_tree.inactivate(population[i], true);
+      phylogenetic_tree.inactivate(population[i], false);
+      delete population[i];
+    }
+    
+    /* STEP 4 : Replace the current population with the new one
+       --------------------------------------------------------- */
+    for (int i = 0; i < population_size; i++)
+    {
+      population[i] = new_population[i];
+    }
+    new_population.clear();
+    
+    /* STEP 5: Update the lineage and phylogenetic trees
+       -------------------------------------------------- */
+    lineage_tree.update_as_lineage_tree();
+    phylogenetic_tree.update_as_phylogenetic_tree();
+  }
+  
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  /* 5) Save lineage and phylogenetic data */
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  
+  std::ofstream file("./lineage.txt", std::ios::out | std::ios::trunc);
+  file << "generation mutation_size trait fitness" << std::endl;
+  puu_node<Individual>* best_node = lineage_tree.get_node_by_selection_unit(population[best_individual]);
+  while (best_node != NULL)
+  {
+    file << best_node->get_insertion_time() << " ";
+    file << best_node->get_selection_unit()->get_mutation_size() << " ";
+    file << best_node->get_selection_unit()->get_trait() << " ";
+    file << best_node->get_selection_unit()->get_fitness() << std::endl;
   }
   file.close();
+  phylogenetic_tree.write_newick_tree("phylogenetic_tree.phb");
   
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 4) Free memory                  */
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  delete[] fitness_vector;
-  fitness_vector = NULL;
-  delete phylogenetic_tree;
-  phylogenetic_tree = NULL;
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  /* 6) Free memory                        */
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  
   for (int i = 0; i < population_size; i++)
   {
     delete population[i];
     population[i] = NULL;
   }
-  delete[] population;
-  population = NULL;
-  delete prng;
-  prng = NULL;
   return EXIT_SUCCESS;
 }
