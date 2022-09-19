@@ -121,8 +121,6 @@ The script requires sudo access to install the library in the appropriate folder
 The main object that will be manipulated by the user is the class <code>puu_tree<selection_unit></code> which instanciates a dynamic representation of a lineage or phylogenetic tree. <code>puu_tree</code> class uses a template: <code>selection_unit</code> can be any class created on your own, with the constraint that the copy contructor must be at least public and not disabled, and preferably fully implemented to avoid errors.
 </p>
 
-### A simple model to implement
-
 <p align="justify">
 In this example, we will implement a basic algorithm to simulate the evolution of a population of constant size $N$. Individuals are asexual and generations are non-overlapping. Each individual owns a phenotypic trait $x \in \mathcal{R}$ which can mutate with a probability $m$ (per individual per generation) and a size $s$ such that the mutated trait $x' = x + \mathcal{N}(0, s)$. Individual's fitness is calculated with the standard Gaussian fitness function $w = e^{-\frac{x^2}{2}}$. The number of descendants at each generation is fitness proportionate.
 </p>
@@ -135,14 +133,13 @@ We will implement five command line arguments to define each simulation:
 - The population size $N$;
 - The mutation rate $m$;
 - The mutation size $s$;
-
 </p>
 
 <p align="justify">
 We will introduce <strong>puutools</strong> code step by step.
 </p>
 
-## Pre-processor include directives
+### Pre-processor include directives
 
 <p align="justify">
 Let's first include the necessary standard library (<code>std</code>) utilitaries and <strong>puutools</strong> libraries:
@@ -168,7 +165,7 @@ We then include to classes that have been pre-implemented on purpose for this tu
 The <code>Prng</code> class contains several random functions based on the <a href="https://www.gnu.org/software/gsl/" target="_blank">GNU Scientific Library</a>. The class <code>Individual</code> contains the basic structure of an individual (one phenotypic trait and one fitness value, plus a few methods). This class will be provided to <strong>puutools</strong> to instanciate trees.
 </p>
 
-## Read command line parameters
+### Read command line parameters
 
 <p align="justify">
 Let's implement a basic piece of code to read our parameters from the command line:
@@ -196,7 +193,7 @@ int main( int argc, char const** argv )
   std::cout << "  • Mutation size      : " << mutation_size << std::endl;
 ```
 
-## Instanciate the pseudo-random numbers generator (prng)
+### Instanciate the pseudo-random numbers generator (prng)
 
 <p align="justify">
 We also instanciate a PRNG object:
@@ -210,10 +207,11 @@ We also instanciate a PRNG object:
   Prng prng(time(0));
 ```
 
-## Initialize the population
+### Initialize the population
 
 <p align="justify">
 This step is used to create the initial population and initialize two trees:
+
 - A lineage tree, which will contain parent-children relationships at every generations,
 - A phylogenetic tree, which will only contain common ancestors.
 </p>
@@ -263,6 +261,7 @@ Each time a new individual is created, we must add a corresponding <strong>root<
 <p align="justify">
 This is the core of our "simple" example. For clarity, each task is uncoupled while it is possible to optimize further the code by merging several loops together.
 At each generation:
+  
 - The vector $w$ of the relative fitnesses is calculated (<strong>step 1</strong>, note that we also detect the best individual of the current generation);
 - The number of descendants per individual is drawn from a multinomial distribution (<strong>step 2</strong>);
 - The new population is generated from this drawing (<strong>step 3</strong>);
@@ -480,6 +479,29 @@ At the end of the script, the memory must be cleaned from the population:
   return EXIT_SUCCESS;
 }
 ```
+
+### Results
+
+This simulation example is available in the folder <code>example</code> of this repository, and can be compiled with CMake (navigate to the folder <code>example/cmake</code> with a terminal and run the following command:
+  
+  sh make_release.sh
+
+The binary executable <code>puutools_example</code> is located in the folder <code>example/build/bin</code>.
+
+As an example, we run the simulation by placing an initial population os size $N=200$, away from the fitness optimum (initial trait value = 2). The simulation time is $T=10000$ generations, with a mutation rate $m=0.02$ and a mutation size $s=0.02$.
+
+  ../build/bin/puutools_example 2.0 10000 200 0.02 0.02
+
+Output files are written in the folder <code>example/output</code>, which also contain a Rscript to generate some figures. For example, we can see that the population evolved towards the optimum. As we recover the lineage of the last best individual, we have also access to the size of fixed mutations.
+We can also vizualize the phylogenetic tree, as well as the distribution of phenotypic trait values accross the lineage tree.
+
+**Trajectory of the lineage of the last best individual, and phylogenetic tree:**
+
+![image](https://user-images.githubusercontent.com/25666459/191051924-b69d834c-f244-41f7-9c03-0ce1e42a3c62.png)
+
+**Repartition of the phenotypic trait in the whole lineage tree:**
+
+![image](https://user-images.githubusercontent.com/25666459/191051967-d0d406ba-0849-478d-853e-247346f51698.png)
 
 ## A complex scenario where puutools has been useful <a name="complex_scenario"></a>
 
