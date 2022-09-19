@@ -160,9 +160,14 @@ int main( int argc, char const** argv )
     
     /* STEP 5: Update the lineage and phylogenetic trees
        -------------------------------------------------- */
-    lineage_tree.update_as_lineage_tree();
-    phylogenetic_tree.update_as_phylogenetic_tree();
+    if (generation%1000==0)
+    {
+      lineage_tree.update_as_lineage_tree();
+      phylogenetic_tree.update_as_phylogenetic_tree();
+    }
   }
+  lineage_tree.update_as_lineage_tree();
+  phylogenetic_tree.update_as_phylogenetic_tree();
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 5) Save lineage and phylogenetic data */

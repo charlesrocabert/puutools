@@ -1157,7 +1157,6 @@ void puu_tree<selection_unit>::shorten()
   }
   remove_list.clear();
 
-  /*
 #if DEBUG
   for (_iterator = _node_map.begin(); _iterator != _node_map.end(); ++_iterator)
   {
@@ -1167,7 +1166,6 @@ void puu_tree<selection_unit>::shorten()
     }
   }
 #endif
-  */
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 3) Set master root children as root */
