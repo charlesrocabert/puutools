@@ -392,6 +392,21 @@ Finally, we save the structure of the phylogenetic tree in Newick format (<code>
   phylogenetic_tree.write_newick_tree("./output/phylogenetic_tree.phb");
 ```
 
+At the end of the script, the memory must be cleaned from the population:
+
+```c++
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  /* 6) Free memory                        */
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  
+  for (int i = 0; i < population_size; i++)
+  {
+    delete population[i];
+    population[i] = NULL;
+  }
+  return EXIT_SUCCESS;
+}
+```
 
 ## A complex scenario where puutools has been useful <a name="complex_scenario"></a>
 
