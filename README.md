@@ -17,9 +17,8 @@
 - [Aim](#aim)
 - [What is puuTools](#puutools)
 - [Installation instructions](#installation)
-- [First usage](#first_usage)
-  - [One simple example](#example)
-  - [A complex scenario where puuTools can be useful](#complex_scenario)
+- [First usage with a walk-through example ](#first_usage)
+- [A complex scenario where puuTools can be useful](#complex_scenario)
 - [Copyright](#copyright)
 - [License](#license)
 
@@ -83,22 +82,45 @@ To date, <strong>puutools</strong> is distributed as a static library for C++ de
 
 ### Installation
 
+<p align="justify">
 Download the <a href="https://github.com/charlesrocabert/Evo2Sim/releases/latest">latest release</a> of <strong>puutools</strong>, and save it to a directory of your choice. Open a terminal and use the <code>cd</code> command to navigate to this directory. To install <strong>puutools</strong>, simply call <code>install.sh</code> on the command line:
 
     sh install.sh
 
 The script requires sudo access to install the library in the appropriate folder. <strong>puutools</strong> comes as a single C++ header file, and will then be installed in an <code>include</code> directory (usually <code>/usr/local/include</code>).
-
-## First usage <a name="first_usage"></a>
-
-### One simple example <a name="example"></a>
-
-<p align="justify">
-
 </p>
 
+## First usage with a walk-through example <a name="first_usage"></a>
 
-### A complex scenario where puutools has been useful <a name="complex_scenario"></a>
+<p align="justify">
+<strong>puutools</strong> is distributed as an external static library. Once installed (see above), the header must be included with the standard <code>#include</code> instruction:
+
+```c++
+#include <puutools.h>
+```
+
+The main object that will be manipulated by the user is the class <code>puu_tree<selection_unit></code> which instanciates a dynamic representation of a lineage or phylogenetic tree. <code>puu_tree</code> class uses a template: <code>selection_unit</code> can be any class created on your own, with the constraint that the copy contructor must be at least public and not disabled, and preferably fully implemented to avoid errors.
+</p>
+
+<p align="justify">
+In this example, we will implement a basic algorithm to simulate the evolution of a population of constant size $N$. Individuals are asexual and generations are non-overlapping. Each individual owns a phenotypic trait $x \in \mathcal{R}$ which can mutate with a probability $m$ (per individual per generation) and a size $s$ such that the mutated trait $x' = x + \mathcal{N}(0, s)$. Individual's fitness is calculated with the standard Gaussian fitness function $w = e^{-\frac{x^2}{2}}$. The number of descendants at each generation is fitness proportionate.
+
+We will implement six command line arguments to define each simulation:
+- The initial trait value $x_0$;
+- The simulation time $T$ (in generations);
+- The population size $N$;
+- The mutation rate $m$;
+- The mutation size $s$;
+
+We will introduce <strong>puutools</strong> code step by step.
+</p>
+
+### Pre-processor include directives
+
+
+
+
+## A complex scenario where puutools has been useful <a name="complex_scenario"></a>
 
 ## Behind the scene
 
