@@ -20,7 +20,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#***************************************************************************/
+#***************************************************************************
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 # Define the minimum required CMake version                                    #
@@ -80,6 +80,11 @@ if(GSL_FOUND)
   include_directories(${GSL_INCLUDE_DIR})
   target_link_libraries(${WRIGHT_FISHER} ${GSL_LIBRARIES})
 endif(GSL_FOUND)
+
+find_package(PUUTOOLS REQUIRED)
+if(PUUTOOLS_FOUND)
+  include_directories(${PUUTOOLS_INCLUDE_DIR})
+endif(PUUTOOLS_FOUND)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#

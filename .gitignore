@@ -10,6 +10,11 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 *.DS_Store
+*.Rhistory
 xcode/*
 deprecated/*
+example/output/*.png
+example/output/*.txt
+example/output/*.phb
+example/build/bin/*
 

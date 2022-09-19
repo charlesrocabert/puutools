@@ -769,7 +769,7 @@ inline void puu_tree<selection_unit>::get_active_node_identifiers( std::vector<u
   {
     if (_iterator->second->is_active())
     {
-      active_node_identifiers->push_back(_iterator->second->get_id());
+      active_node_identifiers->push_back(_iterator->second->get_identifier());
     }
     
   }

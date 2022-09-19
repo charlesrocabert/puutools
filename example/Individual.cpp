@@ -92,6 +92,7 @@ Individual::~Individual( void )
  */
 void Individual::mutate( Prng* prng, double mutation_rate, double mutation_size )
 {
+  _mutation_size = 0.0;
   if (prng->uniform() < mutation_rate)
   {
     _mutation_size  = prng->gaussian(0.0, mutation_size);

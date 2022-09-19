@@ -33,11 +33,11 @@
 #include <iostream>
 #include <vector>
 #include <assert.h>
-//#include <puutools.h>
+#include <puutools.h>
 
 #include "Prng.h"
 #include "Individual.h"
-#include "../puutools/puutools.h"
+//#include "../puutools/puutools.h"
 
 /**
  * \brief    Main function
@@ -58,8 +58,8 @@ int main( int argc, char const** argv )
   double  initial_trait_value = 2.0;
   int     simulation_time     = 10000;
   int     population_size     = 1000;
-  double  mutation_rate       = 1e-4;
-  double  mutation_size       = 0.1;
+  double  mutation_rate       = 1.0/200.0;
+  double  mutation_size       = 0.02;
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) Create the prng                    */
@@ -128,7 +128,7 @@ int main( int argc, char const** argv )
     size_t new_individual_pos = 0;
     for (int i = 0; i < population_size; i++)
     {
-      for (int j = 0; j < nb_descendants[i]; j++)
+      for (unsigned int j = 0; j < nb_descendants[i]; j++)
       {
         new_population[new_individual_pos] = new Individual(*population[i]);
         new_population[new_individual_pos]->mutate(&prng, mutation_rate, mutation_size);
@@ -159,18 +159,44 @@ int main( int argc, char const** argv )
   /* 5) Save lineage and phylogenetic data */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   
-  std::ofstream file("./lineage.txt", std::ios::out | std::ios::trunc);
+  /* Save the lineage of the last best individual
+     --------------------------------------------- */
+  std::ofstream file("./output/lineage_best.txt", std::ios::out | std::ios::trunc);
   file << "generation mutation_size trait fitness" << std::endl;
   puu_node<Individual>* best_node = lineage_tree.get_node_by_selection_unit(population[best_individual]);
-  while (best_node != NULL)
+  while (!best_node->is_master_root())
   {
     file << best_node->get_insertion_time() << " ";
     file << best_node->get_selection_unit()->get_mutation_size() << " ";
     file << best_node->get_selection_unit()->get_trait() << " ";
     file << best_node->get_selection_unit()->get_fitness() << std::endl;
+    best_node = best_node->get_parent();
+    file.flush();
   }
   file.close();
-  phylogenetic_tree.write_newick_tree("phylogenetic_tree.phb");
+  
+  /* Save the lineage of all alive individuals
+     ------------------------------------------ */
+  file.open("./output/lineage_all.txt", std::ios::out | std::ios::trunc);
+  file << "generation mutation_size trait fitness" << std::endl;
+  puu_node<Individual>* node = lineage_tree.get_first();
+  while (node != NULL)
+  {
+    if (!node->is_master_root())
+    {
+      file << node->get_insertion_time() << " ";
+      file << node->get_selection_unit()->get_mutation_size() << " ";
+      file << node->get_selection_unit()->get_trait() << " ";
+      file << node->get_selection_unit()->get_fitness() << std::endl;
+      file.flush();
+    }
+    node = lineage_tree.get_next();
+  }
+  file.close();
+  
+  /* Save the phylogenetic tree
+     --------------------------- */
+  phylogenetic_tree.write_newick_tree("./output/phylogenetic_tree.phb");
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 6) Free memory                        */
