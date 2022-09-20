@@ -17,6 +17,7 @@
 - [Aim](#aim)
 - [What is puuTools](#puutools)
 - [Installation instructions](#installation)
+- [Algorithm overview](#algorithm)
 - [First usage with a walk-through example ](#first_usage)
 - [A complex scenario where puuTools can be useful](#complex_scenario)
 - [Copyright](#copyright)
@@ -111,6 +112,18 @@ The script requires sudo access to install the library in the appropriate folder
 
 If you cannot or do not want to use a sudo access, simply <a href="https://github.com/charlesrocabert/puutools/raw/main/puutools/puutools.h">download the source file <code>puutools.h</code></a> and include it directly to your project.
 </p>
+
+## Algorithm overview <a name="algorithm"></a>
+
+<p align="center">
+<img src="./doc/basic_algorithm-crop.jpg" width=700>
+</p>
+
+<!--
+<p align="justify">
+Figure III.9 – Live update of lineage and phylogenetic trees. At each time-step t, the population state is updated (divisions, deaths, cell updates, ...): (i) at each division, the two daughter cells are added to the trees as leaves, with their parent as a common ancestor, (ii) dead cells are removed from trees. Both lineage and phylogenetic trees are pruned (dead branches are removed), and the phylogenetic tree is shortened (intermediate nodes not being common ancestors are removed). In this example, we start at time t. The common ancestor of the whole population (CA, in red) is the dead cell labelled 0. The most recent common ancestor (MRCA, in blue) is the alive cell 2. Tree leaves are represented in green and all correspond to alive cells (first row). The population state is then updated to time t + 1: the cell 3 dies, and the cell 2 divides in daughter cells 2 and 5 (the cell 2 is still tracked because it divided 4 times and didn’t died yet). These events are added to both trees (second row). Then, pruning and shortening algorithms are applied: the lineage tree looses the branch 3 − 3. The phylogenetic tree looses the leaf 3, and the oldest 2 node. The MRCA is now the node 2, linked to nodes 2 and 4. 
+</p>
+-->
 
 ## First usage with a walk-through example <a name="first_usage"></a>
 
