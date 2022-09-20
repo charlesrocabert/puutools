@@ -92,6 +92,8 @@ To date, <strong>puutools</strong> is distributed as a static library for C++ de
 
 - Gnu Scientific Library (GSL);
 - CBLAS;
+- R >= 4.0.0;
+- Rpackages tidyverse and ape;
 
 ### Installation
 
