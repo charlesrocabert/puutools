@@ -44,7 +44,7 @@ When dealing with complex evolutionary simulations, one solution consists in pro
 </p>
 
 <p align="justify">
-Hence, another solution consists in dynamically tracking the lineage trees during a simulation, in order to only keep the pertinent information in memory. Moreover, such an approach provides live access to the lineage and phylogenetic relationships, including tracing back evolutionary events, at any time during a simulation.
+Hence, another solution consists in dynamically tracking the lineage and/or phylogenetic trees during a simulation, in order to only keep the pertinent information in memory. Moreover, such an approach provides live access to ancestor relationships, including tracing back evolutionary events, at any time during a simulation.
 While this approach comes at slightly higher computational and live memory cost (it is necessary to maintain in memory and regularly update the structure of the tree), it is much lighter and efficient than backing up everything and running post-treatments.
 </p>
 
@@ -59,16 +59,16 @@ This functionality is usually re-implemented from scratch in different simulatio
 ## What is puutools <a name="puutools"></a>
 
 <p align="justify">
-While tree's data-structures are standard in computer science, a straightforward tool to specifically manipulate ancestral relationships in individual-based simulations is still missing.
+While tree's data-structures are standard in computer science, the standard library does not provide tree-like containers and a straightforward tool to specifically manipulate ancestral relationships in individual-based simulations is still missing.
 <strong>puutools</strong> allows to dynamically create, track and manage lineage and/or phylogenic trees during individual-based forward-in-time simulations of evolution.
 </p>
 
 <p align="justify">
-With <strong>puutools</strong>, it is possible to update the lineage and/or the phylogenic tree of a population at each generation during a simulation, and to track and recover any evolutionary events. <strong>puutools</strong> is easy to deploy and versatile, providing the user with a small set of easy-to-use functions.
+With <strong>puutools</strong>, it is possible to update the lineage and/or the phylogenic tree of a population at each generation during a simulation, and to track and recover evolutionary events at any time. <strong>puutools</strong> is easy to deploy and versatile, providing the user with a small set of easy-to-use functions.
 </p>
 
 <p align="justify">
-<strong>puutools</strong> is an all-in-one library. It does not depend on third-party packages, and its code is kept simple and light. <!--Learn more about what is under the hood [here](#behind_the_scene).-->
+<strong>puutools</strong> is an all-in-one library. It does not depend on third-party packages, and its code is kept simple and light. <strong>puutools</strong> comes as and header-only library, so compilation is not needed. <!--Learn more about what is under the hood [here](#behind_the_scene).-->
 </p>
 
 <p align="justify">
