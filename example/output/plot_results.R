@@ -35,7 +35,7 @@ best = read.table("lineage_best.txt", sep=" ", h=T)
 all  = read.table("lineage_all.txt", sep=" ", h=T)
 tree = read.tree("phylogenetic_tree.phb")
 
-png("figure1.png", width=1200, height=1000, units="px")
+png("figure1.png", width=1000, height=800, units="px", pointsize=20)
 par(mfrow=c(2,2))
 plot(best$generation, best$mutation_size, xlab="Generation", ylab="Mutation size", main="\n\nFixed mutation sizes", col="cornflowerblue", type="l", lwd=2)
 plot(best$generation, best$trait, xlab="Generation", ylab="Phenotypic trait", main="\n\nPhenotypic trait evolution", col="cornflowerblue", type="l", lwd=2)
