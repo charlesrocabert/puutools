@@ -35,11 +35,11 @@
 <p align="justify">
 Individual-based forward-in-time evolutionary simulations are more and more common, and have been proven useful in many fields (ecology and evolution, conservation biology, systems biology, etc).
 
+Precisely recovering the evolutionary events that led to the final state of a population is one major interest of evolutionary simulations.
 As models' complexity tends to increase, it becomes crucial to develop tools which efficiently track the lineages of <em>in silico</em> populations and provide exhaustive access to all evolutionary events during a simulation.
 </p>
 
 <p align="justify">
-Precisely recovering the evolutionary events that led to the final state of a population is one major interest of evolutionary simulations.
 When dealing with complex evolutionary simulations, one solution consists in producing full simulation backups at regular intervals during a simulation, in order to recover lineage information in post-processing. However, such an approach usually requires gigabytes of storage, as it saves more information than strictly necessary to recover lineages, limiting the opportunities to produce light and portable simulation software.
 </p>
 
