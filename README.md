@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-<em>Easy-to-use and versatile framework for the live tracking of lineage/phylogenetic trees and evolutionary events in individual-based forward-in-time simulations of evolution.</em>
+<em>Live tracking of lineage/phylogenetic trees and evolutionary events in individual-based forward-in-time simulations of evolution.</em>
 <br/>
 <em><sup>(Puu is the Finnish word for tree)</sup></em>
 <br/><br/>
