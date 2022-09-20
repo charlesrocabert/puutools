@@ -39,11 +39,12 @@ As models' complexity tends to increase, it becomes crucial to develop tools whi
 </p>
 
 <p align="justify">
+Precisely recovering the evolutionary events that led to the final state of a population is one major interest of evolutionary simulations.
 When dealing with complex evolutionary simulations, one solution consists in producing full simulation backups at regular intervals during a simulation, in order to recover lineage information in post-processing. However, such an approach usually requires gigabytes of storage, as it saves more information than strictly necessary to recover lineages, limiting the opportunities to produce light and portable simulation software.
 </p>
 
 <p align="justify">
-Because precisely recovering the evolutionary events that led to the final state of a population is one major interest of evolutionary simulations, keeping trace of the lineages that did not went extinct is relevant. Thus, another solution consists in dynamically tracking the lineage trees during a simulation, in order to only keep the pertinent information in memory. Moreover, such an approach provides live access to the lineage and phylogenetic relationships, including tracing back evolutionary events, at any time during a simulation.
+Hence, another solution consists in dynamically tracking the lineage trees during a simulation, in order to only keep the pertinent information in memory. Moreover, such an approach provides live access to the lineage and phylogenetic relationships, including tracing back evolutionary events, at any time during a simulation.
 While this approach comes at slightly higher computational and live memory cost (it is necessary to maintain in memory and regularly update the structure of the tree), it is much lighter and efficient than backing up everything and running post-treatments.
 </p>
 
