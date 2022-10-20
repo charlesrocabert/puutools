@@ -454,7 +454,7 @@ Output files are written in the folder <code>example/output</code>, which also c
 
 **Trajectory of the lineage of the last best individual, and phylogenetic tree:**
 
-![image](https://user-images.githubusercontent.com/25666459/191052960-9ec2108c-fb8d-4451-a4ea-46679ed52642.png)
+![figure1](https://user-images.githubusercontent.com/25666459/196970154-ac7d8a53-5ff8-4466-b18c-3e6257dd6af9.png)
 
 ## A complex scenario where puutools has been useful <a name="complex_scenario"></a>
 
