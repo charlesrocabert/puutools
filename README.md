@@ -53,7 +53,7 @@ This functionality is usually re-implemented from scratch in different simulatio
 </p>
 
 <p align="center">
-<img src="./doc/backup_vs_live_tracking-crop.jpg">
+<img src="./doc/backup_vs_live_tracking.jpg">
 </p>
 
 ## What is puutools <a name="puutools"></a>
@@ -132,7 +132,7 @@ You should have received a copy of the GNU General Public License along with thi
 ## Algorithm overview <a name="algorithm"></a>
 
 <p align="center">
-<img src="./doc/basic_algorithm-crop.jpg" width=700 />
+<img src="./doc/basic_algorithm.jpg" width=700 />
 </p>
 
 ## First usage with a walk-through example <a name="first_usage"></a>
