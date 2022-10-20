@@ -136,8 +136,12 @@ int main( int argc, char const** argv )
     
     /* STEP 5: Update the lineage and phylogenetic trees
        -------------------------------------------------- */
-    lineage_tree.update_as_lineage_tree();
-    phylogenetic_tree.update_as_phylogenetic_tree();
+    if (generation%100==0)
+    {
+      lineage_tree.update_as_lineage_tree();
+      phylogenetic_tree.update_as_phylogenetic_tree();
+    }
+    
   }
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -152,7 +156,7 @@ int main( int argc, char const** argv )
   std::ofstream file("./output/lineage_best.txt", std::ios::out | std::ios::trunc);
   file << "generation mutation_size trait fitness" << std::endl;
   puu_node<Individual>* best_node = lineage_tree.get_node_by_selection_unit(simulation.get_best_individual());
-  while (!best_node->is_master_root())
+  while (best_node != NULL)
   {
     file << best_node->get_insertion_time() << " ";
     file << best_node->get_selection_unit()->get_mutation_size() << " ";
@@ -170,14 +174,11 @@ int main( int argc, char const** argv )
   puu_node<Individual>* node = lineage_tree.get_first();
   while (node != NULL)
   {
-    if (!node->is_master_root())
-    {
-      file << node->get_insertion_time() << " ";
-      file << node->get_selection_unit()->get_mutation_size() << " ";
-      file << node->get_selection_unit()->get_trait() << " ";
-      file << node->get_selection_unit()->get_fitness() << std::endl;
-      file.flush();
-    }
+    file << node->get_insertion_time() << " ";
+    file << node->get_selection_unit()->get_mutation_size() << " ";
+    file << node->get_selection_unit()->get_trait() << " ";
+    file << node->get_selection_unit()->get_fitness() << std::endl;
+    file.flush();
     node = lineage_tree.get_next();
   }
   file.close();

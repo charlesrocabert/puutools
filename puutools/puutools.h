@@ -88,6 +88,7 @@ public:
   inline unsigned long long int get_identifier( void ) const;
   inline double                 get_insertion_time( void ) const;
   inline selection_unit*        get_selection_unit( void );
+  inline puu_node*              get_previous( void );
   inline puu_node*              get_parent( void );
   inline puu_node*              get_child( size_t pos );
   inline size_t                 get_number_of_children( void ) const;
@@ -185,14 +186,30 @@ inline selection_unit* puu_node<selection_unit>::get_selection_unit( void )
 }
 
 /**
- * \brief    Get the parental node
+ * \brief    Get the previous node
  * \details  --
+ * \param    void
+ * \return   \e puu_node*
+ */
+template <typename selection_unit>
+inline puu_node<selection_unit>* puu_node<selection_unit>::get_previous( void )
+{
+  return _parent;
+}
+
+/**
+ * \brief    Get the parental node
+ * \details  Returns also NULL if the parent is the master root
  * \param    void
  * \return   \e puu_node*
  */
 template <typename selection_unit>
 inline puu_node<selection_unit>* puu_node<selection_unit>::get_parent( void )
 {
+  if (_parent != NULL && _parent->is_master_root())
+  {
+    return NULL;
+  }
   return _parent;
 }
 
@@ -278,14 +295,14 @@ inline bool puu_node<selection_unit>::is_normal( void ) const
 template <typename selection_unit>
 inline bool puu_node<selection_unit>::is_ancestor( unsigned long long int ancestor_id ) const
 {
-  puu_node* node = get_parent();
+  puu_node* node = get_previous();
   while (node != NULL)
   {
     if (node->get_id() == ancestor_id)
     {
       return true;
     }
-    node = node->get_parent();
+    node = node->get_previous();
   }
   return false;
 }
@@ -547,12 +564,12 @@ void puu_node<selection_unit>::replace_by_grandchildren( puu_node* child_to_remo
 template <typename selection_unit>
 void puu_node<selection_unit>::tag_lineage( void )
 {
-  _tagged = true;
+  _tagged        = true;
   puu_node* node = _parent;
   while (node != NULL)
   {
     node->tag();
-    node = node->get_parent();
+    node = node->get_previous();
     if (node != NULL)
     {
       if (node->is_tagged())
@@ -572,12 +589,12 @@ void puu_node<selection_unit>::tag_lineage( void )
 template <typename selection_unit>
 void puu_node<selection_unit>::untag_lineage( void )
 {
-  _tagged = false;
+  _tagged        = false;
   puu_node* node = _parent;
   while (node != NULL)
   {
     node->untag();
-    node = node->get_parent();
+    node = node->get_previous();
     if (node != NULL)
     {
       if (!node->is_tagged())
@@ -730,11 +747,19 @@ template <typename selection_unit>
 inline puu_node<selection_unit>* puu_tree<selection_unit>::get_first( void )
 {
   _iterator = _node_map.begin();
-  if (_iterator != _node_map.end())
+  if (_iterator == _node_map.end())
   {
-    return _iterator->second;
+    return NULL;
   }
-  return NULL;
+  if (_iterator->second->is_master_root())
+  {
+    _iterator++;
+  }
+  if (_iterator == _node_map.end())
+  {
+    return NULL;;
+  }
+  return _iterator->second;
 }
 
 /**
@@ -747,11 +772,19 @@ template <typename selection_unit>
 inline puu_node<selection_unit>* puu_tree<selection_unit>::get_next( void )
 {
   _iterator++;
-  if (_iterator != _node_map.end())
+  if (_iterator == _node_map.end())
   {
-    return _iterator->second;
+    return NULL;
   }
-  return NULL;
+  if (_iterator->second->is_master_root())
+  {
+    _iterator++;
+  }
+  if (_iterator == _node_map.end())
+  {
+    return NULL;
+  }
+  return _iterator->second;
 }
 
 /**
@@ -1161,7 +1194,7 @@ void puu_tree<selection_unit>::shorten()
   {
     if (!_iterator->second->is_master_root() && !_iterator->second->is_active())
     {
-      assert(_iterator->second->get_number_of_children() == 2);
+      assert(_iterator->second->get_number_of_children() >= 2);
     }
   }
 #endif
@@ -1193,14 +1226,14 @@ void puu_tree<selection_unit>::delete_node( unsigned long long int node_identifi
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 1) Update parental children list  */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  node->get_parent()->replace_by_grandchildren(node);
+  node->get_previous()->replace_by_grandchildren(node);
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) Set the new parent of children */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  for (size_t i = 0; i < node->get_parent()->get_number_of_children(); i++)
+  for (size_t i = 0; i < node->get_previous()->get_number_of_children(); i++)
   {
-    node->get_parent()->get_child(i)->set_parent(node->get_parent());
+    node->get_previous()->get_child(i)->set_parent(node->get_previous());
   }
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

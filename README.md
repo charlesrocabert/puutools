@@ -364,16 +364,16 @@ Note that at <strong>STEP 5</strong>, we copy the dead individuals in the lineag
 <strong>TIP:</strong> The size of a phylogenetic tree is approximately constant over time ($2n-1$ nodes), while a lineage tree will grow slowly. Depending on the complexity of your simulation, in can be useful to create a secondary class saving important information from your individuals (such that phenotypic trait values, mutational events, etc) and provide it to the trees instead of your main individual class.
 </p>
 
-### Extracting the information from the trees
+### 6) Final step: extracting information from the trees
 
 <p align="justify">
 Now that the simulation reached an end, we want to extract some information from the trees.
-We first call a last time update functions to ensure a good final structure:
+We call a last time update functions to ensure a good final structure:
 </p>
 
 ```c++
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 5) Save lineage and phylogenetic data */
+  /* 6) Save lineage and phylogenetic data */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
   lineage_tree.update_as_lineage_tree();
@@ -381,7 +381,7 @@ We first call a last time update functions to ensure a good final structure:
 ```
 
 <p align="justify">
-We then retrieve the lineage of the last best individual. To do so, we first get the tree's node from the memory address of the individual using the method <code>get_node_by_selection_unit(*individual)</code>. We then trace back the lineage of the node using the method <code>get_parent()</code> until the master root of the tree is reached (the master root is not a real root of the tree, but is here to anchor every roots). Doing so, we write statistics in a file:
+We first retrieve the lineage of the last best individual. To do so, we first get the best individual's node using the method <code>get_node_by_selection_unit(*individual)</code>. We then trace back the lineage of this particular node using the method <code>get_parent()</code>, until the root of the tree is reached. Doing so, we write statistics in a file:
 </p>
 
 ```c++
@@ -389,8 +389,8 @@ We then retrieve the lineage of the last best individual. To do so, we first get
      --------------------------------------------- */
   std::ofstream file("./output/lineage_best.txt", std::ios::out | std::ios::trunc);
   file << "generation mutation_size trait fitness" << std::endl;
-  puu_node<Individual>* best_node = lineage_tree.get_node_by_selection_unit(population[best_individual]);
-  while (!best_node->is_master_root())
+  puu_node<Individual>* best_node = lineage_tree.get_node_by_selection_unit(simulation.get_best_individual());
+  while (best_node != NULL)
   {
     file << best_node->get_insertion_time() << " ";
     file << best_node->get_selection_unit()->get_mutation_size() << " ";
@@ -403,7 +403,7 @@ We then retrieve the lineage of the last best individual. To do so, we first get
 ```
 
 <p align="justify">
-We then save the data over the whole lineage tree. To do so, we use standard list exploration methods implemented in <strong>puutools</strong>: <code>get_first()</code> and <code>get_next()</code>. When the last node is reached, the function returns <code>NULL</code>. Note that we carefully check that the node is not the master root:
+We then save the data over the whole lineage tree. To do so, we use the methods <code>get_first()</code> and <code>get_next()</code>. When the last node is reached, the function returns <code>NULL</code>.
 </p>
 
 ```c++
@@ -414,14 +414,11 @@ We then save the data over the whole lineage tree. To do so, we use standard lis
   puu_node<Individual>* node = lineage_tree.get_first();
   while (node != NULL)
   {
-    if (!node->is_master_root())
-    {
-      file << node->get_insertion_time() << " ";
-      file << node->get_selection_unit()->get_mutation_size() << " ";
-      file << node->get_selection_unit()->get_trait() << " ";
-      file << node->get_selection_unit()->get_fitness() << std::endl;
-      file.flush();
-    }
+    file << node->get_insertion_time() << " ";
+    file << node->get_selection_unit()->get_mutation_size() << " ";
+    file << node->get_selection_unit()->get_trait() << " ";
+    file << node->get_selection_unit()->get_fitness() << std::endl;
+    file.flush();
     node = lineage_tree.get_next();
   }
   file.close();
@@ -437,25 +434,7 @@ Finally, we save the structure of the phylogenetic tree in Newick format (<code>
   phylogenetic_tree.write_newick_tree("./output/phylogenetic_tree.phb");
 ```
 
-<p align="justify">
-At the end of the script, the memory must be cleaned from the population:
-</p>
-
-```c++
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 6) Free memory                        */
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-  for (int i = 0; i < population_size; i++)
-  {
-    delete population[i];
-    population[i] = NULL;
-  }
-  return EXIT_SUCCESS;
-}
-```
-
-### Results
+### 7) Results
 
 This simulation example is available in the folder <code>example</code> of this repository, and can be compiled with CMake (navigate to the folder <code>example/cmake</code> with a terminal and run the following command:
 
@@ -463,20 +442,15 @@ This simulation example is available in the folder <code>example</code> of this 
 
 The binary executable <code>puutools_example</code> is located in the folder <code>example/build/bin</code>.
 
-As an example, we run the simulation by placing an initial population os size $N=200$, away from the fitness optimum (initial trait value = 2). The simulation time is $T=10000$ generations, with a mutation rate $m=0.02$ and a mutation size $s=0.02$.
+As an example, a simulation have been run by placing an initial population of size $N=200$ away from the fitness optimum (initial trait value = 2). The simulation time is $T=10000$ generations, with a mutation rate $m=0.02$ and a mutation size $s=0.02$.
 
   ../build/bin/puutools_example 2.0 10000 200 0.02 0.02
 
-Output files are written in the folder <code>example/output</code>, which also contain a Rscript to generate some figures. For example, we can see that the population evolved towards the optimum. As we recover the lineage of the last best individual, we have also access to the size of fixed mutations.
-We can also vizualize the phylogenetic tree, as well as the distribution of phenotypic trait values accross the lineage tree.
+Output files are written in the folder <code>example/output</code>, which also contain a Rscript to generate a figure. Here, we can see that the population evolved towards the optimum. As we recover the lineage of the last best individual, we have also access to the size of fixed mutations.
 
 **Trajectory of the lineage of the last best individual, and phylogenetic tree:**
 
 ![image](https://user-images.githubusercontent.com/25666459/191052960-9ec2108c-fb8d-4451-a4ea-46679ed52642.png)
-
-**Repartition of the phenotypic trait in the whole lineage tree:**
-
-![image](https://user-images.githubusercontent.com/25666459/191051967-d0d406ba-0849-478d-853e-247346f51698.png)
 
 ## A complex scenario where puutools has been useful <a name="complex_scenario"></a>
 
