@@ -69,7 +69,7 @@ set(EXECUTABLE_OUTPUT_PATH ../build/bin)
 # Define the executables                                                       #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 set(RUN_EXECUTABLE puutools_example)
-add_executable(${RUN_EXECUTABLE} puutools_example.cpp)
+add_executable(${RUN_EXECUTABLE} ./src/puutools_example.cpp)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -92,9 +92,9 @@ endif(PUUTOOLS_FOUND)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 add_library(
   puutools_examples
-  Prng.cpp
-  Individual.cpp
-  Simulation.cpp
+  ./src/Prng.cpp
+  ./src/Individual.cpp
+  ./src/Simulation.cpp
 )
 
 target_link_libraries(puutools_examples gsl gslcblas)
