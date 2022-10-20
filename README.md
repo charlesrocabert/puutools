@@ -99,7 +99,7 @@ To date, <strong>puutools</strong> is distributed as a static library for C++ de
 ### Installation
 
 <p align="justify">
-Download the <a href="https://github.com/charlesrocabert/Evo2Sim/releases/latest">latest release</a> of <strong>puutools</strong>, and save it to a directory of your choice. Open a terminal and use the <code>cd</code> command to navigate to this directory. To install <strong>puutools</strong>, simply call <code>install.sh</code> on the command line:
+Download the <a href="https://github.com/charlesrocabert/puutools/releases/latest">latest release</a> of <strong>puutools</strong>, and save it to a directory of your choice. Open a terminal and use the <code>cd</code> command to navigate to this directory. To install <strong>puutools</strong>, simply call <code>install.sh</code> on the command line:
 </p>
 
 ```
@@ -436,17 +436,21 @@ Finally, we save the structure of the phylogenetic tree in Newick format (<code>
 
 ### 7) Results
 
+<p align="justify">
 This simulation example is available in the folder <code>example</code> of this repository, and can be compiled with CMake (navigate to the folder <code>example/cmake</code> with a terminal and run the following command:
 
   sh make_release.sh
 
 The binary executable <code>puutools_example</code> is located in the folder <code>example/build/bin</code>.
+</p>
 
+<p align="justify">
 As an example, a simulation have been run by placing an initial population of size $N=200$ away from the fitness optimum (initial trait value = 2). The simulation time is $T=10000$ generations, with a mutation rate $m=0.02$ and a mutation size $s=0.02$.
 
   ../build/bin/puutools_example 2.0 10000 200 0.02 0.02
 
 Output files are written in the folder <code>example/output</code>, which also contain a Rscript to generate a figure. Here, we can see that the population evolved towards the optimum. As we recover the lineage of the last best individual, we have also access to the size of fixed mutations.
+</p>
 
 **Trajectory of the lineage of the last best individual, and phylogenetic tree:**
 
@@ -454,7 +458,8 @@ Output files are written in the folder <code>example/output</code>, which also c
 
 ## A complex scenario where puutools has been useful <a name="complex_scenario"></a>
 
-
-
+<p align="justify">
+<strong>puutools</strong> code has been used for research purpose in the bacterial simulation framework <a href="https://github.com/charlesrocabert/Evo2Sim">Evo<sup>2</sup>Sim</a>. In one publication (see <a href="https://doi.org/10.1371/journal.pcbi.1005459">Rocabert et al. 2017</a>), Evo<sup>2</sup>Sim has been used to study bacterial diversification events in batch culture setups, due to stable cross-feeding. Tracking lineages and phylogenetic trees has been an essential step of this scientific work. An example of simulation output, where <strong>puutools</strong> code is used to display several results, is also available here: https://charlesrocabert.github.io/doc/evo2sim_simulation_example/viewer/viewer.html.
+</p>
 
 
