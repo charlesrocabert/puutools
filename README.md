@@ -1,7 +1,5 @@
-<!--<h1 align="center">puuTools</h1>-->
-
 <p align="center">
-<img src="./logo/puuTools_logo.png" width=200>
+<img src="./logo/puuTools_logo.png" width=300>
 </p>
 
 <p align="center">
@@ -17,6 +15,7 @@
 - [Aim](#aim)
 - [What is puuTools](#puutools)
 - [Installation instructions](#installation)
+- [CMake find module](#findmodule)
 - [Copyright](#copyright)
 - [License](#license)
 - [Algorithm overview](#algorithm)
@@ -112,6 +111,17 @@ The script requires sudo access to install the library in the appropriate folder
 If you cannot or do not want to use a sudo access, simply <a href="https://github.com/charlesrocabert/puutools/raw/main/puutools/puutools.h">download the source file <code>puutools.h</code></a> and include it directly to your project.
 </p>
 
+## CMake find module <a name="findmodule"></a>
+
+<p align="justify">
+A find module is useful to determine whether a package is available during the compilation of a project with CMake.
+It has also the advantage to determine the include, library or framework paths with no need to provide them explicitely in the CMakeLists.txt file.
+</p>
+
+<p align="justify">
+You can download here the CMake find module of <strong>puutools</strong>: <a href="https://github.com/charlesrocabert/puutools/raw/main/cmake_find_module/FindPuuTools.cmake" target="_blank">CMake Find Module</a>
+</p>
+
 ## Copyright <a name="copyright"></a>
 Copyright &copy; 2022 Charles Rocabert.
 All rights reserved.
@@ -143,10 +153,12 @@ You will find a <a href="https://github.com/charlesrocabert/puutools/tree/main/e
 
 ## A complex scenario where puutools has been useful <a name="complex_scenario"></a>
 
-![image](https://user-images.githubusercontent.com/25666459/196973050-579efd60-4e72-436c-bd07-9298d31ddd37.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/25666459/196973050-579efd60-4e72-436c-bd07-9298d31ddd37.png" width=600 />  
+</p>
   
 <p align="justify">
-<strong>puutools</strong> code has been used for research purpose in the bacterial simulation framework <a href="https://github.com/charlesrocabert/Evo2Sim">Evo<sup>2</sup>Sim</a>. In one publication (see <a href="https://doi.org/10.1371/journal.pcbi.1005459">Rocabert et al. 2017</a>), Evo<sup>2</sup>Sim has been used to study bacterial diversification events in batch culture setups, due to stable cross-feeding. Tracking lineages and phylogenetic trees has been an essential step of this scientific work. An example of simulation output, where <strong>puutools</strong> code is used to display several results, is also available here: https://charlesrocabert.github.io/doc/evo2sim_simulation_example/viewer/viewer.html.
+The original code of <strong>puutools</strong> has been used for research purpose as part of the bacterial evolution simulator <a href="https://github.com/charlesrocabert/Evo2Sim">Evo<sup>2</sup>Sim</a>. The software has for example been used to study bacterial diversification events in batch culture setups, due to stable cross-feeding (see <a href="https://doi.org/10.1371/journal.pcbi.1005459">Rocabert et al. 2017</a>). Tracking lineages and phylogenetic trees was an essential step in this scientific work. An example of simulation output is available here: https://charlesrocabert.github.io/doc/evo2sim_simulation_example/viewer/viewer.html.
 </p>
 
 
