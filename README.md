@@ -17,11 +17,11 @@
 - [Aim](#aim)
 - [What is puuTools](#puutools)
 - [Installation instructions](#installation)
+- [Copyright](#copyright)
+- [License](#license)
 - [Algorithm overview](#algorithm)
 - [First usage with a walk-through example ](#first_usage)
 - [A complex scenario where puuTools can be useful](#complex_scenario)
-- [Copyright](#copyright)
-- [License](#license)
 
 ## Aim
 
