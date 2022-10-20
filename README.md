@@ -146,7 +146,7 @@ You will find a <a href="https://github.com/charlesrocabert/puutools/tree/main/e
 ![image](https://user-images.githubusercontent.com/25666459/196973050-579efd60-4e72-436c-bd07-9298d31ddd37.png)
   
 <p align="justify">
-<strong>puutools</strong> code has been used for research purpose in the bacterial simulation framework <a href="https://github.com/charlesrocabert/Evo2Sim">Evo<sup>2</sup>Sim</a>. In one publication (see <a href="https://doi.org/10.1371/journal.pcbi.1005459">Rocabert et al. 2017</a>), Evo<sup>2</sup>Sim has been used to study bacterial diversification events in batch culture setups, due to stable cross-feeding. Tracking lineages and phylogenetic trees has been an essential step of this scientific work. An example of simulation output, where <strong>puutools</strong> code is used to display several results, is also available here: https://charlesrocabert.github.io/doc/evo2sim_simulation_example/viewer/viewer.html.
+The original code of <strong>puutools</strong> has been used for research purpose as part of the bacterial evolution simulator <a href="https://github.com/charlesrocabert/Evo2Sim">Evo<sup>2</sup>Sim</a>. The software has for example been used to study bacterial diversification events in batch culture setups, due to stable cross-feeding (see <a href="https://doi.org/10.1371/journal.pcbi.1005459">Rocabert et al. 2017</a>). Tracking lineages and phylogenetic trees was an essential step in this scientific work. An example of simulation output is available here: https://charlesrocabert.github.io/doc/evo2sim_simulation_example/viewer/viewer.html.
 </p>
 
 
