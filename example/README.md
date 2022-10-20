@@ -1,11 +1,8 @@
-<!--<h1 align="center">puuTools</h1>-->
-
 <p align="center">
 <img src="../logo/puuTools_logo.png" width=200>
 </p>
 
-
-<h1 align="center">Walk-through example</h1>
+<p align="center"><strong>Walk-through example</strong></p>
 
 ## Content
 
