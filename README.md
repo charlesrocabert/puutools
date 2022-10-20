@@ -1,7 +1,5 @@
-<!--<h1 align="center">puuTools</h1>-->
-
 <p align="center">
-<img src="./logo/puuTools_logo.png" width=200>
+<img src="./logo/puuTools_logo.png" width=300>
 </p>
 
 <p align="center">
