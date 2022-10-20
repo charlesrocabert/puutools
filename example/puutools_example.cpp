@@ -11,7 +11,8 @@
 /****************************************************************************
  * puutools
  * ---------
- * Lineage and phylogenetic tree toolbox for individual-based simulations.
+ * Easy-to-use C++ library for the live tracking of lineage and phylogenetic
+ * trees in individual-based forward-in-time simulations of evolution.
  *
  * Copyright © 2022 Charles Rocabert
  * Web: https://github.com/charlesrocabert/puutools/
@@ -32,11 +33,13 @@
 
 #include <iostream>
 #include <vector>
+#include <tuple>
 #include <assert.h>
 #include <puutools.h>
 
 #include "Prng.h"
 #include "Individual.h"
+#include "Simulation.h"
 
 
 /**
@@ -73,29 +76,29 @@ int main( int argc, char const** argv )
   Prng prng(time(0));
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 3) Initialize the population          */
+  /* 3) Create the simulation              */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   
-  puu_tree<Individual>      lineage_tree;
-  puu_tree<Individual>      phylogenetic_tree;
-  std::vector<Individual*>  population(population_size);
-  std::vector<unsigned int> nb_descendants(population_size);
+  Simulation simulation(&prng, initial_trait_value, population_size, mutation_rate, mutation_size);
+  simulation.initialize_population();
+  
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  /* 4) Create trees and add roots         */
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  
+  puu_tree<Individual> lineage_tree;
+  puu_tree<Individual> phylogenetic_tree;
+  
   for (int i = 0; i < population_size; i++)
   {
-    population[i] = new Individual(initial_trait_value);
-    population[i]->mutate(&prng, mutation_rate, mutation_size);
-    lineage_tree.add_root(population[i]);
-    phylogenetic_tree.add_root(population[i]);
+    lineage_tree.add_root(simulation.get_individual(i));
+    phylogenetic_tree.add_root(simulation.get_individual(i));
   }
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 4) Evolve the population              */
+  /* 5) Evolve the population              */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   
-  std::vector<double> fitness_vector(population_size);
-  double              fitness_sum     = 0.0;
-  int                 best_individual = 0;
-  double              best_fitness    = 0.0;
   for (int generation = 1; generation <= simulation_time; generation++)
   {
     if (generation%1000==0)
@@ -103,56 +106,33 @@ int main( int argc, char const** argv )
       std::cout << ">> Generation " << generation << "\n";
     }
     
-    /* STEP 1 : Update and normalize the fitness vector
-       ------------------------------------------------- */
-    fitness_sum = 0.0;
-    for (int i = 0; i < population_size; i++)
+    /* STEP 1 : Create the next generation
+       ------------------------------------ */
+    simulation.create_next_generation();
+    
+    /* STEP 2 : Add reproduction events
+       --------------------------------- */
+    Individual* parent;
+    Individual* descendant;
+    std::tie(parent, descendant) = simulation.get_first_parent_descendant_pair();
+    while (parent != NULL)
     {
-      population[i]->compute_fitness();
-      fitness_vector[i]  = population[i]->get_fitness();
-      fitness_sum       += population[i]->get_fitness();
-    }
-    best_individual = 0;
-    best_fitness    = 0.0;
-    for (int i = 0; i < population_size; i++)
-    {
-      fitness_vector[i] /= fitness_sum;
-      if (best_fitness < fitness_vector[i])
-      {
-        best_individual = i;
-      }
+      lineage_tree.add_reproduction_event(parent, descendant, (double)generation);
+      phylogenetic_tree.add_reproduction_event(parent, descendant, (double)generation);
+      std::tie(parent, descendant) = simulation.get_next_parent_descendant_pair();
     }
     
-    /* STEP 2 : Draw the number of descendants
-       ---------------------------------------- */
-    prng.multinomial(nb_descendants.data(), fitness_vector.data(), population_size, population_size);
-    
-    /* STEP 3 : Generate the new population
-       ------------------------------------- */
-    std::vector<Individual*> new_population(population_size);
-    size_t new_individual_pos = 0;
+    /* STEP 3 : Inactivate parents
+       ---------------------------- */
     for (int i = 0; i < population_size; i++)
     {
-      for (unsigned int j = 0; j < nb_descendants[i]; j++)
-      {
-        new_population[new_individual_pos] = new Individual(*population[i]);
-        new_population[new_individual_pos]->mutate(&prng, mutation_rate, mutation_size);
-        lineage_tree.add_reproduction_event(population[i], new_population[new_individual_pos], (double)generation);
-        phylogenetic_tree.add_reproduction_event(population[i], new_population[new_individual_pos], (double)generation);
-        new_individual_pos++;
-      }
-      lineage_tree.inactivate(population[i], true);
-      phylogenetic_tree.inactivate(population[i], false);
-      delete population[i];
+      lineage_tree.inactivate(simulation.get_individual(i), true);
+      phylogenetic_tree.inactivate(simulation.get_individual(i), false);
     }
     
     /* STEP 4 : Replace the current population with the new one
        --------------------------------------------------------- */
-    for (int i = 0; i < population_size; i++)
-    {
-      population[i] = new_population[i];
-    }
-    new_population.clear();
+    simulation.update_population();
     
     /* STEP 5: Update the lineage and phylogenetic trees
        -------------------------------------------------- */
@@ -164,7 +144,7 @@ int main( int argc, char const** argv )
   }
   
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 5) Save lineage and phylogenetic data */
+  /* 6) Save lineage and phylogenetic data */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   
   lineage_tree.update_as_lineage_tree();
@@ -174,7 +154,7 @@ int main( int argc, char const** argv )
      --------------------------------------------- */
   std::ofstream file("./output/lineage_best.txt", std::ios::out | std::ios::trunc);
   file << "generation mutation_size trait fitness" << std::endl;
-  puu_node<Individual>* best_node = lineage_tree.get_node_by_selection_unit(population[best_individual]);
+  puu_node<Individual>* best_node = lineage_tree.get_node_by_selection_unit(simulation.get_best_individual());
   while (!best_node->is_master_root())
   {
     file << best_node->get_insertion_time() << " ";
@@ -209,14 +189,5 @@ int main( int argc, char const** argv )
      --------------------------- */
   phylogenetic_tree.write_newick_tree("./output/phylogenetic_tree.phb");
   
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 6) Free memory                        */
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  
-  for (int i = 0; i < population_size; i++)
-  {
-    delete population[i];
-    population[i] = NULL;
-  }
   return EXIT_SUCCESS;
 }

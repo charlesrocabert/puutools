@@ -11,7 +11,8 @@
 /****************************************************************************
  * puutools
  * ---------
- * Lineage and phylogenetic tree toolbox for individual-based simulations.
+ * Easy-to-use C++ library for the live tracking of lineage and phylogenetic
+ * trees in individual-based forward-in-time simulations of evolution.
  *
  * Copyright © 2022 Charles Rocabert
  * Web: https://github.com/charlesrocabert/puutools/
