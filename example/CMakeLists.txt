@@ -2,8 +2,8 @@
 #***************************************************************************
 # puutools
 # ---------
-# Live tracking of lineage/phylogenetic trees and evolutionary events in
-# individual-based forward-in-time simulations of evolution.
+# Easy-to-use C++ library for the live tracking of lineage and phylogenetic
+# trees in individual-based forward-in-time simulations of evolution.
 #
 # Copyright © 2022 Charles Rocabert
 # Web: https://github.com/charlesrocabert/puutools/
@@ -94,6 +94,7 @@ add_library(
   puutools_examples
   Prng.cpp
   Individual.cpp
+  Simulation.cpp
 )
 
 target_link_libraries(puutools_examples gsl gslcblas)

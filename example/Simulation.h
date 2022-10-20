@@ -110,7 +110,7 @@ protected:
   int                       _best_individual;    /*!< Best individual position */
   int                       _current_parent;     /*!< Current parent           */
   int                       _current_descendant; /*!< Current descendant       */
-  int                       _local_count;        /*!< Local descendant count   */
+  unsigned int              _local_count;        /*!< Local descendant count   */
 };
 
 /*----------------------------

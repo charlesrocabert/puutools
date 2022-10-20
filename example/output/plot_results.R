@@ -3,8 +3,8 @@
 #***************************************************************************
 # puutools
 # ---------
-# Live tracking of lineage/phylogenetic trees and evolutionary events in
-# individual-based forward-in-time simulations of evolution.
+# Easy-to-use C++ library for the live tracking of lineage and phylogenetic
+# trees in individual-based forward-in-time simulations of evolution.
 #
 # Copyright © 2022 Charles Rocabert
 # Web: https://github.com/charlesrocabert/puutools/
@@ -25,11 +25,9 @@
 
 rm(list=ls())
 
-library("tidyverse")
 library("ape")
 
-#setwd(Path to example/output folder)
-setwd("/Users/charlesrocabert/git/puutools/example/output")
+setwd(Path to example/output folder)
 
 best = read.table("lineage_best.txt", sep=" ", h=T)
 all  = read.table("lineage_all.txt", sep=" ", h=T)
@@ -44,7 +42,4 @@ plot(tree, root.edge=T, show.node.label=F, show.tip.label=F, use.edge.length=F, 
 mtext("Tracing back the lineage of the last best individual", side = 3, line = -1.5, outer = TRUE)
 axisPhylo()
 dev.off()
-
-p = ggplot(all, aes(generation, trait)) + stat_density_2d(aes(fill = ..density..), geom = "raster", contour=F, n=200) + scale_fill_distiller(palette=4, direction=-1) + theme_minimal() + ggtitle("Phenotypic trait trace along the lineage tree") + xlab("Generation") + ylab("Phenotypic trait")
-ggsave("figure2.png", p)
 
