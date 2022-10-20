@@ -16,7 +16,6 @@
 - [8) Final step: extracting information from the trees](#final_step)
 - [9) Results](#results)
 
-
 ## 1) Introduction <a name="introduction"></a>
 
 <p align="justify">
