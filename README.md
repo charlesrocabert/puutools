@@ -132,19 +132,13 @@ You should have received a copy of the GNU General Public License along with thi
 ## Algorithm overview <a name="algorithm"></a>
 
 <p align="center">
-<img src="./doc/basic_algorithm-crop.jpg" width=700>
+<img src="./doc/basic_algorithm-crop.jpg" width=700 />
 </p>
-
-<!--
-<p align="justify">
-Figure III.9 – Live update of lineage and phylogenetic trees. At each time-step t, the population state is updated (divisions, deaths, cell updates, ...): (i) at each division, the two daughter cells are added to the trees as leaves, with their parent as a common ancestor, (ii) dead cells are removed from trees. Both lineage and phylogenetic trees are pruned (dead branches are removed), and the phylogenetic tree is shortened (intermediate nodes not being common ancestors are removed). In this example, we start at time t. The common ancestor of the whole population (CA, in red) is the dead cell labelled 0. The most recent common ancestor (MRCA, in blue) is the alive cell 2. Tree leaves are represented in green and all correspond to alive cells (first row). The population state is then updated to time t + 1: the cell 3 dies, and the cell 2 divides in daughter cells 2 and 5 (the cell 2 is still tracked because it divided 4 times and didn’t died yet). These events are added to both trees (second row). Then, pruning and shortening algorithms are applied: the lineage tree looses the branch 3 − 3. The phylogenetic tree looses the leaf 3, and the oldest 2 node. The MRCA is now the node 2, linked to nodes 2 and 4. 
-</p>
--->
 
 ## First usage with a walk-through example <a name="first_usage"></a>
 
 <p align="justify">
-<strong>puutools</strong> is distributed as an external static library. Once installed (see above), the header must be included with the standard <code>#include</code> instruction:
+<strong>puutools</strong> is distributed as an external static library. Once installed (see above), the header must be included with the standard <code>#include</code> directive:
 </p>
 
 ```c++
@@ -152,15 +146,15 @@ Figure III.9 – Live update of lineage and phylogenetic trees. At each time-ste
 ```
 
 <p align="justify">
-The main object that will be manipulated by the user is the class <code>puu_tree<selection_unit></code> which instanciates a dynamic representation of a lineage or phylogenetic tree. <code>puu_tree</code> class uses a template: <code>selection_unit</code> can be any class created on your own, with the constraint that the copy contructor must be at least public and not disabled, and preferably fully implemented to avoid errors.
+The main object that will be manipulated by the user is the class <code>puu_tree<selection_unit></code> which instanciates a dynamical representation of a lineage or phylogenetic tree. <code>puu_tree<selection_unit></code> is a template class: <code>selection_unit</code> can be any class of your own, with the only constraint that the <strong>copy constructor must be fully implemented</strong> to avoid errors.
 </p>
 
 <p align="justify">
-In this example, we will implement a basic algorithm to simulate the evolution of a population of constant size $N$. Individuals are asexual and generations are non-overlapping. Each individual owns a phenotypic trait $x \in \mathcal{R}$ which can mutate with a probability $m$ (per individual per generation) and a size $s$ such that the mutated trait $x' = x + \mathcal{N}(0, s)$. Individual's fitness is calculated with the standard Gaussian fitness function $w = e^{-\frac{x^2}{2}}$. The number of descendants at each generation is fitness proportionate.
+In this example, we will implement a basic algorithm to simulate the evolution of a population of constant size $N$. Individuals are asexual and generations are non-overlapping. Each individual owns a phenotypic trait $x \in \mathcal{R}$ which mutates with a probability $m$ (per individual per generation) and a size $s$, such that the mutated trait $x' = x + \epsilon,\ \epsilon \sim \mathcal{N}(0, s)$. Individual's fitness is calculated with the well-known Gaussian fitness function $w = e^{-\frac{x^2}{2}}$. The number of descendants at each generation is fitness proportionate, meaning that it is drawn in a multinomial distribution.
 </p>
 
 <p align="justify">
-We will implement five command line arguments to define each simulation:
+We will implement five command line arguments as simulation parameters:
 
 - The initial trait value $x_0$;
 - The simulation time $T$ (in generations);
@@ -170,36 +164,38 @@ We will implement five command line arguments to define each simulation:
 </p>
 
 <p align="justify">
-We will introduce <strong>puutools</strong> code step by step.
+We will now walk through <strong>puutools</strong> step by step.
 </p>
 
-### Pre-processor include directives
+### 1) Pre-processor include directives
 
 <p align="justify">
-Let's first include the necessary standard library (<code>std</code>) utilitaries and <strong>puutools</strong> libraries:
+We first include the necessary standard library (<code>std</code>) utilitaries and the <strong>puutools</strong> library:
 </p>
 
 ```c++
 #include <iostream>
 #include <vector>
+#include <tuple>
 #include <assert.h>
 #include <puutools.h>
 ```
 
 <p align="justify">
-We then include to classes that have been pre-implemented on purpose for this tutorial (see the <code>example</code> folder):
+We then include to classes that have been pre-implemented on purpose for this tutorial (see the <code>example</code> folder of this repository):
 </p>
 
 ```c++
 #include "Prng.h"
 #include "Individual.h"
+#include "Simulation.h"
 ```
 
 <p align="justify">
-The <code>Prng</code> class contains several random functions based on the <a href="https://www.gnu.org/software/gsl/" target="_blank">GNU Scientific Library</a>. The class <code>Individual</code> contains the basic structure of an individual (one phenotypic trait and one fitness value, plus a few methods). This class will be provided to <strong>puutools</strong> to instanciate trees.
+The <code>Prng</code> class contains several random functions based on the <a href="https://www.gnu.org/software/gsl/" target="_blank">GNU Scientific Library</a>. The class <code>Individual</code> contains the basic structure of an individual (one phenotypic trait and one fitness value, plus a few methods); this class will be provided to <strong>puutools</strong> to instanciate trees. The class <code>Simulation</code> contains all the code to run a proper evolutionary simulation.
 </p>
 
-### Read command line parameters
+### 2) Read command line parameters
 
 <p align="justify">
 Let's implement a basic piece of code to read our parameters from the command line:
@@ -211,7 +207,7 @@ int main( int argc, char const** argv )
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 1) Read simulation parameters         */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  
+
   assert(argc==6);
   (void)argc;
   double  initial_trait_value = atof(argv[1]);
@@ -237,190 +233,135 @@ We also instanciate a PRNG object:
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) Create the prng                    */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  
+
   Prng prng(time(0));
 ```
 
-### Initialize the population
+### 3) Initialize the population
 
 <p align="justify">
-This step is used to create the initial population and initialize two trees:
+This step is used to create the simulation and initialize the population:
+</p>
 
+```c++
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+  /* 3) Create the simulation              */
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+  Simulation simulation(&prng, initial_trait_value, population_size, mutation_rate, mutation_size);
+  simulation.initialize_population();
+```
+
+### 4) Create a lineage and a phylogenetic tree, and add the roots
+
+<p align="justify">
+We will create to trees:
 - A lineage tree, which will contain parent-children relationships at every generations,
 - A phylogenetic tree, which will only contain common ancestors.
 </p>
 
 ```c++
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 3) Initialize the population          */
+  /* 4) Create trees and add roots         */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  
-  puu_tree<Individual>      lineage_tree;
-  puu_tree<Individual>      phylogenetic_tree;
-  std::vector<Individual*>  population(population_size);
-  std::vector<unsigned int> nb_descendants(population_size);
+
+  puu_tree<Individual> lineage_tree;
+  puu_tree<Individual> phylogenetic_tree;
+
   for (int i = 0; i < population_size; i++)
   {
-    population[i] = new Individual(initial_trait_value);
-    population[i]->mutate(&prng, mutation_rate, mutation_size);
-    lineage_tree.add_root(population[i]);
-    phylogenetic_tree.add_root(population[i]);
+    lineage_tree.add_root(simulation.get_individual(i));
+    phylogenetic_tree.add_root(simulation.get_individual(i));
   }
 ```
 
 <p align="justify">
-Two pieces of code are important here:
+We first instanciate two trees with the class <code>Individual</code>. It is <strong>not mandatory</strong> to name your individual class "Individual". You can use any class name.
 </p>
 
-```c++
-puu_tree<Individual> lineage_tree;
-puu_tree<Individual> phylogenetic_tree;
-```
-
 <p align="justify">
-We instanciate a tree which will handle the <code>Individual</code> class. Note that we are creating two trees (one for tracking lineages, one for tracking phylogenetic relationships). It is <strong>not mandatory</strong> to name your individual class "Individual". You can use any name.
+We then add a <strong>root</strong> in the trees for each of the $N$ individuals at generation zero, with the function <code>add_root(*individual)</code>. <strong>It is essential to root a tree at the beginning of a simulation</strong>.
 </p>
 
-```c++
-lineage_tree.add_root(population[i]);
-phylogenetic_tree.add_root(population[i]);
-```
+### 5) Run the evolutionary algorithm
 
 <p align="justify">
-Each time a new individual is created, we must add a corresponding <strong>root</strong> in each tree with the function <code>add_root(*individual)</code> (<code>*</code> symbolizing the memory address). To do so, we provide the memory address (through the pointer <code>population[i]</code> to the i<sup>th</sup> individual). If you are not at ease with pointers and memory adresses, consider following an introduction to C/C++ before going further in this example.
-</p>
-
-### Evolution algorithm
-
-<p align="justify">
-This is the core of our "simple" example. For clarity, each task is uncoupled while it is possible to optimize further the code by merging several loops together.
+This is the core of our "simple" example. Tasks have been written as separate pieces of code for clarity, however if it is possible to optimize the code by merging several loops together.
 At each generation:
-  
-- The vector $w$ of the relative fitnesses is calculated (<strong>step 1</strong>, note that we also detect the best individual of the current generation);
-- The number of descendants per individual is drawn from a multinomial distribution (<strong>step 2</strong>);
-- The new population is generated from this drawing (<strong>step 3</strong>);
-- The population is replaced by the new one (<strong>step 4</strong>);
-- Trees structures are updated (<strong>step 5</strong>);
+
+- The next generation of individuals is created;
+- All reproduction events are added to the trees;
+- The previous generation is "inactivated" in the trees;
+- The population is updated with next generation's individuals;
+- Trees structures are updated;
 </p>
 
 ```c++
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 4) Evolve the population              */
+  /* 5) Evolve the population              */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  
-  std::vector<double> fitness_vector(population_size);
-  double              fitness_sum     = 0.0;
-  int                 best_individual = 0;
-  double              best_fitness    = 0.0;
+
   for (int generation = 1; generation <= simulation_time; generation++)
   {
     if (generation%1000==0)
     {
       std::cout << ">> Generation " << generation << "\n";
     }
-    
-    /* STEP 1 : Update and normalize the fitness vector
-       ------------------------------------------------- */
-    fitness_sum = 0.0;
+
+    /* STEP 1 : Create the next generation
+       ------------------------------------ */
+    simulation.create_next_generation();
+
+    /* STEP 2 : Add reproduction events
+       --------------------------------- */
+    Individual* parent;
+    Individual* descendant;
+    std::tie(parent, descendant) = simulation.get_first_parent_descendant_pair();
+    while (parent != NULL)
+    {
+      lineage_tree.add_reproduction_event(parent, descendant, (double)generation);
+      phylogenetic_tree.add_reproduction_event(parent, descendant, (double)generation);
+      std::tie(parent, descendant) = simulation.get_next_parent_descendant_pair();
+    }
+
+    /* STEP 3 : Inactivate parents
+       ---------------------------- */
     for (int i = 0; i < population_size; i++)
     {
-      population[i]->compute_fitness();
-      fitness_vector[i]  = population[i]->get_fitness();
-      fitness_sum       += population[i]->get_fitness();
+      lineage_tree.inactivate(simulation.get_individual(i), true);
+      phylogenetic_tree.inactivate(simulation.get_individual(i), false);
     }
-    best_individual = 0;
-    best_fitness    = 0.0;
-    for (int i = 0; i < population_size; i++)
-    {
-      fitness_vector[i] /= fitness_sum;
-      if (best_fitness < fitness_vector[i])
-      {
-        best_individual = i;
-      }
-    }
-    
-    /* STEP 2 : Draw the number of descendants
-       ---------------------------------------- */
-    prng.multinomial(nb_descendants.data(), fitness_vector.data(), population_size, population_size);
-    
-    /* STEP 3 : Generate the new population
-       ------------------------------------- */
-    std::vector<Individual*> new_population(population_size);
-    size_t new_individual_pos = 0;
-    for (int i = 0; i < population_size; i++)
-    {
-      for (unsigned int j = 0; j < nb_descendants[i]; j++)
-      {
-        new_population[new_individual_pos] = new Individual(*population[i]);
-        new_population[new_individual_pos]->mutate(&prng, mutation_rate, mutation_size);
-        lineage_tree.add_reproduction_event(population[i], new_population[new_individual_pos], (double)generation);
-        phylogenetic_tree.add_reproduction_event(population[i], new_population[new_individual_pos], (double)generation);
-        new_individual_pos++;
-      }
-      lineage_tree.inactivate(population[i], true);
-      phylogenetic_tree.inactivate(population[i], false);
-      delete population[i];
-    }
-    
+
     /* STEP 4 : Replace the current population with the new one
        --------------------------------------------------------- */
-    for (int i = 0; i < population_size; i++)
-    {
-      population[i] = new_population[i];
-    }
-    new_population.clear();
-    
+    simulation.update_population();
+
     /* STEP 5: Update the lineage and phylogenetic trees
        -------------------------------------------------- */
-    if (generation%1000==0)
-    {
-      lineage_tree.update_as_lineage_tree();
-      phylogenetic_tree.update_as_phylogenetic_tree();
-    }
+    lineage_tree.update_as_lineage_tree();
+    phylogenetic_tree.update_as_phylogenetic_tree();
   }
 ```
 
 <p align="justify">
-The most import steps for us are <strong>steps 3 and 5</strong>, where trees are manipulated.
-</p>
-
-```c++
-lineage_tree.add_reproduction_event(population[i], new_population[new_individual_pos], (double)generation);
-phylogenetic_tree.add_reproduction_event(population[i], new_population[new_individual_pos], (double)generation);
-```
-
-<p align="justify">
-Each time a new individual is created from its parent (it is literally a copy of its parent: <code>new Individual(*population[i])</code>), we must create a new relationship in each tree. This is done thought the method <code>add_reproduction_event(*parent, *child, time)</code> (<code>*</code> symbolizing the memory address).
-</p>
-
-```c++
-lineage_tree.inactivate(population[i], true);
-phylogenetic_tree.inactivate(population[i], false);
-```
-
-<p align="justify">
-Then, we must tell to our trees that the individuals from the previous generation are now dead, with the method <code>inactivate(*individual, copy)</code>. The parameter <code>copy</code> is a boolean (true/false). If true, the tree will copy your individual when inactivated, to save it independently from your population algorithm (this is why it is mandatory to implement a copy constructor with <strong>puutools</strong>). This method must be called by the user. Indeed, depending on the complexity of a simulation, parents and their children can both be alive at the same time (<em>e.g.</em> for a bacterial population). The main reason is tree's structure manipulations can only be done with dead individuals.
+At <strong>STEP 2</strong>, we register in the trees every reproduction event, to add new node relationships.
+This is done thought the method <code>add_reproduction_event(*parent, *child, time)</code>.
 </p>
 
 <p align="justify">
-Note that here, we copy the dead individuals in the lineage tree, but not in the phylogenetic tree. Indeed, we will recover later the evolution of the phenotypic trait and the fitness from the lineage tree, while we will only extract the structure of the phylogenetic tree.
-</p>
-
-```c++
-lineage_tree.update_as_lineage_tree();
-phylogenetic_tree.update_as_phylogenetic_tree();
-```
-
-<p align="justify">
-The user will decide with these two methods if a tree is a lineage or a phylogeny. Updating a lineage tree consists in pruning dead branches (branches containing only dead invididuals). Updating a phylogenetic tree consists in pruning the dead branches and shortening the tree, by removing all intermediate nodes to only keep common ancestors.
+Then at <strong>STEP 3</strong>, we must tell to our trees that the individuals from the previous generation are now dead, with the method <code>inactivate(*individual, copy)</code>. The parameter <code>copy</code> is a boolean (<code>true/false</code>). If true, the tree will keep a copy of the individual, to save it independently from your population algorithm (this is why it is mandatory to implement a copy constructor with <strong>puutools</strong>). Remember that calling the method <code>inactivate(*individual, copy)</code> depends on your algorithm. Indeed, it can happen that both the parent and its children remain alive at the next generation (<em>e.g.</em> for a bacterial population). However <strong>using this function is mandatory</strong>, as tree's structure manipulations can only be done with dead individuals.
 </p>
 
 <p align="justify">
-It is not mandatory to call these methods at each generation. In this example, the methods are called every 1,000 generations. If the trees are updated more often, this will increase the computational load. If the trees are updated less often, this will increase the memory load (trees grow at each generation before being pruned and shortened). The user must decide on the period of trees' updates depending on the performance of its own code.
+Note that at <strong>STEP 5</strong>, we copy the dead individuals in the lineage tree, but not in the phylogenetic tree. Indeed, we will recover later the evolution of the phenotypic trait and the fitness from the lineage tree, while we will only extract the structure of the phylogenetic tree.
 </p>
 
 <p align="justify">
-Remember that the size of a phylogenetic tree is approximately constant over time ($2n-1$ nodes), while a lineage tree will grow slowly over time. Depending on the complexity of your simulation, in can be useful to provide a secondary class saving important information (such that phenotypic trait values, mutational events, etc) instead of the main individual class.
+<strong>TIP:</strong> It is not mandatory to call the <strong>STEP 5</strong> at each generation. Simply remember that if the trees are updated more often, this will increase the computational load. If the trees are updated less often, this will increase the memory load (trees grow at each generation before being pruned and shortened). The user must decide on the period of trees' updates depending on the performance of its own code.
+</p>
+
+<p align="justify">
+<strong>TIP:</strong> The size of a phylogenetic tree is approximately constant over time ($2n-1$ nodes), while a lineage tree will grow slowly. Depending on the complexity of your simulation, in can be useful to create a secondary class saving important information from your individuals (such that phenotypic trait values, mutational events, etc) and provide it to the trees instead of your main individual class.
 </p>
 
 ### Extracting the information from the trees
@@ -434,7 +375,7 @@ We first call a last time update functions to ensure a good final structure:
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 5) Save lineage and phylogenetic data */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  
+
   lineage_tree.update_as_lineage_tree();
   phylogenetic_tree.update_as_phylogenetic_tree();
 ```
@@ -504,7 +445,7 @@ At the end of the script, the memory must be cleaned from the population:
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 6) Free memory                        */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  
+
   for (int i = 0; i < population_size; i++)
   {
     delete population[i];
@@ -517,7 +458,7 @@ At the end of the script, the memory must be cleaned from the population:
 ### Results
 
 This simulation example is available in the folder <code>example</code> of this repository, and can be compiled with CMake (navigate to the folder <code>example/cmake</code> with a terminal and run the following command:
-  
+
   sh make_release.sh
 
 The binary executable <code>puutools_example</code> is located in the folder <code>example/build/bin</code>.
