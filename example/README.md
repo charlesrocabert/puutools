@@ -172,7 +172,7 @@ We then add a <strong>root</strong> in the trees for each of the $N$ individuals
 ## 7) Run the evolutionary algorithm <a name="run"></a>
 
 <p align="justify">
-This is the core of our "simple" example. Tasks have been written as separate pieces of code for clarity, however if it is possible to optimize the code by merging several loops together.
+This is the core of our "simple" example. Tasks have been written as separate pieces of code for clarity, however it is possible to optimize the code by merging several loops together.
 At each generation:
 
 - The next generation of individuals is created;
