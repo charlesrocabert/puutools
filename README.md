@@ -123,7 +123,7 @@ You can download here the CMake find module of <strong>puutools</strong>: <a hre
 </p>
 
 <p align="justify">
-Then add this piece of code in your before linking libraries (including ) to your executables:
+Then add this piece of code in your <code>CMakeLists.txt</code> file:
 </p>
 
 ```
