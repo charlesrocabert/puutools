@@ -42,7 +42,6 @@ jobs:
       # The configuration file must be moved to work with Github CMake
       run: |
         mkdir ../cmake
-        cp Config.h ../cmake/.
         cmake --build . --config $BUILD_TYPE
 
     - name: Test
