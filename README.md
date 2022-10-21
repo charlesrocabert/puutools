@@ -122,6 +122,17 @@ It has also the advantage to determine the paths with no need to provide them ex
 You can download here the CMake find module of <strong>puutools</strong>: <a href="https://github.com/charlesrocabert/puutools/raw/main/cmake_find_module/FindPuuTools.cmake" target="_blank">CMake Find Module</a>
 </p>
 
+<p align="justify">
+Then add this piece of code in your before linking libraries (including ) to your executables:
+</p>
+
+```
+find_package(PUUTOOLS REQUIRED)
+if(PUUTOOLS_FOUND)
+  include_directories(${PUUTOOLS_INCLUDE_DIR})
+endif(PUUTOOLS_FOUND)
+```
+
 ## Copyright <a name="copyright"></a>
 Copyright &copy; 2022 Charles Rocabert.
 All rights reserved.
