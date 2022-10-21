@@ -175,11 +175,11 @@ We then add a <strong>root</strong> in the trees for each of the $N$ individuals
 This is the core of our "simple" example. Tasks have been written as separate pieces of code for clarity, however it is possible to optimize the code by merging several loops together.
 At each generation:
 
-- The next generation of individuals is created;
-- All reproduction events are added to the trees;
-- The previous generation is "inactivated" in the trees;
-- The population is updated with next generation's individuals;
-- Trees structures are updated;
+1) The next generation of individuals is created;
+2) All reproduction events are added to the trees;
+3) The previous generation is "inactivated" in the trees;
+4) The population is updated with next generation's individuals;
+5) Trees structures are updated;
 </p>
 
 ```c++
