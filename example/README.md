@@ -141,6 +141,7 @@ This step is used to create the simulation and initialize the population:
 
 <p align="justify">
 We will create to trees:
+
 - A lineage tree, which will contain parent-children relationships at every generations,
 - A phylogenetic tree, which will only contain common ancestors.
 </p>
