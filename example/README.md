@@ -239,7 +239,7 @@ Then at <strong>STEP 3</strong>, we must tell to our trees that the individuals 
 </p>
 
 <p align="justify">
-Note that at <strong>STEP 5</strong>, we copy the dead individuals in the lineage tree, but not in the phylogenetic tree. Indeed, we will recover later the evolution of the phenotypic trait and the fitness from the lineage tree, while we will only extract the structure of the phylogenetic tree.
+Note that at <strong>STEP 3</strong>, we copy the dead individuals in the lineage tree, but not in the phylogenetic tree. Indeed, we will recover later the evolution of the phenotypic trait and the fitness from the lineage tree, while we will only extract the structure of the phylogenetic tree.
 </p>
 
 <p align="justify">
