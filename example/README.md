@@ -67,7 +67,7 @@ We first include the necessary standard library (<code>std</code>) utilitaries a
 ```
 
 <p align="justify">
-We then include to classes that have been pre-implemented on purpose for this tutorial (see the <code>example</code> folder of this repository):
+We then include three classes that have been pre-implemented on purpose for this tutorial (see the <code>example</code> folder of this repository):
 </p>
 
 ```c++
