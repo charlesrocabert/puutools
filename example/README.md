@@ -1,5 +1,5 @@
 <p align="center">
-<img src="../logo/puuTools_logo.png" width=200>
+<img src="../logo/puuTools_logo.png" width=250>
 </p>
 
 <p align="center"><strong>Walk-through example</strong></p>
