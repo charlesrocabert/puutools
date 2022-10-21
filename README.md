@@ -108,14 +108,14 @@ sh install.sh
 <p align="justify">
 The script requires sudo access to install the library in the appropriate folder. <strong>puutools</strong> comes as a single C++ header file, and will be installed in an <code>include</code> directory (usually <code>/usr/local/include</code>).
 
-If you cannot or do not want to use a sudo access, simply <a href="https://github.com/charlesrocabert/puutools/raw/main/puutools/puutools.h">download the source file <code>puutools.h</code></a> and include it directly to your project.
+:warning: If you cannot or do not want to use a sudo access, simply <a href="https://github.com/charlesrocabert/puutools/raw/main/puutools/puutools.h">download the source file <code>puutools.h</code></a> and include it directly to your project.
 </p>
 
 ## CMake find module <a name="findmodule"></a>
 
 <p align="justify">
 A find module is useful to determine whether a package is available during the compilation of a project with CMake.
-It has also the advantage to determine the include, library or framework paths with no need to provide them explicitely in the CMakeLists.txt file.
+It has also the advantage to determine the paths with no need to provide them explicitely in the <code>CMakeLists.txt</code> file.
 </p>
 
 <p align="justify">
