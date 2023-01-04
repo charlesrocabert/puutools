@@ -37,7 +37,7 @@
 <p align="justify">
 Individual-based forward-in-time evolutionary simulations are more and more common, and have been proven useful in many fields (ecology and evolution, conservation biology, systems biology, etc).
 
-Precisely recovering the evolutionary and mutational events that led to the final state of a population is one major interest of evolutionary simulations. It is then important to develop tools which efficiently track the lineages of <em>in silico</em> populations and provide exhaustive access to all the events that occured during a simulation.
+Precisely recovering the evolutionary and mutational events that led to the final state of a population is one major interest of evolutionary simulations. It is then important to develop tools which efficiently track the lineages of <em>in silico</em> populations and provide exhaustive access to all the events that occurred during a simulation.
 </p>
 
 <p align="justify">
@@ -45,12 +45,12 @@ One solution consists in producing full backups at regular intervals during a si
 </p>
 
 <p align="justify">
-Another solution consists in dynamically tracking the lineage and/or phylogenetic trees during a simulation, in order to only keep the pertinent information in live memory. Such an approach provides live access to ancestor relationships, including tracing back evolutionary events, at any time during a simulation.
+Another solution consists in dynamically tracking the lineage and/or coalescence trees during a simulation, in order to only keep the pertinent information in live memory. Such an approach provides live access to ancestor relationships, including tracing back evolutionary events, at any time during a simulation.
 While this approach comes at slightly higher computational and live memory costs (it is necessary to maintain in memory and regularly update the structure of the trees), it is much lighter and efficient than backing up everything and running post-treatments.
 </p>
 
 <p align="justify">
-This functionality is usually re-implemented from scratch in different simulation software, at the cost of re-investing time to optimize the algorithms. The aim of <strong>puutools</strong> is to help developers by offering an <strong>easy-to-use</strong> and <strong>light</strong> framework to manage lineage and phylogenetic information on the fly during an evolutionary simulation.
+This functionality is usually re-implemented from scratch in different simulation software, at the cost of re-investing time to optimize the algorithms. The aim of <strong>puutools</strong> is to help developers by offering an <strong>easy-to-use</strong> and <strong>light</strong> framework to manage lineage and coalescence information on the fly during an evolutionary simulation.
 </p>
 
 <p align="center">
@@ -61,11 +61,11 @@ This functionality is usually re-implemented from scratch in different simulatio
 
 <p align="justify">
 While tree-like data-structures are standard knowledge in computer science, the C++ standard library does not provide tree-like containers, and a straightforward tool to specifically manipulate ancestral relationships in individual-based simulations is still missing.
-<strong>puutools</strong> allows to dynamically create, track and manage lineage and/or phylogenic trees during individual-based forward-in-time simulations of evolution.
+<strong>puutools</strong> allows to dynamically create, track and manage lineage and/or coalescence trees during individual-based forward-in-time simulations of evolution.
 </p>
 
 <p align="justify">
-With <strong>puutools</strong>, it is possible to update the lineage and/or the phylogenic tree of a population at each generation during a simulation, and to track and recover evolutionary events at any time. <strong>puutools</strong> is easy to deploy and versatile, providing the user with a small set of integrated functions.
+With <strong>puutools</strong>, it is possible to update the lineage and/or the coalescence tree of a population at each generation during a simulation, and to track and recover evolutionary events at any time. <strong>puutools</strong> is easy to deploy and versatile, providing the user with a small set of integrated functions.
 </p>
 
 <p align="justify">
@@ -167,11 +167,11 @@ You will find a <a href="https://github.com/charlesrocabert/puutools/tree/main/e
 ## A complex scenario where puutools has been useful <a name="complex_scenario"></a>
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/25666459/196973050-579efd60-4e72-436c-bd07-9298d31ddd37.png" width=600 />  
+  <img src="./doc/tracking_example.png" width=600 />  
 </p>
-  
+
 <p align="justify">
-The original code of <strong>puutools</strong> has been used for research purpose as part of the bacterial evolution simulator <a href="https://github.com/charlesrocabert/Evo2Sim">Evo<sup>2</sup>Sim</a>. The software has for example been used to study bacterial diversification events in batch culture setups, due to stable cross-feeding (see <a href="https://doi.org/10.1371/journal.pcbi.1005459">Rocabert et al. 2017</a>). Tracking lineages and phylogenetic trees was an essential step in this scientific work. An example of simulation output is available here: https://charlesrocabert.github.io/doc/evo2sim_simulation_example/viewer/viewer.html.
+The original code of <strong>puutools</strong> has been used for research purpose as part of the bacterial evolution simulator <a href="https://github.com/charlesrocabert/Evo2Sim">Evo<sup>2</sup>Sim</a>. The software has for example been used to study bacterial diversification events in batch culture setups, due to stable cross-feeding (see <a href="https://doi.org/10.1371/journal.pcbi.1005459">Rocabert et al. 2017</a>). Tracking lineages and coalescence trees was an essential step in this scientific work. An example of simulation output is available here: https://charlesrocabert.github.io/doc/evo2sim_simulation_example/viewer/viewer.html.
 </p>
 
 
