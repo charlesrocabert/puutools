@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-<em>Easy-to-use C++ library for the live tracking of lineage and phylogenetic trees in individual-based forward-in-time simulations of evolution.</em>
+<em>Easy-to-use C++ library for the live tracking of lineage and coalescence trees in individual-based forward-in-time simulations of evolution.</em>
 <br/>
 <em><sup>(Puu is the Finnish word for tree)</sup></em>
 <br/><br/>
