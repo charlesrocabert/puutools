@@ -21,7 +21,7 @@
 - [Copyright](#copyright)
 - [License](#license)
 - [Algorithm overview](#algorithm)
-- [First usage with a walk-through example ](#first_usage)
+- [First usage with a walk-through example](#first_usage)
 - [A complex scenario where puuTools can be useful](#complex_scenario)
 
 ## Aim
