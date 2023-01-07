@@ -12,7 +12,7 @@
 - [4) Read command line parameters](#parameters)
 - [5) Instanciate the pseudo-random numbers generator (PRNG)](#prng)
 - [6) Initialize the population](#initialize)
-- [7) Create a lineage and a phylogenetic tree, and add the roots](#roots)
+- [7) Create a lineage and a coalescence tree, and add the roots](#roots)
 - [8) Run the evolutionary algorithm](#run)
 - [9) Final step: extracting information from the trees](#final_step)
 - [10) Results](#results)
@@ -24,7 +24,7 @@ If you haven't done it already, please read the <a href="https://github.com/char
 </p>
 
 <p align="justify">
-<strong>puutools</strong> is distributed as an external static library. Once installed (see above), the header must be included with the standard <code>#include</code> directive:
+<strong>puutools</strong> is distributed as an external static library. Once installed, the header must be included with the standard <code>#include</code> directive:
 </p>
 
 ```c++
@@ -32,7 +32,7 @@ If you haven't done it already, please read the <a href="https://github.com/char
 ```
 
 <p align="justify">
-The main object that will be manipulated by the user is the class <code>puu_tree<selection_unit></code> which instanciates a dynamical representation of a lineage or phylogenetic tree. <code>puu_tree<selection_unit></code> is a template class: <code>selection_unit</code> can be any class of your own, with the only constraint that the <strong>copy constructor must be fully implemented</strong> to avoid errors.
+The main object that will be manipulated by the user is the class <code>puu_tree<selection_unit></code> which instanciates a dynamical representation of a lineage or coalescence tree. <code>puu_tree<selection_unit></code> is a template class: <code>selection_unit</code> can be any class of your own, with the only constraint that the <strong>copy constructor must be fully implemented</strong> to avoid errors.
 </p>
 
 <p align="justify">
@@ -144,13 +144,13 @@ This step is used to create the simulation and initialize the population:
   simulation.initialize_population();
 ```
 
-## 7) Create a lineage and a phylogenetic tree, and add the roots <a name="roots"></a>
+## 7) Create a lineage and a coalescence tree, and add the roots <a name="roots"></a>
 
 <p align="justify">
 We will create to trees:
 
 - A lineage tree, which will contain parent-children relationships at every generations,
-- A phylogenetic tree, which will only contain common ancestors.
+- A coalescence tree, which will only contain common ancestors.
 </p>
 
 ```c++
@@ -159,12 +159,12 @@ We will create to trees:
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
   puu_tree<Individual> lineage_tree;
-  puu_tree<Individual> phylogenetic_tree;
+  puu_tree<Individual> coalescence_tree;
 
   for (int i = 0; i < population_size; i++)
   {
     lineage_tree.add_root(simulation.get_individual(i));
-    phylogenetic_tree.add_root(simulation.get_individual(i));
+    coalescence_tree.add_root(simulation.get_individual(i));
   }
 ```
 
@@ -213,7 +213,7 @@ At each generation:
     while (parent != NULL)
     {
       lineage_tree.add_reproduction_event(parent, descendant, (double)generation);
-      phylogenetic_tree.add_reproduction_event(parent, descendant, (double)generation);
+      coalescence_tree.add_reproduction_event(parent, descendant, (double)generation);
       std::tie(parent, descendant) = simulation.get_next_parent_descendant_pair();
     }
 
@@ -222,17 +222,17 @@ At each generation:
     for (int i = 0; i < population_size; i++)
     {
       lineage_tree.inactivate(simulation.get_individual(i), true);
-      phylogenetic_tree.inactivate(simulation.get_individual(i), false);
+      coalescence_tree.inactivate(simulation.get_individual(i), false);
     }
 
     /* STEP 4 : Replace the current population with the new one
        --------------------------------------------------------- */
     simulation.update_population();
 
-    /* STEP 5: Update the lineage and phylogenetic trees
-       -------------------------------------------------- */
+    /* STEP 5: Update the lineage and coalescence trees
+       ------------------------------------------------- */
     lineage_tree.update_as_lineage_tree();
-    phylogenetic_tree.update_as_phylogenetic_tree();
+    coalescence_tree.update_as_coalescence_tree();
   }
 ```
 
@@ -246,7 +246,7 @@ Then at <strong>STEP 3</strong>, we must tell to our trees that the individuals 
 </p>
 
 <p align="justify">
-Note that at <strong>STEP 3</strong>, we copy the dead individuals in the lineage tree, but not in the phylogenetic tree. Indeed, we will recover later the evolution of the phenotypic trait and the fitness from the lineage tree, while we will only extract the structure of the phylogenetic tree.
+Note that at <strong>STEP 3</strong>, we copy the dead individuals in the lineage tree, but not in the coalescence tree. Indeed, we will recover later the evolution of the phenotypic trait and the fitness from the lineage tree, while we will only extract the structure of the coalescence tree.
 </p>
 
 <p align="justify">
@@ -254,7 +254,7 @@ Note that at <strong>STEP 3</strong>, we copy the dead individuals in the lineag
 </p>
 
 <p align="justify">
-<strong>TIP:</strong> The size of a phylogenetic tree is approximately constant over time ($2n-1$ nodes), while a lineage tree will grow slowly. Depending on the complexity of your simulation, in can be useful to create a secondary class saving important information from your individuals (such that phenotypic trait values, mutational events, etc) and provide it to the trees instead of your main individual class.
+<strong>TIP:</strong> The size of a coalescence tree is approximately constant over time ($2n-1$ nodes), while a lineage tree will grow slowly. Depending on the complexity of your simulation, in can be useful to create a secondary class saving important information from your individuals (such that phenotypic trait values, mutational events, etc) and provide it to the trees instead of your main individual class.
 </p>
 
 ## 9) Final step: extracting information from the trees <a name="final_step"></a>
@@ -266,11 +266,11 @@ We call a last time update functions to ensure a good final structure:
 
 ```c++
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 6) Save lineage and phylogenetic data */
+  /* 6) Save lineage and coalescence data  */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
   lineage_tree.update_as_lineage_tree();
-  phylogenetic_tree.update_as_phylogenetic_tree();
+  coalescence_tree.update_as_coalescence_tree();
 ```
 
 <p align="justify">
@@ -318,13 +318,13 @@ We then save the data over the whole lineage tree. To do so, we use the methods 
 ```
 
 <p align="justify">
-Finally, we save the structure of the phylogenetic tree in Newick format (<code>.phb</code> extension):
+Finally, we save the structure of the coalescence tree in Newick format (<code>.phb</code> extension):
 </p>
 
 ```c++
-  /* Save the phylogenetic tree
-     --------------------------- */
-  phylogenetic_tree.write_newick_tree("./output/phylogenetic_tree.phb");
+  /* Save the coalescence tree
+     -------------------------- */
+  coalescence_tree.write_newick_tree("./output/coalescence_tree.phb");
 ```
 
 ## 10) Results <a name="results"></a>

@@ -3,7 +3,7 @@
 #***************************************************************************
 # puutools
 # ---------
-# Easy-to-use C++ library for the live tracking of lineage and phylogenetic
+# Easy-to-use C++ library for the live tracking of lineage and coalescence
 # trees in individual-based forward-in-time simulations of evolution.
 #
 # Copyright © 2022-2023 Charles Rocabert
@@ -26,7 +26,7 @@
 echo "\n****************************************************************************"
 echo "* puutools"
 echo "* ---------"
-echo "* Easy-to-use C++ library for the live tracking of lineage and phylogenetic"
+echo "* Easy-to-use C++ library for the live tracking of lineage and coalescence"
 echo "* trees in individual-based forward-in-time simulations."
 echo "*"
 echo "* Copyright © 2022-2023 Charles Rocabert"

@@ -11,7 +11,7 @@
 /****************************************************************************
  * puutools
  * ---------
- * Easy-to-use C++ library for the live tracking of lineage and phylogenetic
+ * Easy-to-use C++ library for the live tracking of lineage and coalescence
  * trees in individual-based forward-in-time simulations.
  *
  * Copyright © 2022-2023 Charles Rocabert
@@ -87,12 +87,12 @@ int main( int argc, char const** argv )
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
   puu_tree<Individual> lineage_tree;
-  puu_tree<Individual> phylogenetic_tree;
+  puu_tree<Individual> coalescence_tree;
 
   for (int i = 0; i < population_size; i++)
   {
     lineage_tree.add_root(simulation.get_individual(i));
-    phylogenetic_tree.add_root(simulation.get_individual(i));
+    coalescence_tree.add_root(simulation.get_individual(i));
   }
 
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -118,7 +118,7 @@ int main( int argc, char const** argv )
     while (parent != NULL)
     {
       lineage_tree.add_reproduction_event(parent, descendant, (double)generation);
-      phylogenetic_tree.add_reproduction_event(parent, descendant, (double)generation);
+      coalescence_tree.add_reproduction_event(parent, descendant, (double)generation);
       std::tie(parent, descendant) = simulation.get_next_parent_descendant_pair();
     }
 
@@ -127,29 +127,29 @@ int main( int argc, char const** argv )
     for (int i = 0; i < population_size; i++)
     {
       lineage_tree.inactivate(simulation.get_individual(i), true);
-      phylogenetic_tree.inactivate(simulation.get_individual(i), false);
+      coalescence_tree.inactivate(simulation.get_individual(i), false);
     }
 
     /* STEP 4 : Replace the current population with the new one
        --------------------------------------------------------- */
     simulation.update_population();
 
-    /* STEP 5: Update the lineage and phylogenetic trees
-       -------------------------------------------------- */
+    /* STEP 5: Update the lineage and coalescence trees
+       ------------------------------------------------- */
     if (generation%100==0)
     {
       lineage_tree.update_as_lineage_tree();
-      phylogenetic_tree.update_as_phylogenetic_tree();
+      coalescence_tree.update_as_coalescence_tree();
     }
 
   }
 
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  /* 6) Save lineage and phylogenetic data */
+  /* 6) Save lineage and coalescence data  */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
   lineage_tree.update_as_lineage_tree();
-  phylogenetic_tree.update_as_phylogenetic_tree();
+  coalescence_tree.update_as_coalescence_tree();
 
   /* Save the lineage of the last best individual
      --------------------------------------------- */
@@ -183,9 +183,9 @@ int main( int argc, char const** argv )
   }
   file.close();
 
-  /* Save the phylogenetic tree
-     --------------------------- */
-  phylogenetic_tree.write_newick_tree("./output/phylogenetic_tree.phb");
+  /* Save the coalescence tree
+     -------------------------- */
+  coalescence_tree.write_newick_tree("./output/coalescence_tree.phb");
 
   return EXIT_SUCCESS;
 }

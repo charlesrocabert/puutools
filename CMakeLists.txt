@@ -2,7 +2,7 @@
 #***************************************************************************
 # puutools
 # ---------
-# Easy-to-use C++ library for the live tracking of lineage and phylogenetic
+# Easy-to-use C++ library for the live tracking of lineage and coalescence
 # trees in individual-based forward-in-time simulations of evolution.
 #
 # Copyright © 2022-2023 Charles Rocabert
@@ -32,7 +32,7 @@ cmake_minimum_required(VERSION 3.19)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 # Define the project name                                                      #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-project(puutools VERSION 0.1.0 DESCRIPTION "# Easy-to-use C++ library for the live tracking of lineage and phylogenetic trees in individual-based forward-in-time simulations.")
+project(puutools VERSION 0.1.0 DESCRIPTION "# Easy-to-use C++ library for the live tracking of lineage and coalescence trees in individual-based forward-in-time simulations.")
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#

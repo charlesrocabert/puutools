@@ -11,7 +11,7 @@
 /****************************************************************************
  * puutools
  * ---------
- * Easy-to-use C++ library for the live tracking of lineage and phylogenetic
+ * Easy-to-use C++ library for the live tracking of lineage and coalescence
  * trees in individual-based forward-in-time simulations.
  *
  * Copyright © 2022-2023 Charles Rocabert

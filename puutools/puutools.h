@@ -11,7 +11,7 @@
 /****************************************************************************
  * puutools
  * ---------
- * Easy-to-use C++ library for the live tracking of lineage and phylogenetic
+ * Easy-to-use C++ library for the live tracking of lineage and coalescence
  * trees in individual-based forward-in-time simulations.
  *
  * Copyright © 2022-2023 Charles Rocabert
@@ -61,7 +61,7 @@ enum puu_node_class
 
 /**
  * \brief   puu_node class declaration
- * \details The puu_node class manages a lineage or phylogenetic node
+ * \details The puu_node class manages a lineage or coalescence node
  */
 template <typename selection_unit>
 class puu_node
@@ -615,7 +615,7 @@ void puu_node<selection_unit>::untag_lineage( void )
 
 /**
  * \brief   puu_tree class declaration
- * \details The puu_tree class manages a lineage or phylogenetic tree
+ * \details The puu_tree class manages a lineage or coalescence tree
  */
 template <typename selection_unit>
 class puu_tree
@@ -658,7 +658,7 @@ public:
   void add_reproduction_event( selection_unit* parent, selection_unit* child, double time );
   void inactivate( selection_unit* unit, bool copy_unit );
   void update_as_lineage_tree( void );
-  void update_as_phylogenetic_tree( void );
+  void update_as_coalescence_tree( void );
   void write_tree( std::string filename );
   void write_newick_tree( std::string filename );
 
@@ -1043,13 +1043,13 @@ void puu_tree<selection_unit>::update_as_lineage_tree( void )
 }
 
 /**
- * \brief    Update the tree as a phylogenetic tree
+ * \brief    Update the tree as a coalescence tree
  * \details  Prune dead branches and shorten the tree.
  * \param    void
  * \return   \e void
  */
 template <typename selection_unit>
-void puu_tree<selection_unit>::update_as_phylogenetic_tree( void )
+void puu_tree<selection_unit>::update_as_coalescence_tree( void )
 {
   prune();
   shorten();

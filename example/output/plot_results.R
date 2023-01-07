@@ -3,7 +3,7 @@
 #***************************************************************************
 # puutools
 # ---------
-# Easy-to-use C++ library for the live tracking of lineage and phylogenetic
+# Easy-to-use C++ library for the live tracking of lineage and coalescence
 # trees in individual-based forward-in-time simulations.
 #
 # Copyright © 2022-2023 Charles Rocabert
@@ -31,7 +31,7 @@ setwd(Path to example/output folder)
 
 best = read.table("lineage_best.txt", sep=" ", h=T)
 all  = read.table("lineage_all.txt", sep=" ", h=T)
-tree = read.tree("phylogenetic_tree.phb")
+tree = read.tree("coalescence_tree.phb")
 
 png("figure1.png", width=1000, height=800, units="px", pointsize=20)
 par(mfrow=c(2,2))
