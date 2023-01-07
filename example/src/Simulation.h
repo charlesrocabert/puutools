@@ -3,7 +3,7 @@
  * \file      Simulation.h
  * \authors   Charles Rocabert
  * \date      20-10-2022
- * \copyright Copyright © 2022 Charles Rocabert. All rights reserved
+ * \copyright Copyright © 2022-2023 Charles Rocabert. All rights reserved
  * \license   puutools is released under the GNU General Public License
  * \brief     Simulation class declaration
  */
@@ -12,9 +12,9 @@
  * puutools
  * ---------
  * Easy-to-use C++ library for the live tracking of lineage and phylogenetic
- * trees in individual-based forward-in-time simulations of evolution.
+ * trees in individual-based forward-in-time simulations.
  *
- * Copyright © 2022 Charles Rocabert
+ * Copyright © 2022-2023 Charles Rocabert
  * Web: https://github.com/charlesrocabert/puutools/
  *
  * puutools is free software: you can redistribute it and/or modify
@@ -33,7 +33,7 @@
 
 #ifndef __puutools__Simulation__
 #define __puutools__Simulation__
-  
+
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -46,21 +46,21 @@
 
 class Simulation
 {
-  
+
 public:
-  
+
   /*----------------------------
    * CONSTRUCTORS
    *----------------------------*/
   Simulation( void ) = delete;
   Simulation( Prng* prng, double initial_trait_value, int population_size, double mutation_rate, double mutation_size );
   Simulation( const Simulation& simulation ) = delete;
-  
+
   /*----------------------------
    * DESTRUCTORS
    *----------------------------*/
   ~Simulation( void );
-  
+
   /*----------------------------
    * GETTERS
    *----------------------------*/
@@ -68,40 +68,40 @@ public:
   inline Individual*                          get_best_individual( void );
   inline std::tuple<Individual*, Individual*> get_first_parent_descendant_pair( void );
   inline std::tuple<Individual*, Individual*> get_next_parent_descendant_pair( void );
-  
+
   /*----------------------------
    * SETTERS
    *----------------------------*/
   Simulation& operator=(const Simulation&) = delete;
-  
+
   /*----------------------------
    * PUBLIC METHODS
    *----------------------------*/
   void initialize_population( void );
   void create_next_generation( void );
   void update_population( void );
-  
+
   /*----------------------------
    * PUBLIC ATTRIBUTES
    *----------------------------*/
-  
+
 protected:
-  
+
   /*----------------------------
    * PROTECTED METHODS
    *----------------------------*/
-  
+
   /*----------------------------
    * PROTECTED ATTRIBUTES
    *----------------------------*/
-  
+
   /* Parameters */
   Prng*   _prng;                /*!< Pseudo-random numbers generator */
   double  _initial_trait_value; /*!< Initial phenotypic trait value  */
   int     _population_size;     /*!< Population size                 */
   double  _mutation_rate;       /*!< Trait mutation rate             */
   double  _mutation_size;       /*!< Trait mutation size             */
-  
+
   /* Simulation variables */
   std::vector<Individual*>  _population;         /*!< Population vector        */
   std::vector<double>       _fitness_vector;     /*!< Fitness vector           */

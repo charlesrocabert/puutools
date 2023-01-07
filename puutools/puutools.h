@@ -3,7 +3,7 @@
  * \file      puutools.h
  * \authors   Charles Rocabert
  * \date      17-01-2022
- * \copyright Copyright © 2022 Charles Rocabert. All rights reserved
+ * \copyright Copyright © 2022-2023 Charles Rocabert. All rights reserved
  * \license   puutools is released under the GNU General Public License
  * \brief     puutools declarations and definitions
  */
@@ -12,9 +12,9 @@
  * puutools
  * ---------
  * Easy-to-use C++ library for the live tracking of lineage and phylogenetic
- * trees in individual-based forward-in-time simulations of evolution.
+ * trees in individual-based forward-in-time simulations.
  *
- * Copyright © 2022 Charles Rocabert
+ * Copyright © 2022-2023 Charles Rocabert
  * Web: https://github.com/charlesrocabert/puutools/
  *
  * puutools is free software: you can redistribute it and/or modify
@@ -66,9 +66,9 @@ enum puu_node_class
 template <typename selection_unit>
 class puu_node
 {
-  
+
 public:
-  
+
   /*----------------------------
    * CONSTRUCTORS
    *----------------------------*/
@@ -76,12 +76,12 @@ public:
   puu_node( unsigned long long int identifier );
   puu_node( unsigned long long int identifier, double time, selection_unit* unit );
   puu_node( const puu_node& node ) = delete;
-  
+
   /*----------------------------
    * DESTRUCTORS
    *----------------------------*/
   ~puu_node( void );
-  
+
   /*----------------------------
    * GETTERS
    *----------------------------*/
@@ -99,19 +99,19 @@ public:
   inline bool                   is_ancestor( unsigned long long int ancestor_id ) const;
   inline bool                   is_active( void ) const;
   inline bool                   is_tagged( void ) const;
-  
+
   /*----------------------------
    * SETTERS
    *----------------------------*/
   puu_node& operator=(const puu_node&) = delete;
-  
+
   inline void set_parent( puu_node* node );
   inline void as_root( void );
   inline void as_normal( void );
   inline void inactivate( bool copy );
   inline void tag( void );
   inline void untag( void );
-  
+
   /*----------------------------
    * PUBLIC METHODS
    *----------------------------*/
@@ -120,17 +120,17 @@ public:
   void replace_by_grandchildren( puu_node* child_to_remove );
   void tag_lineage( void );
   void untag_lineage( void );
-  
+
   /*----------------------------
    * PUBLIC ATTRIBUTES
    *----------------------------*/
-  
+
 protected:
-  
+
   /*----------------------------
    * PROTECTED METHODS
    *----------------------------*/
-  
+
   /*----------------------------
    * PROTECTED ATTRIBUTES
    *----------------------------*/
@@ -620,20 +620,20 @@ void puu_node<selection_unit>::untag_lineage( void )
 template <typename selection_unit>
 class puu_tree
 {
-  
+
 public:
-  
+
   /*----------------------------
    * CONSTRUCTORS
    *----------------------------*/
   puu_tree( void );
   puu_tree( const puu_tree& tree ) = delete;
-  
+
   /*----------------------------
    * DESTRUCTORS
    *----------------------------*/
   ~puu_tree( void );
-  
+
   /*----------------------------
    * GETTERS
    *----------------------------*/
@@ -645,12 +645,12 @@ public:
   inline void                      get_active_node_identifiers( std::vector<unsigned long long int>* active_node_identifiers );
   inline puu_node<selection_unit>* get_common_ancestor( void );
   inline double                    get_common_ancestor_age( void );
-  
+
   /*----------------------------
    * SETTERS
    *----------------------------*/
   puu_tree& operator=(const puu_tree&) = delete;
-  
+
   /*----------------------------
    * PUBLIC METHODS
    *----------------------------*/
@@ -661,13 +661,13 @@ public:
   void update_as_phylogenetic_tree( void );
   void write_tree( std::string filename );
   void write_newick_tree( std::string filename );
-  
+
   /*----------------------------
    * PUBLIC ATTRIBUTES
    *----------------------------*/
-  
+
 protected:
-  
+
   /*----------------------------
    * PROTECTED METHODS
    *----------------------------*/
@@ -678,7 +678,7 @@ protected:
   void tag_tree();
   void untag_tree();
   void tag_offspring( puu_node<selection_unit>* node, std::vector<puu_node<selection_unit>*>* tagged_nodes );
-  
+
   /*----------------------------
    * PROTECTED ATTRIBUTES
    *----------------------------*/
@@ -803,7 +803,7 @@ inline void puu_tree<selection_unit>::get_active_node_identifiers( std::vector<u
     {
       active_node_identifiers->push_back(_iterator->second->get_identifier());
     }
-    
+
   }
 }
 
@@ -834,7 +834,7 @@ template <typename selection_unit>
 inline double puu_tree<selection_unit>::get_common_ancestor_age( void )
 {
   puu_node<selection_unit>* master_root = _node_map[0];
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 1) If the population went extincte        */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -842,7 +842,7 @@ inline double puu_tree<selection_unit>::get_common_ancestor_age( void )
   {
     return 0.0;
   }
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) If there is a unique common ancestor   */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -857,7 +857,7 @@ inline double puu_tree<selection_unit>::get_common_ancestor_age( void )
       return (double)master_root->get_child(0)->get_insertion_time();
     }
   }
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 3) If there are multiple common ancestors */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -943,26 +943,26 @@ void puu_tree<selection_unit>::add_root( selection_unit* unit )
   /* 1) Get the master root          */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   puu_node<selection_unit>* master_root = _node_map[0];
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) Create the root              */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   _current_id++;
   puu_node<selection_unit>* root = new puu_node<selection_unit>(_current_id, 0.0, unit);
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 3) Connect nodes                */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   root->as_root();
   root->set_parent(master_root);
   master_root->add_child(root);
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 4) Add the root to the node map */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   assert(_node_map.find(root->get_identifier()) == _node_map.end());
   _node_map[root->get_identifier()] = root;
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 5) Add the root to the unit map */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -982,7 +982,7 @@ template <typename selection_unit>
 void puu_tree<selection_unit>::add_reproduction_event( selection_unit* parent, selection_unit* child, double time )
 {
   assert(time >= 0.0);
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 1) Get parental node              */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -1006,7 +1006,7 @@ void puu_tree<selection_unit>::add_reproduction_event( selection_unit* parent, s
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   assert(_node_map.find(_current_id) == _node_map.end());
   _node_map[child_node->get_identifier()] = child_node;
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 5) Add child node to the unit map */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -1085,7 +1085,7 @@ template <typename selection_unit>
 void puu_tree<selection_unit>::write_newick_tree( std::string filename )
 {
   std::ofstream file(filename.c_str(), std::ios::out | std::ios::trunc);
-  
+
   for (size_t i = 0; i < _node_map[0]->get_number_of_children(); i++)
   {
     std::stringstream newick_tree;
@@ -1110,7 +1110,7 @@ template <typename selection_unit>
 void puu_tree<selection_unit>::prune()
 {
   untag_tree();
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 1) Tag alive cells lineage          */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -1122,7 +1122,7 @@ void puu_tree<selection_unit>::prune()
       _iterator->second->tag_lineage();
     }
   }
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) Build the list of untagged nodes */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -1134,7 +1134,7 @@ void puu_tree<selection_unit>::prune()
       remove_list.push_back(_iterator->first);
     }
   }
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 3) Delete untagged nodes            */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -1143,7 +1143,7 @@ void puu_tree<selection_unit>::prune()
     delete_node(remove_list[i]);
   }
   remove_list.clear();
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 4) Set master root children as root */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -1179,7 +1179,7 @@ void puu_tree<selection_unit>::shorten()
       remove_list.push_back(_iterator->first);
     }
   }
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) Delete nodes                     */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -1198,7 +1198,7 @@ void puu_tree<selection_unit>::shorten()
     }
   }
 #endif
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 3) Set master root children as root */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -1222,12 +1222,12 @@ void puu_tree<selection_unit>::delete_node( unsigned long long int node_identifi
   puu_node<selection_unit>* node = _node_map[node_identifier];
   assert(node->get_identifier() == node_identifier);
   assert(!node->is_active());
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 1) Update parental children list  */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   node->get_previous()->replace_by_grandchildren(node);
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) Set the new parent of children */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -1235,7 +1235,7 @@ void puu_tree<selection_unit>::delete_node( unsigned long long int node_identifi
   {
     node->get_previous()->get_child(i)->set_parent(node->get_previous());
   }
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 3) Delete node in the node map    */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -1262,7 +1262,7 @@ void puu_tree<selection_unit>::inOrderNewick( puu_node<selection_unit>* node, do
   {
     output << node->get_identifier() << ":" << node->get_insertion_time()-parent_time;
   }
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) Else if node has several children */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

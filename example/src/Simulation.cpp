@@ -3,7 +3,7 @@
  * \file      Simulation.cpp
  * \authors   Charles Rocabert
  * \date      20-10-2022
- * \copyright Copyright © 2022 Charles Rocabert. All rights reserved
+ * \copyright Copyright © 2022-2023 Charles Rocabert. All rights reserved
  * \license   puutools is released under the GNU General Public License
  * \brief     Simulation class definition
  */
@@ -12,9 +12,9 @@
  * puutools
  * ---------
  * Easy-to-use C++ library for the live tracking of lineage and phylogenetic
- * trees in individual-based forward-in-time simulations of evolution.
+ * trees in individual-based forward-in-time simulations.
  *
- * Copyright © 2022 Charles Rocabert
+ * Copyright © 2022-2023 Charles Rocabert
  * Web: https://github.com/charlesrocabert/puutools/
  *
  * puutools is free software: you can redistribute it and/or modify
@@ -54,14 +54,14 @@ Simulation::Simulation( Prng* prng, double initial_trait_value, int population_s
   assert(population_size > 0);
   assert(mutation_rate >= 0.0);
   assert(mutation_rate <= 1.0);
-  
+
   /* Parameters */
   _prng                = prng;
   _initial_trait_value = initial_trait_value;
   _population_size     = population_size;
   _mutation_rate       = mutation_rate;
   _mutation_size       = mutation_size;
-  
+
   /* Simulation variables */
   _population.reserve(_population_size);
   _fitness_vector.reserve(_population_size);
@@ -143,11 +143,11 @@ void Simulation::create_next_generation( void )
       _best_individual = i;
     }
   }
-  
+
   /* STEP 2 : Draw the number of descendants
      ---------------------------------------- */
   _prng->multinomial(_nb_descendants.data(), _fitness_vector.data(), _population_size, _population_size);
-  
+
   /* STEP 3 : Generate the new population
      ------------------------------------- */
   assert(_next_population.size() == 0);

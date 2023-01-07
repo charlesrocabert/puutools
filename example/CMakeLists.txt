@@ -3,9 +3,9 @@
 # puutools
 # ---------
 # Easy-to-use C++ library for the live tracking of lineage and phylogenetic
-# trees in individual-based forward-in-time simulations of evolution.
+# trees in individual-based forward-in-time simulations.
 #
-# Copyright © 2022 Charles Rocabert
+# Copyright © 2022-2023 Charles Rocabert
 # Web: https://github.com/charlesrocabert/puutools/
 #
 # puutools is free software: you can redistribute it and/or modify
@@ -88,7 +88,7 @@ endif(PUUTOOLS_FOUND)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-# Create and link SigmaFGM library                                             #
+# Create and link puutools library                                             #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 add_library(
   puutools_examples

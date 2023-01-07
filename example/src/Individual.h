@@ -3,7 +3,7 @@
  * \file      Individual.h
  * \authors   Charles Rocabert
  * \date      16-01-2022
- * \copyright Copyright © 2022 Charles Rocabert. All rights reserved
+ * \copyright Copyright © 2022-2023 Charles Rocabert. All rights reserved
  * \license   puutools is released under the GNU General Public License
  * \brief     Individual class declaration
  */
@@ -12,9 +12,9 @@
  * puutools
  * ---------
  * Easy-to-use C++ library for the live tracking of lineage and phylogenetic
- * trees in individual-based forward-in-time simulations of evolution.
+ * trees in individual-based forward-in-time simulations.
  *
- * Copyright © 2022 Charles Rocabert
+ * Copyright © 2022-2023 Charles Rocabert
  * Web: https://github.com/charlesrocabert/puutools/
  *
  * puutools is free software: you can redistribute it and/or modify
@@ -43,49 +43,49 @@
 
 class Individual
 {
-  
+
 public:
-  
+
   /*----------------------------
    * CONSTRUCTORS
    *----------------------------*/
   Individual( void ) = delete;
   Individual( double initial_trait_value );
   Individual( const Individual& individual );
-  
+
   /*----------------------------
    * DESTRUCTORS
    *----------------------------*/
   ~Individual( void );
-  
+
   /*----------------------------
    * GETTERS
    *----------------------------*/
   inline double get_mutation_size( void ) const;
   inline double get_trait( void ) const;
   inline double get_fitness( void ) const;
-  
+
   /*----------------------------
    * SETTERS
    *----------------------------*/
   Individual& operator=(const Individual&) = delete;
-  
+
   /*----------------------------
    * PUBLIC METHODS
    *----------------------------*/
   void mutate( Prng* prng, double mutation_rate, double mutation_size );
   void compute_fitness( void );
-  
+
   /*----------------------------
    * PUBLIC ATTRIBUTES
    *----------------------------*/
-  
+
 protected:
-  
+
   /*----------------------------
    * PROTECTED METHODS
    *----------------------------*/
-  
+
   /*----------------------------
    * PROTECTED ATTRIBUTES
    *----------------------------*/

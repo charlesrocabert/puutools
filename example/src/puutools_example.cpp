@@ -3,7 +3,7 @@
  * \file      puutools_example.cpp
  * \authors   Charles Rocabert
  * \date      15-01-2022
- * \copyright Copyright © 2022 Charles Rocabert. All rights reserved
+ * \copyright Copyright © 2022-2023 Charles Rocabert. All rights reserved
  * \license   puutools is released under the GNU General Public License
  * \brief     Simulation example using puutools
  */
@@ -12,9 +12,9 @@
  * puutools
  * ---------
  * Easy-to-use C++ library for the live tracking of lineage and phylogenetic
- * trees in individual-based forward-in-time simulations of evolution.
+ * trees in individual-based forward-in-time simulations.
  *
- * Copyright © 2022 Charles Rocabert
+ * Copyright © 2022-2023 Charles Rocabert
  * Web: https://github.com/charlesrocabert/puutools/
  *
  * puutools is free software: you can redistribute it and/or modify
@@ -54,7 +54,7 @@ int main( int argc, char const** argv )
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 1) Read simulation parameters         */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  
+
   assert(argc==6);
   (void)argc;
   double  initial_trait_value = atof(argv[1]);
@@ -68,48 +68,48 @@ int main( int argc, char const** argv )
   std::cout << "  • Population size    : " << population_size << std::endl;
   std::cout << "  • Mutation rate      : " << mutation_rate << std::endl;
   std::cout << "  • Mutation size      : " << mutation_size << std::endl;
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 2) Create the prng                    */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  
+
   Prng prng(time(0));
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 3) Create the simulation              */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  
+
   Simulation simulation(&prng, initial_trait_value, population_size, mutation_rate, mutation_size);
   simulation.initialize_population();
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 4) Create trees and add roots         */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  
+
   puu_tree<Individual> lineage_tree;
   puu_tree<Individual> phylogenetic_tree;
-  
+
   for (int i = 0; i < population_size; i++)
   {
     lineage_tree.add_root(simulation.get_individual(i));
     phylogenetic_tree.add_root(simulation.get_individual(i));
   }
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 5) Evolve the population              */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  
+
   for (int generation = 1; generation <= simulation_time; generation++)
   {
     if (generation%1000==0)
     {
       std::cout << ">> Generation " << generation << "\n";
     }
-    
+
     /* STEP 1 : Create the next generation
        ------------------------------------ */
     simulation.create_next_generation();
-    
+
     /* STEP 2 : Add reproduction events
        --------------------------------- */
     Individual* parent;
@@ -121,7 +121,7 @@ int main( int argc, char const** argv )
       phylogenetic_tree.add_reproduction_event(parent, descendant, (double)generation);
       std::tie(parent, descendant) = simulation.get_next_parent_descendant_pair();
     }
-    
+
     /* STEP 3 : Inactivate parents
        ---------------------------- */
     for (int i = 0; i < population_size; i++)
@@ -129,11 +129,11 @@ int main( int argc, char const** argv )
       lineage_tree.inactivate(simulation.get_individual(i), true);
       phylogenetic_tree.inactivate(simulation.get_individual(i), false);
     }
-    
+
     /* STEP 4 : Replace the current population with the new one
        --------------------------------------------------------- */
     simulation.update_population();
-    
+
     /* STEP 5: Update the lineage and phylogenetic trees
        -------------------------------------------------- */
     if (generation%100==0)
@@ -141,16 +141,16 @@ int main( int argc, char const** argv )
       lineage_tree.update_as_lineage_tree();
       phylogenetic_tree.update_as_phylogenetic_tree();
     }
-    
+
   }
-  
+
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   /* 6) Save lineage and phylogenetic data */
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  
+
   lineage_tree.update_as_lineage_tree();
   phylogenetic_tree.update_as_phylogenetic_tree();
-  
+
   /* Save the lineage of the last best individual
      --------------------------------------------- */
   std::ofstream file("./output/lineage_best.txt", std::ios::out | std::ios::trunc);
@@ -166,7 +166,7 @@ int main( int argc, char const** argv )
     file.flush();
   }
   file.close();
-  
+
   /* Save the lineage of all alive individuals
      ------------------------------------------ */
   file.open("./output/lineage_all.txt", std::ios::out | std::ios::trunc);
@@ -182,10 +182,10 @@ int main( int argc, char const** argv )
     node = lineage_tree.get_next();
   }
   file.close();
-  
+
   /* Save the phylogenetic tree
      --------------------------- */
   phylogenetic_tree.write_newick_tree("./output/phylogenetic_tree.phb");
-  
+
   return EXIT_SUCCESS;
 }

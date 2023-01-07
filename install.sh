@@ -6,7 +6,7 @@
 # Easy-to-use C++ library for the live tracking of lineage and phylogenetic
 # trees in individual-based forward-in-time simulations of evolution.
 #
-# Copyright © 2022 Charles Rocabert
+# Copyright © 2022-2023 Charles Rocabert
 # Web: https://github.com/charlesrocabert/puutools/
 #
 # puutools is free software: you can redistribute it and/or modify
@@ -26,10 +26,10 @@
 echo "\n****************************************************************************"
 echo "* puutools"
 echo "* ---------"
-echo "* Easy-to-use C++ library for the live tracking of lineage and phylogenetic
-echo "* trees in individual-based forward-in-time simulations of evolution.
+echo "* Easy-to-use C++ library for the live tracking of lineage and phylogenetic"
+echo "* trees in individual-based forward-in-time simulations."
 echo "*"
-echo "* Copyright © 2022 Charles Rocabert"
+echo "* Copyright © 2022-2023 Charles Rocabert"
 echo "* Web: https://github.com/charlesrocabert/puutools/"
 echo "*"
 echo "* puutools is free software: you can redistribute it and/or modify"

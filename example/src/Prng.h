@@ -3,7 +3,7 @@
  * \file      Prng.h
  * \authors   Charles Rocabert
  * \date      16-01-2022
- * \copyright Copyright © 2022 Charles Rocabert. All rights reserved
+ * \copyright Copyright © 2022-2023 Charles Rocabert. All rights reserved
  * \license   puutools is released under the GNU General Public License
  * \brief     Prng class declaration
  */
@@ -12,9 +12,9 @@
  * puutools
  * ---------
  * Easy-to-use C++ library for the live tracking of lineage and phylogenetic
- * trees in individual-based forward-in-time simulations of evolution.
+ * trees in individual-based forward-in-time simulations.
  *
- * Copyright © 2022 Charles Rocabert
+ * Copyright © 2022-2023 Charles Rocabert
  * Web: https://github.com/charlesrocabert/puutools/
  *
  * puutools is free software: you can redistribute it and/or modify
@@ -44,32 +44,32 @@
 
 class Prng
 {
-  
+
 public:
-  
+
   /*----------------------------
    * CONSTRUCTORS
    *----------------------------*/
   Prng( void );
   Prng( unsigned long int seed );
   Prng( const Prng& prng );
-  
+
   /*----------------------------
    * DESTRUCTORS
    *----------------------------*/
   ~Prng( void );
-  
+
   /*----------------------------
    * GETTERS
    *----------------------------*/
-  
+
   /*----------------------------
    * SETTERS
    *----------------------------*/
   Prng& operator=(const Prng&) = delete;
-  
+
   inline void set_seed( unsigned long int seed );
-  
+
   /*----------------------------
    * PUBLIC METHODS
    *----------------------------*/
@@ -83,22 +83,22 @@ public:
   int    exponential( double mu );
   int    poisson( double lambda );
   int    roulette_wheel( double* probas, double sum, int N );
-  
+
   /*----------------------------
    * PUBLIC ATTRIBUTES
    *----------------------------*/
-  
+
 protected:
-  
+
   /*----------------------------
    * PROTECTED METHODS
    *----------------------------*/
-  
+
   /*----------------------------
    * PROTECTED ATTRIBUTES
    *----------------------------*/
   gsl_rng* _prng; /*!< Pseudorandom numbers generator */
-  
+
 };
 
 
