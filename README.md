@@ -1,9 +1,9 @@
 <p align="center">
-<img src="./logo/puuTools_logo.png" width=250>
+<img src="./logo/puutools_logo.png" width=250>
 </p>
 
 <p align="center">
-<em>Easy-to-use C++ library for the live tracking of lineage and coalescence trees in individual-based forward-in-time simulations of evolution.</em>
+<em>Easy-to-use C++ library for the live tracking of lineage and coalescence trees in individual-based forward-in-time simulations.</em>
 <br/>
 <em><sup>(Puu is the Finnish word for tree)</sup></em>
 <br/><br/>
@@ -15,14 +15,14 @@
 ## Content
 
 - [Aim](#aim)
-- [What is puuTools](#puutools)
+- [What is puutools](#puutools)
 - [Installation instructions](#installation)
 - [CMake find module](#findmodule)
 - [Copyright](#copyright)
 - [License](#license)
 - [Algorithm overview](#algorithm)
 - [First usage with a walk-through example](#first_usage)
-- [A complex scenario where puuTools can be useful](#complex_scenario)
+- [A complex scenario where puutools can be useful](#complex_scenario)
 
 ## Aim
 
@@ -35,7 +35,7 @@
 </p>
 
 <p align="justify">
-Individual-based forward-in-time evolutionary simulations are more and more common, and have been proven useful in many fields (ecology and evolution, conservation biology, systems biology, etc).
+Individual-based forward-in-time evolutionary simulations are more and more common, and have been proven useful in many fields (ecology and evolution, conservation biology, systems and computational cell biology, etc).
 
 Precisely recovering the evolutionary and mutational events that led to the final state of a population is one major interest of evolutionary simulations. It is then important to develop tools which efficiently track the lineages of <em>in silico</em> populations and provide exhaustive access to all the events that occurred during a simulation.
 </p>
@@ -60,8 +60,7 @@ This functionality is usually re-implemented from scratch in different simulatio
 ## What is puutools <a name="puutools"></a>
 
 <p align="justify">
-While tree-like data-structures are standard knowledge in computer science, the C++ standard library does not provide tree-like containers, and a straightforward tool to specifically manipulate ancestral relationships in individual-based simulations is still missing.
-<strong>puutools</strong> allows to dynamically create, track and manage lineage and/or coalescence trees during individual-based forward-in-time simulations of evolution.
+<strong>puutools</strong> is a C++ library which allows to dynamically create, track and manage lineage and/or coalescence trees during individual-based forward-in-time simulations of evolution.
 </p>
 
 <p align="justify">
@@ -69,7 +68,7 @@ With <strong>puutools</strong>, it is possible to update the lineage and/or the 
 </p>
 
 <p align="justify">
-<strong>puutools</strong> is an all-in-one library. It does not depend on third-party packages, and its code is kept simple and light. By the way, <strong>puutools</strong> comes as and header-only library, so compilation is not needed.
+<strong>puutools</strong> is an all-in-one library. It does not depend on third-party packages, and its code is kept simple and light. By the way, <strong>puutools</strong> comes as and header-only library, so specific compilation is not needed.
 </p>
 
 <p align="justify">
@@ -82,7 +81,7 @@ To date, <strong>puutools</strong> is distributed as a static library for C++ de
 ### Supported platforms
 
 <p align="justify">
-<strong>puutools</strong> library has been developed for Unix/Linux and macOS systems.
+<strong>puutools</strong> library has been primarily developed for Unix/Linux and macOS systems.
 </p>
 
 ### Required dependencies
@@ -108,24 +107,24 @@ sh install.sh
 ```
 
 <p align="justify">
-The script requires sudo access to install the library in the appropriate folder. <strong>puutools</strong> comes as a single C++ header file, and will be installed in an <code>include</code> directory (usually <code>/usr/local/include</code>).
+The script requires sudo access to install the library in the appropriate folder. <strong>puutools</strong> comes as a single C++ header file, and will be usually installed in an <code>include</code> directory (usually <code>/usr/local/include</code>).
 
-:warning: If you cannot or do not want to use a sudo access, simply <a href="https://github.com/charlesrocabert/puutools/raw/main/puutools/puutools.h">download the source file <code>puutools.h</code></a> and include it directly to your project.
+:warning: If you cannot or do not want to use a sudo access, simply <a href="https://github.com/charlesrocabert/puutools/raw/main/puutools/puutools.h">download the source code file <code>puutools.h</code></a> and include it directly to your project.
 </p>
 
 ## CMake find module <a name="findmodule"></a>
 
 <p align="justify">
-A find module is useful to determine whether a package is available during the compilation of a project with CMake.
-It has also the advantage to determine the paths with no need to provide them explicitely in the <code>CMakeLists.txt</code> file.
+This CMake module is useful to determine whether <code>puutools.h</code> package is available during the compilation of your project.
+It has also the advantage to determine the paths with no need to provide them explicitly in the <code>CMakeLists.txt</code> file.
 </p>
 
 <p align="justify">
-You can download here the CMake find module of <strong>puutools</strong>: <a href="https://github.com/charlesrocabert/puutools/raw/main/cmake_find_module/FindPuuTools.cmake" target="_blank">CMake Find Module</a>
+You can download here the module: <a href="https://github.com/charlesrocabert/puutools/raw/main/cmake_find_module/FindPuuTools.cmake" target="_blank">CMake Find Module</a>
 </p>
 
 <p align="justify">
-Then add this piece of code in your <code>CMakeLists.txt</code> file:
+Then add the piece of code below in your <code>CMakeLists.txt</code> file:
 </p>
 
 ```
