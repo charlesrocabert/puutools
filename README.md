@@ -21,7 +21,6 @@
 - [CMake find module](#findmodule)
 - [Copyright](#copyright)
 - [License](#license)
-- [Algorithm overview](#algorithm)
 - [First usage with a walk-through example](#first_usage)
 - [A complex scenario where puutools can be useful](#complex_scenario)
 
@@ -154,12 +153,6 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 <p align="justify">
 You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses/.
-</p>
-
-## Algorithm overview <a name="algorithm"></a>
-
-<p align="center">
-<img src="./pic/basic_algorithm.jpg" width=700 />
 </p>
 
 ## First usage with a walk-through example <a name="first_usage"></a>
