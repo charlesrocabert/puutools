@@ -20,4 +20,5 @@ example/output/*.phb
 example/build/bin/*
 doc/*.pdf
 doc/*.pptx
-
+pic/*.pdf
+pic/*pptx
