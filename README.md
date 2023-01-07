@@ -16,6 +16,7 @@
 
 - [Aim](#aim)
 - [What is puutools](#puutools)
+- [Contributing](#contributing)
 - [Installation instructions](#installation)
 - [CMake find module](#findmodule)
 - [Copyright](#copyright)
@@ -76,6 +77,10 @@ The code of <strong>puutools</strong> has primarily been implemented and optimiz
 To date, <strong>puutools</strong> is distributed as a static library for C++ developers. We plan to provide a Python-binding in a future version.
 </p>
 
+## Contributing <a name="contributing"></a>
+
+There is a room for many improvements in <strong>puutools</strong>. If you want to contribute, do not hesitate to reach <a href="mailto:charles DOT rocabert AT helsinki DOT fi">the main author</href>.
+
 ## Installation instructions <a name="installation"></a>
 
 ### Supported platforms
@@ -115,7 +120,7 @@ The script requires sudo access to install the library in the appropriate folder
 ## CMake find module <a name="findmodule"></a>
 
 <p align="justify">
-This CMake module is useful to determine whether <code>puutools.h</code> package is available during the compilation of your project.
+This CMake module is useful to determine whether <strong>puutools</strong> package is available during the compilation of your project.
 It has also the advantage to determine the paths with no need to provide them explicitly in the <code>CMakeLists.txt</code> file.
 </p>
 
@@ -172,5 +177,4 @@ You will find a <a href="https://github.com/charlesrocabert/puutools/tree/main/e
 <p align="justify">
 The original code of <strong>puutools</strong> has been used for research purpose as part of the bacterial evolution simulator <a href="https://github.com/charlesrocabert/Evo2Sim">Evo<sup>2</sup>Sim</a>. The software has for example been used to study bacterial diversification events in batch culture setups, due to stable cross-feeding (see <a href="https://doi.org/10.1371/journal.pcbi.1005459">Rocabert et al. 2017</a>). Tracking lineages and coalescence trees was an essential step in this scientific work. An example of simulation output is available here: https://charlesrocabert.github.io/doc/evo2sim_simulation_example/viewer/viewer.html.
 </p>
-
 
