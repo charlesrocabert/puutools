@@ -55,6 +55,8 @@ We will now walk through <strong>puutools</strong> step by step.
 
 ## 2) Algorithm overview <a name="algorithm"></a>
 
+The main idea behind <strong>puutools</strong> is to dynamically update trees structure on the fly during a simulation, in order to minimize the amount of data in live memory. The performance of <strong>puutools</strong> algorithms have been heavily optimized.
+
 <p align="center">
 <img src="../pic/basic_algorithm.jpg" width=700 />
 </p>
