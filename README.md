@@ -4,8 +4,6 @@
 
 <p align="center">
 <em>Easy-to-use C++ library for the live tracking of lineage and coalescence trees in individual-based forward-in-time simulations.</em>
-<br/>
-<em><sup>(Puu is the Finnish word for tree)</sup></em>
 <br/><br/>
 <a href="https://github.com/charlesrocabert/puutools/releases/latest"><img src="https://img.shields.io/github/release/charlesrocabert/puutools/all.svg" /></a>&nbsp;
 <a href="https://github.com/charlesrocabert/puutools/actions"><img src="https://github.com/charlesrocabert/puutools/workflows/CMake/badge.svg" /></a>&nbsp;
