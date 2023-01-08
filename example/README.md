@@ -331,7 +331,9 @@ Finally, we save the structure of the coalescence tree in Newick format (<code>.
 <p align="justify">
 This simulation example is available in the folder <code>example</code> of this repository, and can be compiled with CMake (navigate to the folder <code>example/cmake</code> with a terminal and run the following command:
 
+```
   sh make_release.sh
+```
 
 The binary executable <code>puutools_example</code> is located in the folder <code>example/build/bin</code>.
 </p>
