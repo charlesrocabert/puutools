@@ -7,17 +7,22 @@
 ## Content
 
 - [1) Introduction](#introduction)
-- [2) Algorithm overview](#algorithm)
-- [3) Pre-processor include directives](#include)
-- [4) Read command line parameters](#parameters)
-- [5) Instanciate the pseudo-random numbers generator (PRNG)](#prng)
-- [6) Initialize the population](#initialize)
-- [7) Create a lineage and a coalescence tree, and add the roots](#roots)
-- [8) Run the evolutionary algorithm](#run)
-- [9) Final step: extracting information from the trees](#final_step)
-- [10) Results](#results)
+- [2) Pre-processor include directives](#include)
+- [3) Read command line parameters](#parameters)
+- [4) Instanciate the pseudo-random numbers generator (PRNG)](#prng)
+- [5) Initialize the population](#initialize)
+- [6) Create a lineage and a coalescence tree, and add the roots](#roots)
+- [7) Run the evolutionary algorithm](#run)
+- [8) Final step: extracting information from the trees](#final_step)
+- [9) Results](#results)
 
 ## 1) Introduction <a name="introduction"></a>
+
+The main idea behind <strong>puutools</strong> is to dynamically update trees structure on the fly during a simulation, in order to minimize the amount of data in live memory. The performance of <strong>puutools</strong> algorithms have been heavily optimized.
+
+<p align="center">
+<img src="../pic/basic_algorithm.jpg" width=700 />
+</p>
 
 <p align="justify">
 If you haven't done it already, please read the <a href="https://github.com/charlesrocabert/puutools/blob/main/README.md" target="_blank">main documentation</a> to install <strong>puutools</strong> on your device.
@@ -32,7 +37,7 @@ If you haven't done it already, please read the <a href="https://github.com/char
 ```
 
 <p align="justify">
-The main object that will be manipulated by the user is the class <code>puu_tree<selection_unit></code> which instanciates a dynamical representation of a lineage or coalescence tree. <code>puu_tree<selection_unit></code> is a template class: <code>selection_unit</code> can be any class of your own, with the only constraint that the <strong>copy constructor must be fully implemented</strong>.
+The main object is the class <code>puu_tree<selection_unit></code> which instanciates a dynamical representation of a lineage or coalescence tree. <code>puu_tree<selection_unit></code> is a template class: <code>selection_unit</code> can be any class of your own, with the only constraint that the <strong>copy constructor must be fully implemented</strong>.
 </p>
 
 <p align="justify">
@@ -53,15 +58,7 @@ We will implement five command line arguments as simulation parameters:
 We will now walk through <strong>puutools</strong> step by step.
 </p>
 
-## 2) Algorithm overview <a name="algorithm"></a>
-
-The main idea behind <strong>puutools</strong> is to dynamically update trees structure on the fly during a simulation, in order to minimize the amount of data in live memory. The performance of <strong>puutools</strong> algorithms have been heavily optimized.
-
-<p align="center">
-<img src="../pic/basic_algorithm.jpg" width=700 />
-</p>
-
-## 3) Pre-processor include directives <a name="include"></a>
+## 2) Pre-processor include directives <a name="include"></a>
 
 <p align="justify">
 We first include the necessary standard library (<code>std</code>) utilitaries and the <strong>puutools</strong> library:
@@ -89,7 +86,7 @@ We then include three classes that have been pre-implemented on purpose for this
 The <code>Prng</code> class contains several random functions based on the <a href="https://www.gnu.org/software/gsl/" target="_blank">GNU Scientific Library</a>. The class <code>Individual</code> contains the basic structure of an individual (one phenotypic trait and one fitness value, plus a few methods); this class will be provided to <strong>puutools</strong> to instanciate trees. The class <code>Simulation</code> contains all the code to run a proper evolutionary simulation.
 </p>
 
-## 4) Read command line parameters <a name="parameters"></a>
+## 3) Read command line parameters <a name="parameters"></a>
 
 <p align="justify">
 Let's implement a basic piece of code to read our parameters from the command line:
@@ -117,7 +114,7 @@ int main( int argc, char const** argv )
   std::cout << "  • Mutation size      : " << mutation_size << std::endl;
 ```
 
-## 5) Instanciate the pseudo-random numbers generator (PRNG) <a name="prng"></a>
+## 4) Instanciate the pseudo-random numbers generator (PRNG) <a name="prng"></a>
 
 <p align="justify">
 We also instanciate a PRNG object:
@@ -131,7 +128,7 @@ We also instanciate a PRNG object:
   Prng prng(time(0));
 ```
 
-## 6) Initialize the population <a name="initialize"></a>
+## 5) Initialize the population <a name="initialize"></a>
 
 <p align="justify">
 This step is used to create the simulation and initialize the population:
@@ -146,7 +143,7 @@ This step is used to create the simulation and initialize the population:
   simulation.initialize_population();
 ```
 
-## 7) Create a lineage and a coalescence tree, and add the roots <a name="roots"></a>
+## 6) Create a lineage and a coalescence tree, and add the roots <a name="roots"></a>
 
 <p align="justify">
 We will create two trees:
@@ -178,7 +175,7 @@ We first instanciate two trees with the class <code>Individual</code>. It is <st
 We then add a <strong>root</strong> in the trees for each of the $N$ individuals at generation zero, with the function <code>add_root(*individual)</code>. <strong>It is essential to root a tree at the beginning of a simulation</strong>.
 </p>
 
-## 8) Run the evolutionary algorithm <a name="run"></a>
+## 7) Run the evolutionary algorithm <a name="run"></a>
 
 <p align="justify">
 This is the core of our "simple" example. Tasks have been written as separate pieces of code for clarity, however it is possible to optimize the code by merging several loops together.
@@ -259,7 +256,7 @@ Note that at <strong>STEP 3</strong>, we copy the dead individuals in the lineag
 <strong>TIP:</strong> The size of a coalescence tree is approximately constant over time ($2n-1$ nodes), while a lineage tree will grow slowly. Depending on the complexity of your simulation, in can be useful to create a secondary class saving important information from your individuals (such that phenotypic trait values, mutational events, etc) and provide it to the trees instead of your main individual class.
 </p>
 
-## 9) Final step: extracting information from the trees <a name="final_step"></a>
+## 8) Final step: extracting information from the trees <a name="final_step"></a>
 
 <p align="justify">
 Now that the simulation reached an end, we want to extract some information from the trees.
@@ -329,7 +326,7 @@ Finally, we save the structure of the coalescence tree in Newick format (<code>.
   coalescence_tree.write_newick_tree("./output/coalescence_tree.phb");
 ```
 
-## 10) Results <a name="results"></a>
+## 9) Results <a name="results"></a>
 
 <p align="justify">
 This simulation example is available in the folder <code>example</code> of this repository, and can be compiled with CMake (navigate to the folder <code>example/cmake</code> with a terminal and run the following command:
