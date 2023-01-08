@@ -33,17 +33,17 @@
 </p>
 
 <p align="justify">
-Individual-based forward-in-time evolutionary simulations are more and more common, and have been proven useful in many fields (ecology and evolution, conservation biology, systems and computational cell biology, etc).
+Individual-based forward-in-time evolutionary simulations are more and more common, and have proven useful in many fields (ecology and evolution, conservation biology, systems and computational cell biology, etc).
 
-Precisely recovering the evolutionary and mutational events that led to the final state of a population is one major interest of evolutionary simulations. It is then important to develop tools which efficiently track the lineages of <em>in silico</em> populations and provide exhaustive access to all the events that occurred during a simulation.
+Recovering the evolutionary and mutational events is one major interest of evolutionary simulations. It requires tools which efficiently track the lineages of <em>in silico</em> populations, providing exhaustive access to the simulation events that led to the final state of a population.
 </p>
 
 <p align="justify">
-One solution consists in producing full backups at regular intervals during a simulation, in order to recover lineage information in post-processing. However, such an approach usually requires gigabytes of storage, as it saves more information than strictly necessary to recover lineages, and limits the opportunities to produce light and portable simulation software.
+One solution consists in producing full backups at regular intervals during a simulation, in order to recover lineage information in post-processing. However, this approach usually requires gigabytes of storage, as it saves more information than strictly necessary, and then limits the opportunities to produce light and portable simulation software.
 </p>
 
 <p align="justify">
-Another solution consists in dynamically tracking the lineage and/or coalescence trees during a simulation, in order to only keep the pertinent information in live memory. Such an approach provides live access to ancestor relationships, including tracing back evolutionary events, at any time during a simulation.
+Another solution consists in dynamically tracking the lineage and/or coalescence trees during a simulation, in order to only keep the pertinent information in live memory. Such an approach provides live access to ancestor relationships (including tracing back evolutionary events) at any time during a simulation.
 While this approach comes at slightly higher computational and live memory costs (it is necessary to maintain in memory and regularly update the structure of the trees), it is much lighter and efficient than backing up everything and running post-treatments.
 </p>
 
@@ -76,7 +76,7 @@ To date, <strong>puutools</strong> is distributed as a static library for C++ de
 
 ## Contributing <a name="contributing"></a>
 
-There is a room for many improvements in <strong>puutools</strong>. If you want to contribute, do not hesitate to reach <a href="mailto:charles DOT rocabert AT helsinki DOT fi">the main author</href>.
+If you want to contribute, do not hesitate to reach <a href="mailto:charles DOT rocabert AT helsinki DOT fi">the main author</href>.
 
 ## Installation instructions <a name="installation"></a>
 
