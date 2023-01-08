@@ -339,9 +339,9 @@ The binary executable <code>puutools_example</code> is located in the folder <co
 <p align="justify">
 As an example, a simulation have been run by shifting an initial population of size $N=200$ away from the fitness optimum (initial trait value $x = 2$). The simulation time is $T=10000$ generations, with a mutation rate $m=0.02$ and a mutation size $s=0.02$.
 
-
+```
   ../build/bin/puutools_example 2.0 10000 200 0.02 0.02
-
+```
 
 Output files are written in the folder <code>example/output</code>, which also contains a Rscript to generate a figure. Here, we can see that the population evolved towards the optimum. As we recover the lineage of the last best individual, we have also access to the size of fixed mutations.
 </p>
