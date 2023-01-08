@@ -20,7 +20,7 @@
 ## 1) Introduction <a name="introduction"></a>
 
 <p align="justify">
-If you haven't done it already, please read the <a href="https://github.com/charlesrocabert/puutools/blob/main/README.md" target="_blank">main documentation</a> to install <strong>puutool</strong> on your device.
+If you haven't done it already, please read the <a href="https://github.com/charlesrocabert/puutools/blob/main/README.md" target="_blank">main documentation</a> to install <strong>puutools</strong> on your device.
 </p>
 
 <p align="justify">
