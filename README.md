@@ -137,7 +137,7 @@ endif(PUUTOOLS_FOUND)
 ```
 
 ## Copyright <a name="copyright"></a>
-Copyright &copy; 2022 Charles Rocabert.
+Copyright &copy; 2022-2023 Charles Rocabert.
 All rights reserved.
 
 ## License <a name="license"></a>
