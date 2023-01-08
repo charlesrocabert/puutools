@@ -253,13 +253,13 @@ Note that at <strong>STEP 3</strong>, we copy the dead individuals in the lineag
 </p>
 
 <p align="justify">
-<strong>:bulb: TIP:</strong> The size of a coalescence tree is approximately constant over time ($2n-1$ nodes), while a lineage tree will grow slowly. Depending on the complexity of your simulation, in can be useful to create a secondary class saving important information from your individuals (such that phenotypic trait values, mutational events, etc) and provide it to the trees instead of your main individual class.
+<strong>:bulb: TIP:</strong> The size of a coalescence tree is approximately constant over time (2n-1 nodes), while a lineage tree will grow slowly. Depending on the complexity of your simulation, in can be useful to create a secondary class saving important information from your individuals (<em>e.g.</em> phenotypic trait values, mutational events, etc) and provide it to the trees instead of your main individual class.
 </p>
 
 ## 8) Final step: extracting information from the trees <a name="final_step"></a>
 
 <p align="justify">
-Now that the simulation reached an end, we want to extract some information from the trees.
+Now that the simulation reached an end, we will extract some information from the trees.
 We call a last time update functions to ensure a good final structure:
 </p>
 
@@ -337,12 +337,12 @@ The binary executable <code>puutools_example</code> is located in the folder <co
 </p>
 
 <p align="justify">
-As an example, a simulation have been run by placing an initial population of size $N=200$ away from the fitness optimum (initial trait value = 2). The simulation time is $T=10000$ generations, with a mutation rate $m=0.02$ and a mutation size $s=0.02$.
+As an example, a simulation have been run by shifting an initial population of size $N=200$ away from the fitness optimum (initial trait value $x = 2$). The simulation time is $T=10000$ generations, with a mutation rate $m=0.02$ and a mutation size $s=0.02$.
 
   ../build/bin/puutools_example 2.0 10000 200 0.02 0.02
 
-Output files are written in the folder <code>example/output</code>, which also contain a Rscript to generate a figure. Here, we can see that the population evolved towards the optimum. As we recover the lineage of the last best individual, we have also access to the size of fixed mutations.
+Output files are written in the folder <code>example/output</code>, which also contains a Rscript to generate a figure. Here, we can see that the population evolved towards the optimum. As we recover the lineage of the last best individual, we have also access to the size of fixed mutations.
 </p>
 
-![figure1](https://user-images.githubusercontent.com/25666459/196970154-ac7d8a53-5ff8-4466-b18c-3e6257dd6af9.png)
+<img src="../pic/example_results.png">
 
