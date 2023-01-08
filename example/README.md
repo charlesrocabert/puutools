@@ -236,12 +236,12 @@ At each generation:
 ```
 
 <p align="justify">
-At <strong>STEP 2</strong>, we register in the trees every reproduction event, to add new node relationships.
-This is done thought the method <code>add_reproduction_event(*parent, *child, time)</code>.
+At <strong>STEP 2</strong>, we register in the trees every reproduction events to add the new node relationships.
+This is done with the method <code>add_reproduction_event(*parent, *child, time)</code>.
 </p>
 
 <p align="justify">
-Then at <strong>STEP 3</strong>, we must tell to our trees that the individuals from the previous generation are now dead, with the method <code>inactivate(*individual, copy)</code>. The parameter <code>copy</code> is a boolean (<code>true/false</code>). If true, the tree will keep a copy of the individual, to save it independently from your population algorithm (this is why it is mandatory to implement a copy constructor with <strong>puutools</strong>). Remember that calling the method <code>inactivate(*individual, copy)</code> depends on your algorithm. Indeed, it can happen that both the parent and its children remain alive at the next generation (<em>e.g.</em> for a bacterial population). However <strong>using this function is mandatory</strong>, as tree's structure manipulations can only be done with dead individuals.
+At <strong>STEP 3</strong>, we must tell to our trees that individuals from the previous generation are now dead, with the method <code>inactivate(*individual, copy)</code>. The parameter <code>copy</code> is a boolean (<code>true/false</code>). If true, the tree will keep a copy of the individual, to save it independently from your population algorithm (this is why it is mandatory to implement a copy constructor with <strong>puutools</strong>). Remember that calling the method <code>inactivate(*individual, copy)</code> depends on your algorithm. Indeed, it can happen that both the parent and its children remain alive at the next generation (<em>e.g.</em> for a bacterial population). However <strong>using this function is mandatory</strong>, as tree's structure manipulations can only be done with dead individuals.
 </p>
 
 <p align="justify">
@@ -249,11 +249,11 @@ Note that at <strong>STEP 3</strong>, we copy the dead individuals in the lineag
 </p>
 
 <p align="justify">
-<strong>TIP:</strong> It is not mandatory to call the <strong>STEP 5</strong> at each generation. Simply remember that if the trees are updated more often, this will increase the computational load. If the trees are updated less often, this will increase the memory load (trees grow at each generation before being pruned and shortened). The user must decide on the period of trees' updates depending on the performance of its own code.
+<strong>:bulb: TIP:</strong> It is not mandatory to call the <strong>STEP 5</strong> at each generation. Simply remember that if the trees are updated more often, this will increase the computational load. If the trees are updated less often, this will increase the memory load (trees grow at each generation before being pruned and shortened). The user must decide on the period of trees' updates depending on the performance of its own code.
 </p>
 
 <p align="justify">
-<strong>TIP:</strong> The size of a coalescence tree is approximately constant over time ($2n-1$ nodes), while a lineage tree will grow slowly. Depending on the complexity of your simulation, in can be useful to create a secondary class saving important information from your individuals (such that phenotypic trait values, mutational events, etc) and provide it to the trees instead of your main individual class.
+<strong>:bulb: TIP:</strong> The size of a coalescence tree is approximately constant over time ($2n-1$ nodes), while a lineage tree will grow slowly. Depending on the complexity of your simulation, in can be useful to create a secondary class saving important information from your individuals (such that phenotypic trait values, mutational events, etc) and provide it to the trees instead of your main individual class.
 </p>
 
 ## 8) Final step: extracting information from the trees <a name="final_step"></a>
