@@ -76,7 +76,7 @@ To date, <strong>puutools</strong> is distributed as a static library for C++ de
 
 ## Contributing <a name="contributing"></a>
 
-If you want to contribute, do not hesitate to reach <a href="mailto:charles DOT rocabert AT helsinki DOT fi">the main author</href>.
+If you want to contribute, do not hesitate to reach <a href="mailto:charles DOT rocabert AT hhu DOT de">the developer</href>.
 
 ## Installation instructions <a name="installation"></a>
 
