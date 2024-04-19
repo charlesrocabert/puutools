@@ -20,7 +20,7 @@
 - [Copyright](#copyright)
 - [License](#license)
 - [First usage with a walk-through example](#first_usage)
-- [A complex scenario where puutools can be useful](#complex_scenario)
+- [A complex scenario where puutools has been useful](#complex_scenario)
 
 ## Aim
 
