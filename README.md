@@ -17,10 +17,10 @@
 - [Contributing](#contributing)
 - [Installation instructions](#installation)
 - [CMake find module](#findmodule)
-- [Copyright](#copyright)
-- [License](#license)
 - [First usage with a walk-through example](#first_usage)
 - [A complex scenario where puutools has been useful](#complex_scenario)
+- [Copyright](#copyright)
+- [License](#license)
 
 ## Aim
 
@@ -113,22 +113,6 @@ The script requires sudo access to install the library in the appropriate folder
 :warning: If you cannot or do not want to use a sudo access, simply <a href="https://github.com/charlesrocabert/puutools/raw/main/puutools/puutools.h">download the source code file <code>puutools.h</code></a> and include it directly to your project.
 </p>
 
-## First usage with a walk-through example <a name="first_usage"></a>
-
-<p align="justify">
-You will find a <a href="https://github.com/charlesrocabert/puutools/tree/main/example" target="_blank">complete walk-through example</a> to get used with the current functionalities of <strong>puutools</strong>.
-</p>
-
-## A complex scenario where puutools has been useful <a name="complex_scenario"></a>
-
-<p align="center">
-  <img src="./pic/tracking_example.png" width=600 />  
-</p>
-
-<p align="justify">
-The original code of <strong>puutools</strong> has been implemented for research purpose as part of the bacterial evolution simulator <a href="https://github.com/charlesrocabert/Evo2Sim">Evo<sup>2</sup>Sim</a>. The software has for example been used to study bacterial diversification events in batch culture setups (see <a href="https://doi.org/10.1371/journal.pcbi.1005459">Rocabert et al. 2017</a>). Tracking lineages and coalescence trees was an essential step in this scientific work. An example of simulation output is available here: https://charlesrocabert.github.io/doc/evo2sim_simulation_example/viewer/viewer.html.
-</p>
-
 ## CMake find module <a name="findmodule"></a>
 
 <p align="justify">
@@ -150,6 +134,22 @@ if(PUUTOOLS_FOUND)
   include_directories(${PUUTOOLS_INCLUDE_DIR})
 endif(PUUTOOLS_FOUND)
 ```
+
+## First usage with a walk-through example <a name="first_usage"></a>
+
+<p align="justify">
+You will find a <a href="https://github.com/charlesrocabert/puutools/tree/main/example" target="_blank">complete walk-through example</a> to get used with the current functionalities of <strong>puutools</strong>.
+</p>
+
+## A complex scenario where puutools has been useful <a name="complex_scenario"></a>
+
+<p align="center">
+  <img src="./pic/tracking_example.png" width=600 />  
+</p>
+
+<p align="justify">
+The original code of <strong>puutools</strong> has been implemented for research purpose as part of the bacterial evolution simulator <a href="https://github.com/charlesrocabert/Evo2Sim">Evo<sup>2</sup>Sim</a>. The software has for example been used to study bacterial diversification events in batch culture setups (see <a href="https://doi.org/10.1371/journal.pcbi.1005459">Rocabert et al. 2017</a>). Tracking lineages and coalescence trees was an essential step in this scientific work. An example of simulation output is available here: https://charlesrocabert.github.io/doc/evo2sim_simulation_example/viewer/viewer.html.
+</p>
 
 ## Copyright <a name="copyright"></a>
 Copyright &copy; 2022-2024 Charles Rocabert.
