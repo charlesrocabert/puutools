@@ -26,7 +26,7 @@
 
 <p align="center">
 <kbd>
-<img src="./pic/finnish_landscape.jpg" width=400>
+<img src="./pic/finnish_landscape.jpg" width=600>
 </kbd>
 <br/>
 <sup>Helmi Biese - View from Pyynikki Ridge, 1900.</sup>
