@@ -266,7 +266,7 @@ Note also that at <strong>STEP 3</strong>, we copy the dead individuals in the l
 </p>
 
 <p align="justify">
-<strong>:bulb: TIP:</strong> The size of a coalescence tree is approximately constant over time (2n-1 nodes), while a lineage tree will grow slowly. Depending on the complexity of your simulation, in can be useful to create a secondary class saving important information from your individuals (<em>e.g.</em> phenotypic trait values, mutational events, etc) and provide it to the trees instead of your main individual class.
+<strong>:bulb: TIP:</strong> The size of a coalescence tree is approximately constant over time ($2N-1$ nodes), while a lineage tree grows slowly. Depending on the complexity of your simulation, in can be useful to create a secondary class saving the most important information from your individuals (<em>e.g.</em> phenotypic trait values, mutational events, etc) and provide it to the trees instead of your main individual class.
 </p>
 
 ## 8) Final step: extracting information from the trees <a name="final_step"></a>
