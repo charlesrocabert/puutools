@@ -33,18 +33,18 @@
 </p>
 
 <p align="justify">
-Individual-based forward-in-time evolutionary simulations are more and more common, and have proven useful in many fields (ecology and evolution, conservation biology, systems and computational cell biology, etc).
+Individual-based forward-in-time evolutionary simulations are more and more common, and have proven useful in many fields (ecology and evolution, conservation biology, systems and computational cell biology, <em>etc</em>).
 
-Recovering the evolutionary and mutational events is one major interest of evolutionary simulations. It requires tools which efficiently track the lineages of <em>in silico</em> populations, providing exhaustive access to the simulation events that led to the final state of a population.
+Recovering the evolutionary and mutational events is one major interest of evolutionary simulations. It requires tools which efficiently track the lineages of <em>in silico</em> populations, hopefully providing exhaustive access to the simulation events that led to the final state of a population.
 </p>
 
 <p align="justify">
-One solution consists in producing full backups at regular intervals during a simulation, in order to recover lineage information in post-processing. However, this approach usually requires gigabytes of storage, as it saves more information than strictly necessary, and then limits the opportunities to produce light and portable simulation software.
+One solution consists in producing full backups at regular intervals during a simulation, and recovering lineage information in post-processing. However, this approach usually requires gigabytes of storage, as it saves more information than strictly necessary, and then limits the opportunity to produce light and portable simulation software.
 </p>
 
 <p align="justify">
-Another solution consists in dynamically tracking the lineage and/or coalescence trees during a simulation, in order to only keep the pertinent information in live memory. Such an approach provides live access to ancestor relationships (including tracing back evolutionary events) at any time during a simulation.
-While this approach comes at slightly higher computational and live memory costs (it is necessary to maintain in memory and regularly update the structure of the trees), it is much lighter and efficient than backing up everything and running post-treatments.
+Another solution consists in dynamically tracking the lineage and/or coalescence trees during a simulation, to only keep the pertinent information in live memory. Such an approach provides live access to ancestor relationships (including tracing back evolutionary events) at any time during a simulation.
+While this approach comes at slightly higher computational and live memory costs (it is necessary to maintain in memory and regularly update the trees), it is much lighter and efficient than the back-up/post-treatment approach.
 </p>
 
 <p align="justify">
@@ -66,17 +66,17 @@ With <strong>puutools</strong>, it is possible to update the lineage and/or the 
 </p>
 
 <p align="justify">
-<strong>puutools</strong> is an all-in-one library. It does not depend on third-party packages, and its code is kept simple and light. By the way, <strong>puutools</strong> comes as and header-only library, so specific compilation is not needed.
+<strong>puutools</strong> is an <strong>all-in-one library</strong>. It does not depend on third-party packages, and its code is kept simple and light. <strong>puutools</strong> comes as and header-only library, so specific compilation is not needed.
 </p>
 
 <p align="justify">
-The code of <strong>puutools</strong> has primarily been implemented and optimized during the European project <a href="http://www.evoevo.eu/">EvoEvo</a> (FP7-ICT-610427), as part of the <a href="https://github.com/charlesrocabert/Evo2Sim">Evo<sup>2</sup>Sim</a> software (see <a href="https://doi.org/10.1371/journal.pcbi.1005459">Rocabert et al. 2017</a>). The code has also been used in <a href="https://github.com/charlesrocabert/SigmaFGM">&sigma;FGM</a> framework (see <a href="https://doi.org/10.1111/evo.14083">Rocabert et al. 2020</a>).
+<strong>puutools</strong> has primarily been implemented and optimized during the European project <a href="http://www.evoevo.eu/">EvoEvo</a> (FP7-ICT-610427), as part of the <a href="https://github.com/charlesrocabert/Evo2Sim">Evo<sup>2</sup>Sim</a> software (see <a href="https://doi.org/10.1371/journal.pcbi.1005459">Rocabert et al. 2017</a>). The code has then been deployed in <a href="https://github.com/charlesrocabert/SigmaFGM">&sigma;FGM</a> framework (see <a href="https://doi.org/10.1111/evo.14083">Rocabert et al. 2020</a>).
 To date, <strong>puutools</strong> is distributed as a static library for C++ developers. We plan to provide a Python-binding in a future version.
 </p>
 
 ## Contributing <a name="contributing"></a>
 
-If you want to contribute, do not hesitate to reach <a href="mailto:charles DOT rocabert AT hhu DOT de">the developer</href>.
+If you wish to contribute, do not hesitate to reach <a href="mailto:charles DOT rocabert AT hhu DOT de">the developer</href>.
 
 ## Installation instructions <a name="installation"></a>
 
@@ -91,17 +91,16 @@ If you want to contribute, do not hesitate to reach <a href="mailto:charles DOT 
 - A C++11 compiler (GCC, LLVM, ...);
 - CMake >= 3.19 (command line version);
 
-**Additional dependencies for the example code:**
-
-- Gnu Scientific Library (GSL);
-- CBLAS;
-- R >= 4.0.0;
-- Rpackage ape;
+> #### Additional dependencies for the example code:
+> - Gnu Scientific Library (GSL);
+> - CBLAS;
+> - R >= 4.0.0;
+> - Rpackage ape;
 
 ### Installation
 
 <p align="justify">
-Download the <a href="https://github.com/charlesrocabert/puutools/releases/latest">latest release</a> of <strong>puutools</strong>, and save it to a directory of your choice. Open a terminal and use the <code>cd</code> command to navigate to this directory. To install <strong>puutools</strong>, simply call <code>install.sh</code> on the command line:
+Download the <a href="https://github.com/charlesrocabert/puutools/releases/latest">latest release</a> of <strong>puutools</strong>, and save it into a directory of your choice. Open a terminal and use the <code>cd</code> command to navigate to this directory. To install <strong>puutools</strong>, simply call the script <code>install.sh</code> on the command line:
 </p>
 
 ```
@@ -117,7 +116,7 @@ The script requires sudo access to install the library in the appropriate folder
 ## First usage with a walk-through example <a name="first_usage"></a>
 
 <p align="justify">
-You will find a <a href="https://github.com/charlesrocabert/puutools/tree/main/example" target="_blank">complete walk-through example</a> to get used to the main functionalities of <strong>puutools</strong>.
+You will find a <a href="https://github.com/charlesrocabert/puutools/tree/main/example" target="_blank">complete walk-through example</a> to get used with the current functionalities of <strong>puutools</strong>.
 </p>
 
 ## A complex scenario where puutools has been useful <a name="complex_scenario"></a>
@@ -127,18 +126,18 @@ You will find a <a href="https://github.com/charlesrocabert/puutools/tree/main/e
 </p>
 
 <p align="justify">
-The original code of <strong>puutools</strong> has been used for research purpose as part of the bacterial evolution simulator <a href="https://github.com/charlesrocabert/Evo2Sim">Evo<sup>2</sup>Sim</a>. The software has for example been used to study bacterial diversification events in batch culture setups, due to stable cross-feeding (see <a href="https://doi.org/10.1371/journal.pcbi.1005459">Rocabert et al. 2017</a>). Tracking lineages and coalescence trees was an essential step in this scientific work. An example of simulation output is available here: https://charlesrocabert.github.io/doc/evo2sim_simulation_example/viewer/viewer.html.
+The original code of <strong>puutools</strong> has been implemented for research purpose as part of the bacterial evolution simulator <a href="https://github.com/charlesrocabert/Evo2Sim">Evo<sup>2</sup>Sim</a>. The software has for example been used to study bacterial diversification events in batch culture setups (see <a href="https://doi.org/10.1371/journal.pcbi.1005459">Rocabert et al. 2017</a>). Tracking lineages and coalescence trees was an essential step in this scientific work. An example of simulation output is available here: https://charlesrocabert.github.io/doc/evo2sim_simulation_example/viewer/viewer.html.
 </p>
 
 ## CMake find module <a name="findmodule"></a>
 
 <p align="justify">
-This CMake module is useful to determine whether <strong>puutools</strong> package is available during the compilation of your project.
-It has also the advantage to determine the paths with no need to provide them explicitly in the <code>CMakeLists.txt</code> file.
+In case your project is compiled through CMake, the following module can be used to detect whether <strong>puutools</strong> is available during compilation.
+It has also the advantage to automatically detect the paths in the <code>CMakeLists.txt</code> file.
 </p>
 
 <p align="justify">
-You can download here the module: <a href="https://github.com/charlesrocabert/puutools/raw/main/cmake_find_module/FindPuuTools.cmake" target="_blank">CMake Find Module</a>
+You can download the module here: <a href="https://github.com/charlesrocabert/puutools/raw/main/cmake_find_module/FindPuuTools.cmake" target="_blank">CMake Find Module</a>
 </p>
 
 <p align="justify">
